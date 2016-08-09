@@ -1,0 +1,2 @@
+App.lang.strings.en =
+  '': ''

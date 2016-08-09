@@ -1,0 +1,11 @@
+{
+  "name": "BeamMaze",
+  "version": "0.0.0",
+  "author": {
+    "name": "raccoons.lv"
+  },
+  "dependencies": {
+    "phaser": "^2.6.1"
+  },
+  "devDependencies": {}
+}
