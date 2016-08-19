@@ -5,7 +5,7 @@
     "name": "raccoons.lv"
   },
   "dependencies": {
-    "phaser": "^2.6.1"
+    "babylonjs": "^2.4.1"
   },
   "devDependencies": {}
 }
