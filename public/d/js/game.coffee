@@ -35,9 +35,10 @@ class Game
     ob
 
   _reflect: (v, mesh)->
-    if BABYLON.Angle.BetweenTwoPoints(v, mesh.__rotation_v).radians() > Math.PI/2
+    dot = BABYLON.Vector3.Dot(v, mesh.__rotation_v)
+    if Math.PI/2 > Math.acos(dot / (v.length() * mesh.__rotation_v.length()))
       return null
-    v.subtract(mesh.__rotation_v.scale(2*BABYLON.Vector3.Dot(v, mesh.__rotation_v)))
+    v.subtract(mesh.__rotation_v.scale(2*dot))
 
   beam: (angle)->
     if @_beam_angle_prev is angle
@@ -54,10 +55,10 @@ class Game
       points.push if pick_info.hit then pick_info.pickedMesh.position else end
       if not (pick_info.hit and pick_info.pickedMesh._type is 'mirror')
         break
-      last_mirror = pick_info.pickedMesh.id
       end = @_reflect(end, pick_info.pickedMesh)
       if end is null
         break
+      last_mirror = pick_info.pickedMesh.id
     @_beam = BABYLON.Mesh.CreateLines(@_name(), points, @_scene)
     @_beam_angle_prev = angle
 
