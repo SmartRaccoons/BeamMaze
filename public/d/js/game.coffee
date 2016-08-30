@@ -32,6 +32,20 @@ class Game
     ob.__rotation = angle
     ob.__rotation_v = new BABYLON.Vector3(Math.cos(angle), Math.sin(angle), 0)
     ob._type = 'mirror'
+#    mirrorMaterial = new BABYLON.StandardMaterial(@_name(), @_scene)
+#    mirrorMaterial.reflectionTexture = new BABYLON.MirrorTexture("mirror", 512, @_scene, true)
+#    mirrorMaterial.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, -10.0)
+#    mirrorMaterial.reflectionTexture.renderList = @_list
+#    mirrorMaterial.reflectionTexture.level = 0.6
+#    ob.material = mirrorMaterial
+    ob
+
+  obstacle: (coors)->
+    ob = BABYLON.Mesh.CreateBox(@_name(), 4, @_scene)
+    ob.position.x = coors[0]
+    ob.position.y = coors[1]
+    ob.position.z = coors[2]
+    ob._type = 'obstacle'
     ob
 
   _reflect: (v, mesh)->
@@ -51,9 +65,13 @@ class Game
     end = new BABYLON.Vector3(Math.cos(angle) * length, Math.sin(angle) * length, 0)
     for i in [0..100]
       pick_info = @_scene.pickWithRay new BABYLON.Ray(points[points.length - 1], end, length), (m)->
-        last_mirror isnt m.id and ['mirror', 'target'].indexOf(m._type) > -1
+        last_mirror isnt m.id and ['mirror', 'target', 'obstacle'].indexOf(m._type) > -1
       points.push if pick_info.hit then pick_info.pickedMesh.position else end
-      if not (pick_info.hit and pick_info.pickedMesh._type is 'mirror')
+      if not pick_info.hit
+        break
+      if pick_info.pickedMesh._type is 'target'
+        console.info 'TARGET'
+      if pick_info.pickedMesh._type isnt 'mirror'
         break
       end = @_reflect(end, pick_info.pickedMesh)
       if end is null
@@ -91,6 +109,7 @@ class Game
     camera.setPosition(new BABYLON.Vector3(0, 0, -50))
     camera.attachControl(canvas, false)
     @beam_source()
+    @obstacle([-10, 0, 0])
     @target([20, 0, 0])
     @mirror([10, -10, 0], Math.PI/2)
     @mirror([-10, -10, 0], Math.PI/2)
