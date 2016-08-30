@@ -23,13 +23,21 @@ class Game
     beam.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, out
     out()
 
-  mirror: (coors)->
-    ob = BABYLON.Mesh.CreateSphere(@_name(), 10, 2, @_scene)
+  mirror: (coors, angle)->
+    ob = BABYLON.Mesh.CreateGround(@_name(), 10, 2, 4, @_scene)
     ob.position.x = coors[0]
     ob.position.y = coors[1]
     ob.position.z = coors[2]
+    ob.rotation.z = angle + 3*Math.PI/2
+    ob.__rotation = angle
+    ob.__rotation_v = new BABYLON.Vector3(Math.cos(angle), Math.sin(angle), 0)
     ob._type = 'mirror'
     ob
+
+  _reflect: (v, mesh)->
+    if BABYLON.Angle.BetweenTwoPoints(v, mesh.__rotation_v).radians() > Math.PI/2
+      return null
+    v.subtract(mesh.__rotation_v.scale(2*BABYLON.Vector3.Dot(v, mesh.__rotation_v)))
 
   beam: (angle)->
     if @_beam_angle_prev is angle
@@ -37,15 +45,20 @@ class Game
     length = 200
     if @_beam
       @_beam.dispose()
-    start = new BABYLON.Vector3(0, 0, 0)
+    points = [new BABYLON.Vector3(0, 0, 0)]
+    last_mirror = ''
     end = new BABYLON.Vector3(Math.cos(angle) * length, Math.sin(angle) * length, 0)
-    pick_info = @_scene.pickWithRay new BABYLON.Ray(start, end, length), (m)-> ['mirror', 'target'].indexOf(m._type) > -1
-    if pick_info.hit
-      console.info pick_info
-      end = pick_info.pickedMesh.position
-    if pick_info.hit and pick_info.pickedMesh._type is 'target'
-      console.info 'targeted'
-    @_beam = BABYLON.Mesh.CreateLines(@_name(), [start, end], @_scene)
+    for i in [0..100]
+      pick_info = @_scene.pickWithRay new BABYLON.Ray(points[points.length - 1], end, length), (m)->
+        last_mirror isnt m.id and ['mirror', 'target'].indexOf(m._type) > -1
+      points.push if pick_info.hit then pick_info.pickedMesh.position else end
+      if not (pick_info.hit and pick_info.pickedMesh._type is 'mirror')
+        break
+      last_mirror = pick_info.pickedMesh.id
+      end = @_reflect(end, pick_info.pickedMesh)
+      if end is null
+        break
+    @_beam = BABYLON.Mesh.CreateLines(@_name(), points, @_scene)
     @_beam_angle_prev = angle
 
   target: (position)->
@@ -74,14 +87,15 @@ class Game
 
     scene = @_scene = new BABYLON.Scene(engine)
     camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), scene)
-    camera.setPosition(new BABYLON.Vector3(0, 0, -100))
+    camera.setPosition(new BABYLON.Vector3(0, 0, -50))
     camera.attachControl(canvas, false)
     @beam_source()
     @target([20, 0, 0])
-    @mirror([10, -10, 0])
-    @mirror([20, -20, 0])
+    @mirror([10, -10, 0], Math.PI/2)
+    @mirror([-10, -10, 0], Math.PI/2)
+    @mirror([-20, 0, 0], Math.PI/2)
     scene.render()
-    @beam(Math.PI/4)
+    @beam(5*Math.PI/4)
 
 
 g = new Game()
