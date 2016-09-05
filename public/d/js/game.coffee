@@ -12,17 +12,20 @@ class Game
       't': (coors)=> @target(coors)
       's': (coors, degrees=0)=> @beam_source(coors, Math.PI * degrees / 180)
     }
-    [
-      ['', '', 'o', '', '', '', '']
-      ['', 's270', '', '', '', '', '']
-      ['', 'm45', 'm160', '', '', '', '']
-      ['', '', '', '', '', 'o', '']
-      ['', '', '', '', 'm90', 'm90', '']
-      ['', '', '', 'm30', '', 'm90', '']
-      ['', '', '', '', '', '', 't']
-    ].forEach (l, y)->
+    map = [
+      ['', '', '', 'm244', '', '', '']
+      ['s-45', '', '', '', '', '', '']
+      ['', 'm90', '', '', '', '', '']
+      ['', '', '', '', '', '', '']
+      ['', '', '', '', '', 'm258', '']
+      ['', '', '', '', '', '', '']
+      ['', '', 'm150', '', '', '', 't']
+    ]
+    height = map.length
+    map.forEach (l, y)->
+      width = l.length
       l.forEach (v, x)->
-        coors = [10 * x, -10 * y, 0]
+        coors = [10 * (x - width / 2), -10 * (y - height / 2), 0]
         if v and methods[v.substr(0, 1)]
           methods[v.substr(0, 1)].apply(@, [coors].concat(v.substr(1).split('|')))
 
@@ -59,8 +62,16 @@ class Game
       ob.__rotation = angle
       ob.__rotation_v = new BABYLON.Vector3(Math.cos(angle), Math.sin(angle), 0)
     ob._type = 'mirror'
-    ob.actionManager = new BABYLON.ActionManager(@_scene)
-    ob.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
+    click = BABYLON.MeshBuilder.CreateCylinder(@_name(), {
+      height: 2.2
+      diameter: 8
+    }, @_scene)
+    click.rotation.x = Math.PI/2
+    click.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+    click.material.alpha = 0.3
+    click.parent = ob
+    click.actionManager = new BABYLON.ActionManager(@_scene)
+    click.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
       rotate(ob.__rotation + Math.PI/4)
       @beam()
     rotate(angle)
@@ -94,13 +105,13 @@ class Game
     last_mirror = ''
     end = new BABYLON.Vector3(Math.cos(angle) * length, Math.sin(angle) * length, 0)
     for i in [0..100]
-      pick_info = @_scene.pickWithRay new BABYLON.Ray(points[points.length - 1], end, length), ((i)->
+      pick_info = @_scene.pickWithRay new BABYLON.Ray(points[points.length - 1], end, 1000), ((i)->
         (m)->
           if (i is 0 and m._type is 'source') or last_mirror is m.id
             return false
           ['mirror', 'target', 'obstacle', 'source'].indexOf(m._type) > -1
       )(i)
-      points.push if pick_info.hit then pick_info.pickedMesh.position else end
+      points.push if pick_info.hit then pick_info.pickedPoint else end
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
@@ -140,7 +151,7 @@ class Game
 
     scene = @_scene = new BABYLON.Scene(engine)
     camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene)
-    camera.setPosition(new BABYLON.Vector3(0, 0, -200))
+    camera.setPosition(new BABYLON.Vector3(0, 0, -150))
     camera.attachControl(canvas, false)
     @map()
     scene.render()
