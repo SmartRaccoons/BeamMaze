@@ -22,13 +22,14 @@ class Game
       ['', '', '', '', '', '', '']
       ['', '', 'm237.8', '', '', '', 't']
     ]
+    map = window.MAP(10, 5, [3, 5], [9, 9])
     height = map.length
     map.forEach (l, y)->
       width = l.length
       l.forEach (v, x)->
         coors = [10 * (x - width / 2), -10 * (y - height / 2), 0]
         if v and methods[v.substr(0, 1)]
-          methods[v.substr(0, 1)].apply(@, [coors].concat(v.substr(1).split('|')))
+          methods[v.substr(0, 1)].apply(@, [coors].concat(v.substr(1).split(';')))
 
   _name: ->
     @_object_id++
@@ -165,7 +166,7 @@ class Game
     scene = @_scene = new BABYLON.Scene(engine)
     scene.registerBeforeRender @_render_before_loop.bind(@)
     camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene)
-    camera.setPosition(new BABYLON.Vector3(0, 0, -150))
+    camera.setPosition(new BABYLON.Vector3(0, 0, -200))
     camera.attachControl(canvas, false)
     @map()
     scene.render()
