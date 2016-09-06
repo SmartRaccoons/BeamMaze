@@ -3,6 +3,7 @@ class Game
 
   constructor: ->
     @_object_id = 0
+    @_mirror = []
 #    @_wall = []
 
   map: ->
@@ -13,13 +14,13 @@ class Game
       's': (coors, degrees=0)=> @beam_source(coors, Math.PI * degrees / 180)
     }
     map = [
-      ['', '', '', 'm244', '', '', '']
+      ['', '', '', 'm243', '', '', '']
       ['s-45', '', '', '', '', '', '']
       ['', 'm90', '', '', '', '', '']
       ['', '', '', '', '', '', '']
-      ['', '', '', '', '', 'm258', '']
+      ['', '', '', '', '', 'm256', '']
       ['', '', '', '', '', '', '']
-      ['', '', 'm150', '', '', '', 't']
+      ['', '', 'm237.8', '', '', '', 't']
     ]
     height = map.length
     map.forEach (l, y)->
@@ -57,11 +58,11 @@ class Game
     ob.position.x = coors[0]
     ob.position.y = coors[1]
     ob.position.z = coors[2]
-    rotate = (angle)->
+    ob._type = 'mirror'
+    ob.__rotate = (angle)->
       ob.rotation.z = angle + 3*Math.PI/2
       ob.__rotation = angle
       ob.__rotation_v = new BABYLON.Vector3(Math.cos(angle), Math.sin(angle), 0)
-    ob._type = 'mirror'
     click = BABYLON.MeshBuilder.CreateCylinder(@_name(), {
       height: 2.2
       diameter: 8
@@ -72,9 +73,9 @@ class Game
     click.parent = ob
     click.actionManager = new BABYLON.ActionManager(@_scene)
     click.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
-      rotate(ob.__rotation + Math.PI/4)
-      @beam()
-    rotate(angle)
+      ob.__rotation_new = ob.__rotation_new + Math.PI/4
+    ob.__rotation_new = angle
+    @_mirror.push ob
 #    mirrorMaterial = new BABYLON.StandardMaterial(@_name(), @_scene)
 #    mirrorMaterial.reflectionTexture = new BABYLON.MirrorTexture("mirror", 512, @_scene, true)
 #    mirrorMaterial.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, -10.0)
@@ -138,6 +139,18 @@ class Game
 
   _render_loop: ->
 
+  _render_before_loop: ->
+    changes = false
+    @_mirror.forEach (ob)=>
+      if ob.__rotation isnt ob.__rotation_new
+        ob.__rotate(ob.__rotation_new)
+        changes = true
+    if changes
+      setTimeout =>
+        @beam()
+      , 0
+#    console.info @_target
+
 
   render: ->
     canvas = document.createElement('canvas')
@@ -150,6 +163,7 @@ class Game
       engine.resize()
 
     scene = @_scene = new BABYLON.Scene(engine)
+    scene.registerBeforeRender @_render_before_loop.bind(@)
     camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene)
     camera.setPosition(new BABYLON.Vector3(0, 0, -150))
     camera.attachControl(canvas, false)
