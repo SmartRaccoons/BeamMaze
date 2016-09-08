@@ -1,4 +1,6 @@
 
+
+
 class Game
 
   constructor: ->
@@ -8,37 +10,29 @@ class Game
 
   map: ->
     methods = {
-      'o': (coors)=> @obstacle(coors)
-      'm': (coors, degrees=0)=> @mirror(coors, Math.PI * degrees / 180)
-      't': (coors)=> @target(coors)
-      's': (coors, degrees=0)=> @beam_source(coors, Math.PI * degrees / 180)
+      'o': 'obstacle'
+      'm': 'mirror'
+      't': 'target'
+      's': 'beam_source'
     }
-    map = [
-      ['', '', '', 'm243', '', '', '']
-      ['s-45', '', '', '', '', '', '']
-      ['', 'm90', '', '', '', '', '']
-      ['', '', '', '', '', '', '']
-      ['', '', '', '', '', 'm256', '']
-      ['', '', '', '', '', '', '']
-      ['', '', 'm237.8', '', '', '', 't']
-    ]
-    map = window.MAP(10, 5, [3, 5], [9, 9])
+    map = []
+    map = window.MAP(10, 2, [3, 5])
     height = map.length
-    map.forEach (l, y)->
+    map.forEach (l, y)=>
       width = l.length
-      l.forEach (v, x)->
-        coors = [10 * (x - width / 2), -10 * (y - height / 2), 0]
+      l.forEach (v, x)=>
         if v and methods[v.substr(0, 1)]
-          methods[v.substr(0, 1)].apply(@, [coors].concat(v.substr(1).split(';')))
+          @[methods[v.substr(0, 1)]].apply(@, [[10 * (x - width / 2), -10 * (y - height / 2), 0]].concat(v.substr(1).split(';')))
 
   _name: ->
     @_object_id++
     "o_#{@_object_id}"
 
-  beam_source: (coors, angle)->
+  beam_source: (coors, angles...)->
     @_beam_coors = coors
-    @_beam_angle_prev = angle
-    ob = BABYLON.Mesh.CreateSphere(@_name(), 5, 2, @_scene)
+    @_beam_angle_prev = angles[0]
+    @_beam_angle_prev_i = 0
+    ob = BABYLON.Mesh.CreateSphere(@_name(), 5, 4, @_scene)
     material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material = material
     ob._type = 'source'
@@ -48,13 +42,17 @@ class Game
     ob.material.emissiveColor = new BABYLON.Color3(1.0, 1.0, 0)
     ob.actionManager = new BABYLON.ActionManager(@_scene)
     ob.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
-      @beam(@_beam_angle_prev - Math.PI/4)
+      @_beam_angle_prev_i++
+      if @_beam_angle_prev_i >= angles.length
+        @_beam_angle_prev_i = 0
+      @beam(parseFloat(angles[@_beam_angle_prev_i]))
 
   mirror: (coors, angle)->
+    angle = parseFloat(angle)
     ob = BABYLON.MeshBuilder.CreateBox(@_name(), {
-      width: 8
-      height: 0.1
-      depth: 2
+      width: 10
+      height: 1
+      depth: 10
     }, @_scene)
     ob.position.x = coors[0]
     ob.position.y = coors[1]
@@ -65,12 +63,12 @@ class Game
       ob.__rotation = angle
       ob.__rotation_v = new BABYLON.Vector3(Math.cos(angle), Math.sin(angle), 0)
     click = BABYLON.MeshBuilder.CreateCylinder(@_name(), {
-      height: 2.2
-      diameter: 8
+      height: 10.2
+      diameter: 10.2
     }, @_scene)
     click.rotation.x = Math.PI/2
     click.material = new BABYLON.StandardMaterial(@_name(), @_scene)
-    click.material.alpha = 0.3
+    click.material.alpha = 0
     click.parent = ob
     click.actionManager = new BABYLON.ActionManager(@_scene)
     click.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
@@ -166,7 +164,7 @@ class Game
     scene = @_scene = new BABYLON.Scene(engine)
     scene.registerBeforeRender @_render_before_loop.bind(@)
     camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene)
-    camera.setPosition(new BABYLON.Vector3(0, 0, -200))
+    camera.setPosition(new BABYLON.Vector3(-50, -60, -200))
     camera.attachControl(canvas, false)
     @map()
     scene.render()
