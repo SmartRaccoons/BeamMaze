@@ -6,6 +6,7 @@ class Game
   constructor: ->
     @_object_id = 0
     @_mirror = []
+    @_mirrors_correct = false
 #    @_wall = []
 
   map: ->
@@ -15,8 +16,9 @@ class Game
       't': 'target'
       's': 'beam_source'
     }
-    map = []
-    map = window.MAP(10, 2, [3, 5])
+    map = window.MAPS[0]
+    @_mirrors_correct = true
+    map = window.MAP(10, 4, [2, 4])
     height = map.length
     map.forEach (l, y)=>
       width = l.length
@@ -29,9 +31,12 @@ class Game
     "o_#{@_object_id}"
 
   beam_source: (coors, angles...)->
+    right = angles.pop()
+    if not @_mirrors_correct
+      right = 0
     @_beam_coors = coors
-    @_beam_angle_prev = angles[0]
-    @_beam_angle_prev_i = 0
+    @_beam_angle_prev_i = right
+    @_beam_angle_prev = angles[@_beam_angle_prev_i]
     ob = BABYLON.Mesh.CreateSphere(@_name(), 5, 4, @_scene)
     material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material = material
@@ -47,11 +52,11 @@ class Game
         @_beam_angle_prev_i = 0
       @beam(parseFloat(angles[@_beam_angle_prev_i]))
 
-  mirror: (coors, angle)->
-    angle = parseFloat(angle)
+  mirror: (coors, params...)->
+    angle = parseFloat(if @_mirrors_correct then params[0] else params[1])
     ob = BABYLON.MeshBuilder.CreateBox(@_name(), {
       width: 10
-      height: 1
+      height: 0.001
       depth: 10
     }, @_scene)
     ob.position.x = coors[0]
@@ -98,6 +103,7 @@ class Game
     v.subtract(mesh.__rotation_v.scale(2*dot))
 
   beam: (angle = @_beam_angle_prev)->
+    @text('')
     length = 200
     if @_beam
       @_beam.dispose()
@@ -115,7 +121,7 @@ class Game
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
-        console.info 'TARGET'
+        @text('Well done!')
       if pick_info.pickedMesh._type isnt 'mirror'
         break
       end = @_reflect(end, pick_info.pickedMesh)
@@ -135,6 +141,26 @@ class Game
     target._type = 'target'
     @_target = target
     target
+
+  text: (t)->
+    if t is @_text_last
+      return
+    @_text_last = t
+    if not @_text_plane
+      @_text_plane = BABYLON.Mesh.CreatePlane(@_name(), 60, @_scene, false)
+#      @_text_plane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL
+      @_text_plane.position = new BABYLON.Vector3(0, 0, 10)
+      @_text_plane.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+      @_text_plane.material.backFaceCulling = false
+      @_text_plane.material.diffuseTexture = texture = new BABYLON.DynamicTexture(@_name(), {
+        width: 512
+        height: 512
+      }, @_scene, true)
+      texture.hasAlpha = true
+    else
+      texture = @_text_plane.material.diffuseTexture
+    texture.getContext().clearRect(0, 0, 512, 512)
+    texture.drawText(t, null, 256, "bold 40px verdana", '#11ee00', null)
 
   _render_loop: ->
 

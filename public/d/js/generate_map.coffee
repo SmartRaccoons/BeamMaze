@@ -16,7 +16,9 @@ map = (size, mirrors_total, source)->
       a = 2*Math.PI + a
     a
 
-  round = (n)-> Math.round(n * 1000) / 1000
+  round = (n)-> Math.round(n * 10000) / 10000
+
+  random_angle = (n)-> Math.floor(Math.random() * 4) * (Math.PI / 4)
 
   check_mirror = (angle)->
     accept = [0, 1, -1, 0.70710, -0.70710]
@@ -41,14 +43,17 @@ map = (size, mirrors_total, source)->
     if not check_mirror(mirror_angle)
       continue
     if i > 0
-      map[mirror_prev[1]][mirror_prev[0]] = 'm' + round(mirror_angle) + ';' + i
-    source_angles.push round(angle_cal([x - source[0], source[1] - y]))
+      map[mirror_prev[1]][mirror_prev[0]] = 'm' + [round(mirror_angle), round(random_angle(mirror_angle)), i].join(';')
+    mirror_angle = angle_cal([x - source[0], source[1] - y])
+    if i isnt mirrors_total and check_mirror(mirror_angle)
+      source_angles.push round(mirror_angle)
     angle = angle_cal([mirror_prev[0] - x, y - mirror_prev[1]])
     mirror_prev = [x, y]
     i++
   map[y][x] = 't'
-  source_angles.pop()
-  map[source[1]][source[0]] += source_angles.join(';')
+  source_angles_correct = source_angles[0]
+  source_angles = source_angles.sort()
+  map[source[1]][source[0]] += source_angles.join(';') + ';' + source_angles.indexOf(source_angles_correct)
   console.info map
   map
 if window?
