@@ -17,8 +17,8 @@ class Game
       's': 'beam_source'
     }
     map = window.MAPS[0]
-    @_mirrors_correct = true
-    map = window.MAP(10, 4, [2, 4])
+#    @_mirrors_correct = true
+#    map = window.MAP(10, 4, [2, 4])
     height = map.length
     map.forEach (l, y)=>
       width = l.length
@@ -77,7 +77,7 @@ class Game
     click.parent = ob
     click.actionManager = new BABYLON.ActionManager(@_scene)
     click.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
-      ob.__rotation_new = ob.__rotation_new + Math.PI/4
+      ob.__rotation_new = ob.__rotation_new + Math.PI/2
     ob.__rotation_new = angle
     @_mirror.push ob
 #    mirrorMaterial = new BABYLON.StandardMaterial(@_name(), @_scene)

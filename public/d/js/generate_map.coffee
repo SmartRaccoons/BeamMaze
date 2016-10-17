@@ -21,7 +21,7 @@ map = (size, mirrors_total, source)->
   random_angle = (n)-> Math.floor(Math.random() * 4) * (Math.PI / 4)
 
   check_mirror = (angle)->
-    accept = [0, 1, -1, 0.70710, -0.70710]
+    accept = [0, 1, -1]#, 0.70710, -0.70710]
     for a in accept
       if -0.01 < Math.sin(angle) - a < 0.01
         return true
@@ -45,6 +45,8 @@ map = (size, mirrors_total, source)->
     if i > 0
       map[mirror_prev[1]][mirror_prev[0]] = 'm' + [round(mirror_angle), round(random_angle(mirror_angle)), i].join(';')
     mirror_angle = angle_cal([x - source[0], source[1] - y])
+    if i is 0 and not check_mirror(mirror_angle)
+      continue
     if i isnt mirrors_total and check_mirror(mirror_angle)
       source_angles.push round(mirror_angle)
     angle = angle_cal([mirror_prev[0] - x, y - mirror_prev[1]])
