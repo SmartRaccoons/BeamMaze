@@ -7,7 +7,7 @@ class Game
   constructor: ->
     @_object_id = 0
     @_mirror = []
-    @_platform = {}
+    @_platform = []
     @_mirrors_correct = false
 #    @_wall = []
 
@@ -28,7 +28,7 @@ class Game
     middle = Math.floor(size/2)
     for fn in Object.keys(methods)
       methods[fn] = ((name, fn)=>
-        (parent, x, y)=>
+        (parent=null, x=0, y=0)=>
           console.info name, parent, x, y
           console.info fn
           if fn
@@ -38,23 +38,23 @@ class Game
             @[fn].apply(@, params)
       )(fn, methods[fn])
 
-    methods[map[middle][middle]](null, middle, middle)
+    methods[map[middle][middle]]()
     for m in [1..middle]
-      parent = @platform(m, middle * 10, m * 10)
+      parent = @platform(m, m * 10)
       for x in [-m..m]
-        methods[map[x + middle][m + middle]](parent, x + middle, m + middle)
-        methods[map[x + middle][-m + middle]](parent, x + middle, -m + middle)
+        methods[map[x + middle][m + middle]](parent, x, m)
+        methods[map[x + middle][-m + middle]](parent, x, -m)
       for y in [(-m+1)...m]
-        methods[map[m + middle][y + middle]](parent, m + middle, y + middle)
-        methods[map[-m + middle][y + middle]](parent, -m + middle, y + middle)
+        methods[map[m + middle][y + middle]](parent, m, y)
+        methods[map[-m + middle][y + middle]](parent, -m, y)
     for m in [0...size]
-      methods[map[size][m]](null, middle+1, size, m)
+      methods[map[size][m]](null, 1, size - middle)
 
   _name: ->
     @_object_id++
     "o_#{@_object_id}"
 
-  beam_source: (coors, angles...)->
+  beam_source: (coors)->
     @_beam_coors = coors
     ob = BABYLON.Mesh.CreateSphere(@_name(), 5, 4, @_scene)
     material = new BABYLON.StandardMaterial(@_name(), @_scene)
@@ -65,7 +65,8 @@ class Game
     ob.position.z = coors[2]
     ob.material.emissiveColor = new BABYLON.Color3(1.0, 1.0, 0)
 
-  platform: (name, center, size)->
+  platform: (name, size)->
+    console.info 'platform', name, size
     width = size * 2 + @_step
     depth = 2
     ob = BABYLON.MeshBuilder.CreateBox(@_name(), {
@@ -73,35 +74,44 @@ class Game
       height: width
       depth: depth
     }, @_scene)
-    ob.position.x = center
-    ob.position.y = center
-    ob.position.z = 0
     ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material.alpha = 0.4
+    ob._rotation_target = new BABYLON.Vector3.Zero()
     for c in [{
-      size: [@_step, @_step]
-      position: [-size, -size]
-      click: (ob)->
-        console.info ob
-        ob.rotation.z += Math.PI
-#    }, {
 #      size: [@_step, @_step]
-#      position: [size, size]
-#      click: (ob)->
-#        console.info ob
-#        ob.rotation.z -= Math.PI
+#      position: [-size, -size]
+#      click: ->
+#        ob.rotation.x += Math.PI
+#        ob.rotation.y += Math.PI
+#    }, {
+#      size: [width - 2 * @_step, @_step]
+#      position: [0, -size]
+#      click: ->
+#        ob.rotation.x -= Math.PI
+#    }, {
+      size: [@_step, width - 2 * @_step]
+      position: [-size, 0]
+      click: =>
+        ob._rotation_target.y -= Math.PI
     }]
       action = BABYLON.MeshBuilder.CreateBox(@_name(), {
         width: c.size[0]
         height: c.size[1]
-        depth: depth
+        depth: @_step
       }, @_scene)
-      action.parent = ob
+#      action.parent = ob
       action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], 0)
       action.actionManager = new BABYLON.ActionManager(@_scene)
-      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, ((action)=>
-        => c.click(action)
+      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, c.click
+      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, ((action)=>
+        => action.material.alpha = 0.5
       )(action)
+      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, ((action)=>
+        => action.material.alpha = 0.2
+      )(action)
+      action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+      action.material.alpha = 0.2
+    @_platform.push ob
     ob
 
   mirror_reverse: (parent, coors)->
@@ -113,6 +123,7 @@ class Game
       height: 0.001
       depth: 10
     }, @_scene)
+    ob.parent = parent
     ob.position.x = coors[0]
     ob.position.y = coors[1]
     ob.position.z = coors[2]
@@ -136,9 +147,9 @@ class Game
 #      return null
     v.subtract(mesh.__rotation_v.scale(2*dot))
 
-  beam: (angle = -Math.PI)->
+  beam: (angle = 0)->
     @text('')
-    length = 200
+    length = 10**5
     if @_beam
       @_beam.dispose()
     points = [new BABYLON.Vector3(@_beam_coors[0], @_beam_coors[1], @_beam_coors[2])]
@@ -165,11 +176,9 @@ class Game
     @_beam = BABYLON.Mesh.CreateLines(@_name(), points, @_scene)
     @_beam_angle_prev = angle
 
-  target: (coors)->
+  target: ->
     target = BABYLON.Mesh.CreateSphere(@_name(), 5, 2, @_scene)
     material = new BABYLON.StandardMaterial(@_name(), @_scene)
-    target.position.x = coors[0]
-    target.position.y = coors[1]
     material.emissiveColor = new BABYLON.Color3(1.0, 0, 0)
     target.material = material
     target._type = 'target'
@@ -198,8 +207,24 @@ class Game
 
   _render_loop: ->
 
+  _animate_angle: (start, end)->
+    step = Math.PI/20
+    diff = end - start
+    if -step < diff < step
+      return end
+    if diff < 0
+      return start - step
+    start + step
+
   _render_before_loop: ->
     changes = false
+    @_platform.forEach (ob)=>
+      if ob._rotation_target.x isnt ob.rotation.x
+        ob.rotation.x = @_animate_angle(ob.rotation.x, ob._rotation_target.x)
+        changes = true
+      if ob._rotation_target.y isnt ob.rotation.y
+        ob.rotation.y = @_animate_angle(ob.rotation.y, ob._rotation_target.y)
+        changes = true
 #    @_mirror.forEach (ob)=>
 #      if ob.__rotation isnt ob.__rotation_new
 #        ob.__rotate(ob.__rotation_new)
