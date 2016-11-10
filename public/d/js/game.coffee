@@ -76,41 +76,62 @@ class Game
     }, @_scene)
     ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material.alpha = 0.4
-    ob._rotation_target = new BABYLON.Vector3.Zero()
+    ob._rotation_animations = []
     for c in [{
-#      size: [@_step, @_step]
-#      position: [-size, -size]
-#      click: ->
-#        ob.rotation.x += Math.PI
-#        ob.rotation.y += Math.PI
-#    }, {
-#      size: [width - 2 * @_step, @_step]
-#      position: [0, -size]
-#      click: ->
-#        ob.rotation.x -= Math.PI
-#    }, {
+      size: [@_step, @_step]
+      position: [size, size]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(space, -space, 0)
+    }, {
+      size: [@_step, @_step]
+      position: [-size, -size]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(-space, space, 0)
+    }, {
+      size: [@_step, @_step]
+      position: [size, -size]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(-space, -space, 0)
+    }, {
+      size: [@_step, @_step]
+      position: [-size, size]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(space, space, 0)
+    }, {
+      size: [width - 2 * @_step, @_step]
+      position: [0, size]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(space, 0, 0)
+    }, {
+      size: [width - 2 * @_step, @_step]
+      position: [0, -size]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(-space, 0, 0)
+    }, {
       size: [@_step, width - 2 * @_step]
       position: [-size, 0]
-      click: =>
-        ob._rotation_target.y -= Math.PI
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(0, space, 0)
+    }, {
+      size: [@_step, width - 2 * @_step]
+      position: [size, 0]
+      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(0, -space, 0)
     }]
-      action = BABYLON.MeshBuilder.CreateBox(@_name(), {
-        width: c.size[0]
-        height: c.size[1]
-        depth: @_step
-      }, @_scene)
-#      action.parent = ob
-      action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], 0)
-      action.actionManager = new BABYLON.ActionManager(@_scene)
-      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, c.click
-      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, ((action)=>
-        => action.material.alpha = 0.5
-      )(action)
-      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, ((action)=>
-        => action.material.alpha = 0.2
-      )(action)
-      action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
-      action.material.alpha = 0.2
+      for space in [-1, 1]
+        action = BABYLON.MeshBuilder.CreateBox(@_name(), {
+          width: c.size[0]
+          height: c.size[1]
+          depth: @_step / 2
+        }, @_scene)
+        action.parent = ob
+        action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], space * @_step/4 )
+        action.actionManager = new BABYLON.ActionManager(@_scene)
+        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, ((space, fn)->
+          => fn(space)
+        )(space, c.click)
+        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, ((action)=>
+          =>
+            action.material._alpha_previous = action.material.alpha
+            action.material.alpha = 0.7
+        )(action)
+        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, ((action)=>
+          => action.material.alpha = action.material._alpha_previous
+        )(action)
+        action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+        action.material.alpha = 0
     @_platform.push ob
     ob
 
@@ -147,11 +168,14 @@ class Game
 #      return null
     v.subtract(mesh.__rotation_v.scale(2*dot))
 
-  beam: (angle = 0)->
-    @text('')
-    length = 10**5
+  beam_remove: ->
     if @_beam
       @_beam.dispose()
+
+  beam: (angle = Math.PI * 3/2)->
+    @text('')
+    length = 10**5
+    @beam_remove()
     points = [new BABYLON.Vector3(@_beam_coors[0], @_beam_coors[1], @_beam_coors[2])]
     last_mirror = ''
     end = new BABYLON.Vector3(Math.cos(angle) * length, Math.sin(angle) * length, 0)
@@ -207,24 +231,25 @@ class Game
 
   _render_loop: ->
 
-  _animate_angle: (start, end)->
-    step = Math.PI/20
-    diff = end - start
-    if -step < diff < step
-      return end
-    if diff < 0
-      return start - step
-    start + step
-
   _render_before_loop: ->
     changes = false
     @_platform.forEach (ob)=>
-      if ob._rotation_target.x isnt ob.rotation.x
-        ob.rotation.x = @_animate_angle(ob.rotation.x, ob._rotation_target.x)
-        changes = true
-      if ob._rotation_target.y isnt ob.rotation.y
-        ob.rotation.y = @_animate_angle(ob.rotation.y, ob._rotation_target.y)
-        changes = true
+      if not ob._rotation_animation and ob._rotation_animations.length > 0
+        ob._rotation_animation = {
+          vector: ob._rotation_animations.shift()
+          steps: 30
+          step: Math.PI/30
+        }
+      if ob._rotation_animation
+        ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.LOCAL)
+        ob._rotation_animation.steps--
+        if ob._rotation_animation.steps is 0
+          ob._rotation_animation = null
+          changes = true
+    if changes and @_beam
+      @beam_remove()
+    if not changes and not @_beam
+      @beam()
 #    @_mirror.forEach (ob)=>
 #      if ob.__rotation isnt ob.__rotation_new
 #        ob.__rotate(ob.__rotation_new)
