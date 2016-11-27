@@ -29,8 +29,6 @@ class Game
     for fn in Object.keys(methods)
       methods[fn] = ((name, fn)=>
         (parent=null, x=0, y=0)=>
-          console.info name, parent, x, y
-          console.info fn
           if fn
             params = [[x*10, y*10, 0]]
             if parent
@@ -48,7 +46,7 @@ class Game
         methods[map[m + middle][y + middle]](parent, m, y)
         methods[map[-m + middle][y + middle]](parent, -m, y)
     for m in [0...size]
-      methods[map[size][m]](null, 1, size - middle)
+      methods[map[size][m]](null, m - middle, size - middle)
 
   _name: ->
     @_object_id++
@@ -149,8 +147,7 @@ class Game
     ob.position.y = coors[1]
     ob.position.z = coors[2]
     ob._type = 'mirror'
-    ob.rotation.z = angle + 3*Math.PI/2
-    ob.__rotation_v = new BABYLON.Vector3(Math.cos(angle), Math.sin(angle), 0)
+    ob.rotation.z = angle
     @_mirror.push ob
     ob
 
@@ -163,22 +160,29 @@ class Game
     ob
 
   _reflect: (v, mesh)->
-    dot = BABYLON.Vector3.Dot(v, mesh.__rotation_v)
-#    if -0.01 < Math.PI/2 - Math.acos(dot / (v.length() * mesh.__rotation_v.length())) < 0.01
-#      return null
-    v.subtract(mesh.__rotation_v.scale(2*dot))
+    points = mesh._boundingInfo.boundingBox.vectorsWorld.reduce (actual, value)->
+      return [
+        if !actual[0] or actual[0].x > value.x then value else actual[0],
+        if !actual[1] or actual[1].x < value.x then value else actual[1]
+      ]
+    right = points[0].y > points[1].y
+    if (v.x is 0 and right) or (v.y is 0 and !right)
+      return new BABYLON.Vector3(-v.y, v.x , 0)
+    return new BABYLON.Vector3(v.y, -v.x , 0)
 
   beam_remove: ->
     if @_beam
       @_beam.dispose()
+      @_beam = null
 
   beam: (angle = Math.PI * 3/2)->
+    console.info 'beam'
     @text('')
     length = 10**5
     @beam_remove()
     points = [new BABYLON.Vector3(@_beam_coors[0], @_beam_coors[1], @_beam_coors[2])]
-    last_mirror = ''
-    end = new BABYLON.Vector3(Math.cos(angle) * length, Math.sin(angle) * length, 0)
+    last_mirror = null
+    end = new BABYLON.Vector3(Math.round(Math.cos(angle) * length), Math.round(Math.sin(angle) * length), 0)
     for i in [0..100]
       pick_info = @_scene.pickWithRay new BABYLON.Ray(points[points.length - 1], end, 1000), ((i)->
         (m)->
@@ -186,7 +190,8 @@ class Game
             return false
           ['mirror', 'target', 'obstacle', 'source'].indexOf(m._type) > -1
       )(i)
-      points.push if pick_info.hit then pick_info.pickedPoint else end
+      pick_info_point = if pick_info.pickedPoint then new BABYLON.Vector3(Math.round(pick_info.pickedPoint.x), Math.round(pick_info.pickedPoint.y), Math.round(pick_info.pickedPoint.z)) else null
+      points.push if pick_info_point then pick_info_point else end
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
@@ -234,32 +239,23 @@ class Game
   _render_before_loop: ->
     changes = false
     @_platform.forEach (ob)=>
-      if not ob._rotation_animation and ob._rotation_animations.length > 0
+      if not ob._rotation_animation
+        if ob._rotation_animations.length is 0
+          return
         ob._rotation_animation = {
-          vector: ob._rotation_animations.shift()
-          steps: 30
-          step: Math.PI/30
-        }
-      if ob._rotation_animation
-        ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.LOCAL)
-        ob._rotation_animation.steps--
-        if ob._rotation_animation.steps is 0
-          ob._rotation_animation = null
-          changes = true
+            vector: ob._rotation_animations.shift()
+            steps: 30
+            step: Math.PI/30
+          }
+      changes = true
+      ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.LOCAL)
+      ob._rotation_animation.steps--
+      if ob._rotation_animation.steps is 0
+        ob._rotation_animation = null
     if changes and @_beam
       @beam_remove()
     if not changes and not @_beam
       @beam()
-#    @_mirror.forEach (ob)=>
-#      if ob.__rotation isnt ob.__rotation_new
-#        ob.__rotate(ob.__rotation_new)
-#        changes = true
-#    if changes
-#      setTimeout =>
-#        @beam()
-#      , 0
-#    console.info @_target
-
 
   render: ->
     canvas = document.createElement('canvas')
