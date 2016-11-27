@@ -37,16 +37,18 @@ class Game
       )(fn, methods[fn])
 
     methods[map[middle][middle]]()
+    map.reverse()
+    for m in [0...size]
+      methods[map[0][m]](null, m - middle, -middle - 1)
+    map.shift()
     for m in [1..middle]
       parent = @platform(m, m * 10)
-      for x in [-m..m]
-        methods[map[x + middle][m + middle]](parent, x, m)
-        methods[map[x + middle][-m + middle]](parent, x, -m)
-      for y in [(-m+1)...m]
-        methods[map[m + middle][y + middle]](parent, m, y)
-        methods[map[-m + middle][y + middle]](parent, -m, y)
-    for m in [0...size]
-      methods[map[size][m]](null, m - middle, size - middle)
+      for y in [-m..m]
+        methods[map[(y + middle)][m + middle]](parent, m, y)
+        methods[map[(y + middle)][-m + middle]](parent, -m, y)
+      for x in [(-m+1)...m]
+        methods[map[m + middle][x + middle]](parent, x, m)
+        methods[map[-m + middle][x + middle]](parent, x, -m)
 
   _name: ->
     @_object_id++
@@ -139,7 +141,7 @@ class Game
   mirror: (parent, coors, angle=Math.PI/4)->
     ob = BABYLON.MeshBuilder.CreateBox(@_name(), {
       width: 10
-      height: 0.001
+      height: 1
       depth: 10
     }, @_scene)
     ob.parent = parent
@@ -175,7 +177,7 @@ class Game
       @_beam.dispose()
       @_beam = null
 
-  beam: (angle = Math.PI * 3/2)->
+  beam: (angle = Math.PI/2)->
     console.info 'beam'
     @text('')
     length = 10**5
@@ -190,7 +192,7 @@ class Game
             return false
           ['mirror', 'target', 'obstacle', 'source'].indexOf(m._type) > -1
       )(i)
-      pick_info_point = if pick_info.pickedPoint then new BABYLON.Vector3(Math.round(pick_info.pickedPoint.x), Math.round(pick_info.pickedPoint.y), Math.round(pick_info.pickedPoint.z)) else null
+      pick_info_point = if pick_info.pickedPoint then new BABYLON.Vector3(Math.round(pick_info.pickedPoint.x/10)*10, Math.round(pick_info.pickedPoint.y/10)*10, Math.round(pick_info.pickedPoint.z/10)*10) else null
       points.push if pick_info_point then pick_info_point else end
       if not pick_info.hit
         break
