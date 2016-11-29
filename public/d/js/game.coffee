@@ -1,7 +1,7 @@
 
 
 
-class Game
+class Game extends MicroEvent
   _step: 10
 
   constructor: ->
@@ -9,6 +9,9 @@ class Game
     @_mirror = []
     @_platform = []
     @_mirrors_correct = false
+    @_rotations = false
+    @bind 'rotation-start', @beam_remove
+    @bind 'rotation-stop', @beam
 #    @_wall = []
 
   map: ->
@@ -21,10 +24,9 @@ class Game
     }
 
     map_string = window.MAPS[0]
-#    map = window.MAP(10, 4, [2, 4])
     map = map_string.split("\n").map (s)->
       s.trim().split('').map (ob)-> parseInt(ob)
-    size = map[0].length
+    @_map_size = size = map[0].length
     middle = Math.floor(size/2)
     for fn in Object.keys(methods)
       methods[fn] = ((name, fn)=>
@@ -50,6 +52,21 @@ class Game
         methods[map[m + middle][x + middle]](parent, x, m)
         methods[map[-m + middle][x + middle]](parent, x, -m)
 
+  get_map: ->
+    map = []
+    for y in [0..@_map_size]
+      map[y] = []
+      for x in [0...@_map_size]
+        map[y][x] = '0'
+    middle = Math.floor(@_map_size/2)
+    map[middle + 1][middle] = '9'
+    @_mirror.forEach (m)=>
+      map[Math.round(m._absolutePosition.y / @_step) + middle + 1][Math.round(m._absolutePosition.x / @_step) + middle] = if @_mirror_position(m) then '2' else '1'
+    map[0][@_beam_coors[0] / @_step  + middle] = '8'
+    map.map (line)-> line.join ''
+    .reverse()
+    .join("\n")
+
   _name: ->
     @_object_id++
     "o_#{@_object_id}"
@@ -66,7 +83,6 @@ class Game
     ob.material.emissiveColor = new BABYLON.Color3(1.0, 1.0, 0)
 
   platform: (name, size)->
-    console.info 'platform', name, size
     width = size * 2 + @_step
     depth = 2
     ob = BABYLON.MeshBuilder.CreateBox(@_name(), {
@@ -75,7 +91,7 @@ class Game
       depth: depth
     }, @_scene)
     ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
-    ob.material.alpha = 0.4
+    ob.material.alpha = 0.1
     ob._rotation_animations = []
     for c in [{
       size: [@_step, @_step]
@@ -118,18 +134,21 @@ class Game
         }, @_scene)
         action.parent = ob
         action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], space * @_step/4 )
+        mouseout = ((action)=>
+          => action.material.alpha = 0
+        )(action)
         action.actionManager = new BABYLON.ActionManager(@_scene)
-        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, ((space, fn)->
-          => fn(space)
-        )(space, c.click)
+
+        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, ((space, fn, mouseout)->
+          =>
+            mouseout()
+            fn(space)
+        )(space, c.click, mouseout)
         action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, ((action)=>
           =>
-            action.material._alpha_previous = action.material.alpha
             action.material.alpha = 0.7
         )(action)
-        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, ((action)=>
-          => action.material.alpha = action.material._alpha_previous
-        )(action)
+        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, mouseout
         action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
         action.material.alpha = 0
     @_platform.push ob
@@ -161,13 +180,16 @@ class Game
     ob._type = 'obstacle'
     ob
 
-  _reflect: (v, mesh)->
+  _mirror_position: (mesh)->
     points = mesh._boundingInfo.boundingBox.vectorsWorld.reduce (actual, value)->
       return [
         if !actual[0] or actual[0].x > value.x then value else actual[0],
         if !actual[1] or actual[1].x < value.x then value else actual[1]
       ]
-    right = points[0].y > points[1].y
+    points[0].y > points[1].y
+
+  _reflect: (v, mesh)->
+    right = @_mirror_position(mesh)
     if (v.x is 0 and right) or (v.y is 0 and !right)
       return new BABYLON.Vector3(-v.y, v.x , 0)
     return new BABYLON.Vector3(v.y, -v.x , 0)
@@ -178,7 +200,6 @@ class Game
       @_beam = null
 
   beam: (angle = Math.PI/2)->
-    console.info 'beam'
     @text('')
     length = 10**5
     @beam_remove()
@@ -205,7 +226,6 @@ class Game
         break
       last_mirror = pick_info.pickedMesh.id
     @_beam = BABYLON.Mesh.CreateLines(@_name(), points, @_scene)
-    @_beam_angle_prev = angle
 
   target: ->
     target = BABYLON.Mesh.CreateSphere(@_name(), 5, 2, @_scene)
@@ -213,7 +233,6 @@ class Game
     material.emissiveColor = new BABYLON.Color3(1.0, 0, 0)
     target.material = material
     target._type = 'target'
-    @_target = target
     target
 
   text: (t)->
@@ -254,10 +273,10 @@ class Game
       ob._rotation_animation.steps--
       if ob._rotation_animation.steps is 0
         ob._rotation_animation = null
-    if changes and @_beam
-      @beam_remove()
-    if not changes and not @_beam
-      @beam()
+
+    if @_rotations isnt changes
+      @_rotations = changes
+      @trigger 'rotation-' + if changes then 'start' else 'stop'
 
   render: ->
     canvas = document.createElement('canvas')
@@ -281,3 +300,4 @@ class Game
 
 g = new Game()
 g.render()
+window.GAME = g
