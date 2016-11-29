@@ -12,9 +12,10 @@ run :
 
 production :
 	grunt compile
-	cat bower_components/babylonjs/dist/preview release/babylon.js \
+	cat bower_components/babylonjs/dist/preview\ release/babylon.js \
 	bower_components/microevent.js/microevent.js \
 	public/d/js/init.js \
+	public/d/js/map.js \
 	public/d/locale/en.js \
 	public/d/js/game.js \
 > public/d/all.js
