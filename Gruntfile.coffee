@@ -32,8 +32,7 @@ module.exports = (grunt) ->
       static:
         files: ['public/d/**/*.css',
           'public/**/*.html',
-          'public/**/*.js',
-          'public_test/**/*.js'],
+          'public/**/*.js'],
         options:
           livereload: true
     compile:
