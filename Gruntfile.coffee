@@ -1,5 +1,5 @@
 fs = require('fs')
-pjson = require('./bower.json')
+pjson = require('./package.json')
 exec = require('child_process').exec
 
 module.exports = (grunt) ->
