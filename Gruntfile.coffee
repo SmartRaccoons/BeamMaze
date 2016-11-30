@@ -25,6 +25,14 @@ module.exports = (grunt) ->
     for file in coffee
       exec("#{coffee_command} #{file}", exec_callback)
 
+  grunt.registerTask 'version', ->
+    dir = __dirname + '/public/v/' + pjson.version
+    if !fs.existsSync(dir)
+      fs.mkdirSync(dir)
+      fs.mkdirSync("#{dir}/d")
+    ['index.html', 'd/j.js'].forEach (f)->
+      exec "cp public/#{f} #{dir}/#{f}"
+
   grunt.initConfig
     watch:
       coffee:

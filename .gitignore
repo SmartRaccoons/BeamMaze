@@ -4,3 +4,4 @@ node_modules/
 *.js
 *.js.map
 !public/d/j.js
+!public/v/**/*.js
