@@ -27448,17 +27448,17 @@ en: {}
 }).call(this);
 
 (function() {
-window.MAPS = [ "01020\n00201\n00900\n02000\n00000\n08000" ];
+window.MAPS = [ "0000020\n0100000\n2100020\n1119000\n0100000\n1001110\n2001000\n0800000", "01020\n00201\n00900\n02000\n00000\n08000", "200\n190\n200\n800", "01020\n00201\n00900\n02000\n00000\n08000" ];
 }).call(this);
 
 (function() {
 App.lang.strings.en = {
-"": ""
+"well done": "Well done!"
 };
 }).call(this);
 
 (function() {
-var Game, g, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -27470,20 +27470,65 @@ child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
 };
-Game = function(_super) {
+window.Game = Game = function(_super) {
 __extends(Game, _super);
 Game.prototype._step = 10;
-function Game() {
+function Game(options) {
+this.options = options;
 this._object_id = 0;
+this._before_render_fn = [];
+this._clear();
+this.bind("rotation-start", function(_this) {
+return function() {
+_this.text("");
+return _this.beam_remove();
+};
+}(this));
+this.bind("rotation-stop", function(_this) {
+return function() {
+return _this._before_render_fn.push(function() {
+return _this.beam();
+});
+};
+}(this));
+this.bind("beam", function(_this) {
+return function() {
+if (_this._solved) {
+return _this.text(_l("well done"));
+}
+};
+}(this));
+}
+Game.prototype._clear = function() {
+this._controls = [];
 this._mirror = [];
 this._platform = [];
-this._mirrors_correct = false;
-this._rotations = false;
-this.bind("rotation-start", this.beam_remove);
-this.bind("rotation-stop", this.beam);
+return this._rotations = null;
+};
+Game.prototype.map = function(map_string) {
+this._map_remove();
+return this._map_load(map_string);
+};
+Game.prototype._map_remove = function() {
+if (this._beam_source) {
+this._beam_source.dispose();
 }
-Game.prototype.map = function() {
-var fn, m, map, map_string, methods, middle, parent, size, x, y, _i, _j, _k, _l, _len, _ref, _results;
+if (this._target) {
+this._target.dispose();
+}
+this._controls.forEach(function(ob) {
+return ob.dispose();
+});
+this._mirror.forEach(function(ob) {
+return ob.dispose();
+});
+this._platform.forEach(function(ob) {
+return ob.dispose();
+});
+return this._clear();
+};
+Game.prototype._map_load = function(map_string) {
+var fn, m, map, methods, middle, parent, size, x, y, _i, _j, _k, _l, _len, _ref, _results;
 methods = {
 "0": null,
 "1": "mirror",
@@ -27491,7 +27536,6 @@ methods = {
 "8": "beam_source",
 "9": "target"
 };
-map_string = window.MAPS[0];
 map = map_string.split("\n").map(function(s) {
 return s.trim().split("").map(function(ob) {
 return parseInt(ob);
@@ -27551,45 +27595,24 @@ return _results1;
 }
 return _results;
 };
-Game.prototype.get_map = function() {
-var map, middle, x, y, _i, _j, _ref, _ref1;
-map = [];
-for (y = _i = 0, _ref = this._map_size; 0 <= _ref ? _i <= _ref : _i >= _ref; y = 0 <= _ref ? ++_i : --_i) {
-map[y] = [];
-for (x = _j = 0, _ref1 = this._map_size; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
-map[y][x] = "0";
-}
-}
-middle = Math.floor(this._map_size / 2);
-map[middle + 1][middle] = "9";
-this._mirror.forEach(function(_this) {
-return function(m) {
-return map[Math.round(m._absolutePosition.y / _this._step) + middle + 1][Math.round(m._absolutePosition.x / _this._step) + middle] = _this._mirror_position(m) ? "2" : "1";
-};
-}(this));
-map[0][this._beam_coors[0] / this._step + middle] = "8";
-return map.map(function(line) {
-return line.join("");
-}).reverse().join("\n");
-};
 Game.prototype._name = function() {
 this._object_id++;
 return "o_" + this._object_id;
 };
 Game.prototype.beam_source = function(coors) {
-var material, ob;
+var ob;
 this._beam_coors = coors;
 ob = BABYLON.Mesh.CreateSphere(this._name(), 5, 4, this._scene);
-material = new BABYLON.StandardMaterial(this._name(), this._scene);
-ob.material = material;
+ob.material = new BABYLON.StandardMaterial(this._name(), this._scene);
 ob._type = "source";
 ob.position.x = coors[0];
 ob.position.y = coors[1];
 ob.position.z = coors[2];
-return ob.material.emissiveColor = new BABYLON.Color3(1, 1, 0);
+ob.material.emissiveColor = new BABYLON.Color3(1, 1, 0);
+return this._beam_source = ob;
 };
 Game.prototype.platform = function(name, size) {
-var action, c, depth, mouseout, ob, space, width, _i, _j, _len, _len1, _ref, _ref1;
+var depth, ob, width;
 width = size * 2 + this._step;
 depth = 2;
 ob = BABYLON.MeshBuilder.CreateBox(this._name(), {
@@ -27599,96 +27622,83 @@ depth: depth
 }, this._scene);
 ob.material = new BABYLON.StandardMaterial(this._name(), this._scene);
 ob.material.alpha = .1;
-ob._rotation_animations = [];
-_ref = [ {
+[ {
 size: [ this._step, this._step ],
 position: [ size, size ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(space, -space, 0));
-}
+vector: new BABYLON.Vector3(-1, 1, 0)
 }, {
 size: [ this._step, this._step ],
 position: [ -size, -size ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(-space, space, 0));
-}
+vector: new BABYLON.Vector3(1, -1, 0)
 }, {
 size: [ this._step, this._step ],
 position: [ size, -size ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(-space, -space, 0));
-}
+vector: new BABYLON.Vector3(1, 1, 0)
 }, {
 size: [ this._step, this._step ],
 position: [ -size, size ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(space, space, 0));
-}
+vector: new BABYLON.Vector3(-1, -1, 0)
 }, {
 size: [ width - 2 * this._step, this._step ],
 position: [ 0, size ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(space, 0, 0));
-}
+vector: new BABYLON.Vector3(-1, 0, 0)
 }, {
 size: [ width - 2 * this._step, this._step ],
 position: [ 0, -size ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(-space, 0, 0));
-}
+vector: new BABYLON.Vector3(1, 0, 0)
 }, {
 size: [ this._step, width - 2 * this._step ],
 position: [ -size, 0 ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(0, space, 0));
-}
+vector: new BABYLON.Vector3(0, -1, 0)
 }, {
 size: [ this._step, width - 2 * this._step ],
 position: [ size, 0 ],
-click: function(space) {
-return ob._rotation_animations.push(new BABYLON.Vector3(0, -space, 0));
-}
-} ];
-for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-c = _ref[_i];
-_ref1 = [ -1, 1 ];
-for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-space = _ref1[_j];
-action = BABYLON.MeshBuilder.CreateBox(this._name(), {
+vector: new BABYLON.Vector3(0, 1, 0)
+} ].forEach(function(_this) {
+return function(c) {
+var action, mouseout;
+action = BABYLON.MeshBuilder.CreateBox(_this._name(), {
 width: c.size[0],
 height: c.size[1],
-depth: this._step / 2
-}, this._scene);
-action.parent = ob;
-action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], space * this._step / 4);
-mouseout = function(_this) {
-return function(action) {
-return function() {
+depth: _this._step
+}, _this._scene);
+_this._controls.push(action);
+action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], 0);
+mouseout = function() {
 return action.material.alpha = 0;
 };
+action.actionManager = new BABYLON.ActionManager(_this._scene);
+mouseout = function() {
+return action.material.alpha = 0;
 };
-}(this)(action);
-action.actionManager = new BABYLON.ActionManager(this._scene);
-action.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function(space, fn, mouseout) {
-return function(_this) {
-return function() {
-mouseout();
-return fn(space);
-};
-}(this);
-}(space, c.click, mouseout)));
-action.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(_this) {
-return function(action) {
-return function() {
+action.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function() {
+return ob.__rotate(c.vector);
+}));
+action.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function() {
 return action.material.alpha = .7;
-};
-};
-}(this)(action)));
+}));
 action.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, mouseout));
-action.material = new BABYLON.StandardMaterial(this._name(), this._scene);
-action.material.alpha = 0;
+action.material = new BABYLON.StandardMaterial(_this._name(), _this._scene);
+return action.material.alpha = 0;
+};
+}(this));
+ob._rotation_animations = [];
+ob.__rotate = function(vector, angle, steps) {
+if (angle == null) {
+angle = Math.PI;
 }
+if (steps == null) {
+steps = 30;
 }
+if (!steps) {
+return ob.rotate(vector, angle, BABYLON.Space.LOCAL);
+}
+return ob._rotation_animations.push({
+vector: vector,
+steps: steps,
+step: angle / steps
+});
+};
 this._platform.push(ob);
 return ob;
 };
@@ -27702,7 +27712,7 @@ angle = Math.PI / 4;
 }
 ob = BABYLON.MeshBuilder.CreateBox(this._name(), {
 width: 10,
-height: 1,
+height: .1,
 depth: 10
 }, this._scene);
 ob.parent = parent;
@@ -27711,6 +27721,8 @@ ob.position.y = coors[1];
 ob.position.z = coors[2];
 ob._type = "mirror";
 ob.rotation.z = angle;
+ob.material = new BABYLON.StandardMaterial(this._name(), this._scene);
+ob.material.emissiveTexture = new BABYLON.Texture("" + this.options.path + "/img/mirror.png", this._scene);
 this._mirror.push(ob);
 return ob;
 };
@@ -27740,6 +27752,7 @@ return new BABYLON.Vector3(v.y, -v.x, 0);
 };
 Game.prototype.beam_remove = function() {
 if (this._beam) {
+this._solved = false;
 this._beam.dispose();
 return this._beam = null;
 }
@@ -27749,7 +27762,6 @@ var end, i, last_mirror, length, pick_info, pick_info_point, points, _i;
 if (angle == null) {
 angle = Math.PI / 2;
 }
-this.text("");
 length = Math.pow(10, 5);
 this.beam_remove();
 points = [ new BABYLON.Vector3(this._beam_coors[0], this._beam_coors[1], this._beam_coors[2]) ];
@@ -27770,7 +27782,7 @@ if (!pick_info.hit) {
 break;
 }
 if (pick_info.pickedMesh._type === "target") {
-this.text("Well done!");
+this._solved = true;
 }
 if (pick_info.pickedMesh._type !== "mirror") {
 break;
@@ -27781,7 +27793,8 @@ break;
 }
 last_mirror = pick_info.pickedMesh.id;
 }
-return this._beam = BABYLON.Mesh.CreateLines(this._name(), points, this._scene);
+this._beam = BABYLON.Mesh.CreateLines(this._name(), points, this._scene);
+return this.trigger("beam");
 };
 Game.prototype.target = function() {
 var material, target;
@@ -27790,7 +27803,7 @@ material = new BABYLON.StandardMaterial(this._name(), this._scene);
 material.emissiveColor = new BABYLON.Color3(1, 0, 0);
 target.material = material;
 target._type = "target";
-return target;
+return this._target = target;
 };
 Game.prototype.text = function(t) {
 var texture;
@@ -27817,6 +27830,12 @@ return texture.drawText(t, null, 256, "bold 40px verdana", "#11ee00", null);
 Game.prototype._render_loop = function() {};
 Game.prototype._render_before_loop = function() {
 var changes;
+if (this._before_render_fn.length > 0) {
+this._before_render_fn.pop()();
+}
+if (this._platform.length === 0) {
+return;
+}
 changes = false;
 this._platform.forEach(function(_this) {
 return function(ob) {
@@ -27824,14 +27843,10 @@ if (!ob._rotation_animation) {
 if (ob._rotation_animations.length === 0) {
 return;
 }
-ob._rotation_animation = {
-vector: ob._rotation_animations.shift(),
-steps: 30,
-step: Math.PI / 30
-};
+ob._rotation_animation = ob._rotation_animations.shift();
 }
 changes = true;
-ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.LOCAL);
+ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.WORLD);
 ob._rotation_animation.steps--;
 if (ob._rotation_animation.steps === 0) {
 return ob._rotation_animation = null;
@@ -27859,16 +27874,25 @@ return engine.resize();
 });
 scene = this._scene = new BABYLON.Scene(engine);
 scene.registerBeforeRender(this._render_before_loop.bind(this));
-camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene);
-camera.setPosition(new BABYLON.Vector3(-50, -60, -200));
-camera.attachControl(canvas, false);
-this.map();
-scene.render();
-return this.beam();
+this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), scene);
+this._camera.setPosition(new BABYLON.Vector3(-30, -40, -150));
+return this.load_map();
+};
+Game.prototype.load_map = function() {
+return setTimeout(function(_this) {
+return function() {
+return _this.map(window.MAPS[0]);
+};
+}(this), 100);
 };
 return Game;
 }(MicroEvent);
-g = new Game();
+}).call(this);
+
+(function() {
+var g;
+g = new window.Game({
+path: window.location.pathname.substr(0, window.location.pathname.lastIndexOf("/")) + "/d"
+});
 g.render();
-window.GAME = g;
 }).call(this);

@@ -55,13 +55,13 @@ window.Game = class GameDebug extends window.Game
         v2.z = 1
       if v.x is 0 and v.y is 0 and v.z is 0
         return
-      p.__rotate((if negate then v2.negate() else v2), true, angle)
+      p.__rotate((if negate then v2.negate() else v2), angle, true)
     check_combination = (c, callback)=>
       c.forEach (combination)=> rotate(@_platform[combination[0]], directions[combination[1]])
       setTimeout =>
         @beam()
         if @_solved
-          right_map = @get_map()
+          right_map = @get_map().join "\n"
           if right.indexOf(right_map) is -1
             right.push right_map
         c.forEach (combination)=> rotate(@_platform[combination[0]], directions[combination[1]], true)
@@ -88,3 +88,7 @@ window.Game = class GameDebug extends window.Game
         @map(@href[1].split('|').join("\n"))
       , 20
     super
+
+  render: ->
+    super
+    @_camera.attachControl(document.body, true)
