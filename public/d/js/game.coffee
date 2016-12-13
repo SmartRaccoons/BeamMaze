@@ -1,20 +1,38 @@
 
 
 
-class Game extends MicroEvent
+window.Game = class Game extends MicroEvent
   _step: 10
 
   constructor: ->
     @_object_id = 0
+    @_before_render_fn = []
     @_mirror = []
     @_platform = []
-    @_mirrors_correct = false
-    @_rotations = false
-    @bind 'rotation-start', @beam_remove
-    @bind 'rotation-stop', @beam
-#    @_wall = []
+    @bind 'rotation-start', =>
+      @text('')
+      @beam_remove()
+    @bind 'rotation-stop', => @_before_render_fn.push => @beam()
+    @bind 'beam', =>
+      if @_solved
+        @text(_l('well done'))
 
-  map: ->
+  map: (map_string)->
+    @_map_remove()
+    @_map_load(map_string)
+
+  _map_remove: ->
+    if @_beam_source
+      @_beam_source.dispose()
+    if @_target
+      @_target.dispose()
+    @_mirror.forEach (ob)-> ob.dispose()
+    @_platform.forEach (ob)-> ob.dispose()
+    @_mirror = []
+    @_platform = []
+    @_rotations = null
+
+  _map_load: (map_string)->
     methods = {
       '0': null
       '1': 'mirror'
@@ -23,7 +41,6 @@ class Game extends MicroEvent
       '9': 'target'
     }
 
-    map_string = window.MAPS[0]
     map = map_string.split("\n").map (s)->
       s.trim().split('').map (ob)-> parseInt(ob)
     @_map_size = size = map[0].length
@@ -52,21 +69,6 @@ class Game extends MicroEvent
         methods[map[m + middle][x + middle]](parent, x, m)
         methods[map[-m + middle][x + middle]](parent, x, -m)
 
-  get_map: ->
-    map = []
-    for y in [0..@_map_size]
-      map[y] = []
-      for x in [0...@_map_size]
-        map[y][x] = '0'
-    middle = Math.floor(@_map_size/2)
-    map[middle + 1][middle] = '9'
-    @_mirror.forEach (m)=>
-      map[Math.round(m._absolutePosition.y / @_step) + middle + 1][Math.round(m._absolutePosition.x / @_step) + middle] = if @_mirror_position(m) then '2' else '1'
-    map[0][@_beam_coors[0] / @_step  + middle] = '8'
-    map.map (line)-> line.join ''
-    .reverse()
-    .join("\n")
-
   _name: ->
     @_object_id++
     "o_#{@_object_id}"
@@ -81,6 +83,7 @@ class Game extends MicroEvent
     ob.position.y = coors[1]
     ob.position.z = coors[2]
     ob.material.emissiveColor = new BABYLON.Color3(1.0, 1.0, 0)
+    @_beam_source = ob
 
   platform: (name, size)->
     width = size * 2 + @_step
@@ -92,39 +95,38 @@ class Game extends MicroEvent
     }, @_scene)
     ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material.alpha = 0.1
-    ob._rotation_animations = []
     for c in [{
       size: [@_step, @_step]
       position: [size, size]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(space, -space, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(space, -space, 0)
     }, {
       size: [@_step, @_step]
       position: [-size, -size]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(-space, space, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(-space, space, 0)
     }, {
       size: [@_step, @_step]
       position: [size, -size]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(-space, -space, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(-space, -space, 0)
     }, {
       size: [@_step, @_step]
       position: [-size, size]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(space, space, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(space, space, 0)
     }, {
       size: [width - 2 * @_step, @_step]
       position: [0, size]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(space, 0, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(space, 0, 0)
     }, {
       size: [width - 2 * @_step, @_step]
       position: [0, -size]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(-space, 0, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(-space, 0, 0)
     }, {
       size: [@_step, width - 2 * @_step]
       position: [-size, 0]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(0, space, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(0, space, 0)
     }, {
       size: [@_step, width - 2 * @_step]
       position: [size, 0]
-      click: (space)-> ob._rotation_animations.push new BABYLON.Vector3(0, -space, 0)
+      click: (space)-> ob.__rotate new BABYLON.Vector3(0, -space, 0)
     }]
       for space in [-1, 1]
         action = BABYLON.MeshBuilder.CreateBox(@_name(), {
@@ -151,6 +153,12 @@ class Game extends MicroEvent
         action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, mouseout
         action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
         action.material.alpha = 0
+
+    ob._rotation_animations = []
+    ob.__rotate = (vector, immediate = false, angle = Math.PI)->
+      if immediate
+        return ob.rotate vector, angle, BABYLON.Space.LOCAL
+      ob._rotation_animations.push vector
     @_platform.push ob
     ob
 
@@ -196,11 +204,11 @@ class Game extends MicroEvent
 
   beam_remove: ->
     if @_beam
+      @_solved = false
       @_beam.dispose()
       @_beam = null
 
   beam: (angle = Math.PI/2)->
-    @text('')
     length = 10**5
     @beam_remove()
     points = [new BABYLON.Vector3(@_beam_coors[0], @_beam_coors[1], @_beam_coors[2])]
@@ -218,7 +226,7 @@ class Game extends MicroEvent
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
-        @text('Well done!')
+        @_solved = true
       if pick_info.pickedMesh._type isnt 'mirror'
         break
       end = @_reflect(end, pick_info.pickedMesh)
@@ -226,6 +234,7 @@ class Game extends MicroEvent
         break
       last_mirror = pick_info.pickedMesh.id
     @_beam = BABYLON.Mesh.CreateLines(@_name(), points, @_scene)
+    @trigger 'beam'
 
   target: ->
     target = BABYLON.Mesh.CreateSphere(@_name(), 5, 2, @_scene)
@@ -233,7 +242,7 @@ class Game extends MicroEvent
     material.emissiveColor = new BABYLON.Color3(1.0, 0, 0)
     target.material = material
     target._type = 'target'
-    target
+    @_target = target
 
   text: (t)->
     if t is @_text_last
@@ -258,6 +267,10 @@ class Game extends MicroEvent
   _render_loop: ->
 
   _render_before_loop: ->
+    if @_before_render_fn.length > 0
+      @_before_render_fn.pop()()
+    if @_platform.length is 0
+      return
     changes = false
     @_platform.forEach (ob)=>
       if not ob._rotation_animation
@@ -292,12 +305,11 @@ class Game extends MicroEvent
     scene.registerBeforeRender @_render_before_loop.bind(@)
     camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene)
     camera.setPosition(new BABYLON.Vector3(-50, -60, -200))
-    camera.attachControl(canvas, false)
-    @map()
-    scene.render()
-    @beam()
+    camera.attachControl(canvas, true)
+    @load_map()
 
+  load_map: ->
+    setTimeout =>
+      @map(window.MAPS[0])
+    , 100
 
-g = new Game()
-g.render()
-window.GAME = g

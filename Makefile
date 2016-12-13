@@ -18,6 +18,7 @@ production :
 	public/d/js/map.js \
 	public/d/locale/en.js \
 	public/d/js/game.js \
+	public/d/js/run.js \
 > public/d/all.js
 	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j.js
 	rm public/d/all.js
