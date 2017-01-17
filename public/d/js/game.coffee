@@ -100,22 +100,6 @@ window.Game = class Game extends MicroEvent
     ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material.alpha = 0.1
     [{
-      size: [@_step, @_step]
-      position: [size, size]
-      vector: new BABYLON.Vector3(-1, 1, 0)
-    }, {
-      size: [@_step, @_step]
-      position: [-size, -size]
-      vector: new BABYLON.Vector3(1, -1, 0)
-    }, {
-      size: [@_step, @_step]
-      position: [size, -size]
-      vector: new BABYLON.Vector3(1, 1, 0)
-    }, {
-      size: [@_step, @_step]
-      position: [-size, size]
-      vector: new BABYLON.Vector3(-1, -1, 0)
-    }, {
       size: [width - 2 * @_step, @_step]
       position: [0, size]
       vector: new BABYLON.Vector3(-1, 0, 0)

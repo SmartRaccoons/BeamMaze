@@ -30,6 +30,7 @@ module.exports = (grunt) ->
     if !fs.existsSync(dir)
       fs.mkdirSync(dir)
       fs.mkdirSync("#{dir}/d")
+    exec "cp -r public/d/img/ #{dir}/d/img/"
     ['index.html', 'd/j.js'].forEach (f)->
       exec "cp public/#{f} #{dir}/#{f}"
 
