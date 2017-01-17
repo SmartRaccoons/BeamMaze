@@ -4,11 +4,11 @@
 window.Game = class Game extends MicroEvent
   _step: 10
 
-  constructor: ->
+  constructor: (options)->
+    @options = options
     @_object_id = 0
     @_before_render_fn = []
-    @_mirror = []
-    @_platform = []
+    @_clear()
     @bind 'rotation-start', =>
       @text('')
       @beam_remove()
@@ -16,6 +16,12 @@ window.Game = class Game extends MicroEvent
     @bind 'beam', =>
       if @_solved
         @text(_l('well done'))
+
+  _clear: ->
+    @_controls = []
+    @_mirror = []
+    @_platform = []
+    @_rotations = null
 
   map: (map_string)->
     @_map_remove()
@@ -26,11 +32,10 @@ window.Game = class Game extends MicroEvent
       @_beam_source.dispose()
     if @_target
       @_target.dispose()
+    @_controls.forEach (ob)-> ob.dispose()
     @_mirror.forEach (ob)-> ob.dispose()
     @_platform.forEach (ob)-> ob.dispose()
-    @_mirror = []
-    @_platform = []
-    @_rotations = null
+    @_clear()
 
   _map_load: (map_string)->
     methods = {
@@ -76,8 +81,7 @@ window.Game = class Game extends MicroEvent
   beam_source: (coors)->
     @_beam_coors = coors
     ob = BABYLON.Mesh.CreateSphere(@_name(), 5, 4, @_scene)
-    material = new BABYLON.StandardMaterial(@_name(), @_scene)
-    ob.material = material
+    ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob._type = 'source'
     ob.position.x = coors[0]
     ob.position.y = coors[1]
@@ -95,70 +99,67 @@ window.Game = class Game extends MicroEvent
     }, @_scene)
     ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
     ob.material.alpha = 0.1
-    for c in [{
+    [{
       size: [@_step, @_step]
       position: [size, size]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(space, -space, 0)
+      vector: new BABYLON.Vector3(-1, 1, 0)
     }, {
       size: [@_step, @_step]
       position: [-size, -size]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(-space, space, 0)
+      vector: new BABYLON.Vector3(1, -1, 0)
     }, {
       size: [@_step, @_step]
       position: [size, -size]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(-space, -space, 0)
+      vector: new BABYLON.Vector3(1, 1, 0)
     }, {
       size: [@_step, @_step]
       position: [-size, size]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(space, space, 0)
+      vector: new BABYLON.Vector3(-1, -1, 0)
     }, {
       size: [width - 2 * @_step, @_step]
       position: [0, size]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(space, 0, 0)
+      vector: new BABYLON.Vector3(-1, 0, 0)
     }, {
       size: [width - 2 * @_step, @_step]
       position: [0, -size]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(-space, 0, 0)
+      vector: new BABYLON.Vector3(1, 0, 0)
     }, {
       size: [@_step, width - 2 * @_step]
       position: [-size, 0]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(0, space, 0)
+      vector: new BABYLON.Vector3(0, -1, 0)
     }, {
       size: [@_step, width - 2 * @_step]
       position: [size, 0]
-      click: (space)-> ob.__rotate new BABYLON.Vector3(0, -space, 0)
-    }]
-      for space in [-1, 1]
-        action = BABYLON.MeshBuilder.CreateBox(@_name(), {
-          width: c.size[0]
-          height: c.size[1]
-          depth: @_step / 2
-        }, @_scene)
-        action.parent = ob
-        action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], space * @_step/4 )
-        mouseout = ((action)=>
-          => action.material.alpha = 0
-        )(action)
-        action.actionManager = new BABYLON.ActionManager(@_scene)
-
-        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, ((space, fn, mouseout)->
-          =>
-            mouseout()
-            fn(space)
-        )(space, c.click, mouseout)
-        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, ((action)=>
-          =>
-            action.material.alpha = 0.7
-        )(action)
-        action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, mouseout
-        action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+      vector: new BABYLON.Vector3(0, 1, 0)
+    }].forEach (c)=>
+      action = BABYLON.MeshBuilder.CreateBox(@_name(), {
+        width: c.size[0]
+        height: c.size[1]
+        depth: @_step
+      }, @_scene)
+      @_controls.push action
+      action.position = new BABYLON.Vector3(-c.position[0], -c.position[1], 0)
+      mouseout = => action.material.alpha = 0
+      action.actionManager = new BABYLON.ActionManager(@_scene)
+      mouseout = =>
         action.material.alpha = 0
+      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, =>
+        ob.__rotate c.vector
+      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, =>
+        action.material.alpha = 0.7
+      action.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, mouseout
+      action.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+      action.material.alpha = 0
 
     ob._rotation_animations = []
-    ob.__rotate = (vector, immediate = false, angle = Math.PI)->
-      if immediate
+    ob.__rotate = (vector, angle = Math.PI, steps = 30)->
+      if !steps
         return ob.rotate vector, angle, BABYLON.Space.LOCAL
-      ob._rotation_animations.push vector
+      ob._rotation_animations.push {
+          vector: vector
+          steps: steps
+          step: angle/steps
+        }
     @_platform.push ob
     ob
 
@@ -168,7 +169,7 @@ window.Game = class Game extends MicroEvent
   mirror: (parent, coors, angle=Math.PI/4)->
     ob = BABYLON.MeshBuilder.CreateBox(@_name(), {
       width: 10
-      height: 1
+      height: 0.1
       depth: 10
     }, @_scene)
     ob.parent = parent
@@ -177,6 +178,8 @@ window.Game = class Game extends MicroEvent
     ob.position.z = coors[2]
     ob._type = 'mirror'
     ob.rotation.z = angle
+    ob.material = new BABYLON.StandardMaterial(@_name(), @_scene)
+    ob.material.emissiveTexture = new BABYLON.Texture("#{@options.path}/img/mirror.png", @_scene)
     @_mirror.push ob
     ob
 
@@ -276,13 +279,9 @@ window.Game = class Game extends MicroEvent
       if not ob._rotation_animation
         if ob._rotation_animations.length is 0
           return
-        ob._rotation_animation = {
-            vector: ob._rotation_animations.shift()
-            steps: 30
-            step: Math.PI/30
-          }
+        ob._rotation_animation = ob._rotation_animations.shift()
       changes = true
-      ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.LOCAL)
+      ob.rotate(ob._rotation_animation.vector, ob._rotation_animation.step, BABYLON.Space.WORLD)
       ob._rotation_animation.steps--
       if ob._rotation_animation.steps is 0
         ob._rotation_animation = null
@@ -303,13 +302,11 @@ window.Game = class Game extends MicroEvent
 
     scene = @_scene = new BABYLON.Scene(engine)
     scene.registerBeforeRender @_render_before_loop.bind(@)
-    camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 200, BABYLON.Vector3.Zero(), scene)
-    camera.setPosition(new BABYLON.Vector3(-50, -60, -200))
-    camera.attachControl(canvas, true)
+    @_camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), scene)
+    @_camera.setPosition(new BABYLON.Vector3(-30, -40, -150))
     @load_map()
 
   load_map: ->
     setTimeout =>
       @map(window.MAPS[0])
     , 100
-
