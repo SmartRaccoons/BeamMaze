@@ -31252,35 +31252,6 @@ return Game;
 }).call(this);
 
 (function() {
-var GameDebug, el, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
-for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
-}
-function ctor() {
-this.constructor = child;
-}
-ctor.prototype = parent.prototype;
-child.prototype = new ctor();
-child.__super__ = parent.prototype;
-return child;
-};
-el = function(id) {
-return document.getElementById(id);
-};
-window.Game = GameDebug = function(_super) {
-__extends(GameDebug, _super);
-function GameDebug() {
-return GameDebug.__super__.constructor.apply(this, arguments);
-}
-GameDebug.prototype.render = function() {
-GameDebug.__super__.render.apply(this, arguments);
-return this._camera.attachControl(document.body, true);
-};
-return GameDebug;
-}(window.Game);
-}).call(this);
-
-(function() {
 var g;
 g = new window.Game({
 path: window.location.pathname.substr(0, window.location.pathname.lastIndexOf("/")) + "/d"
