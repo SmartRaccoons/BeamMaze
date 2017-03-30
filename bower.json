@@ -2,7 +2,8 @@
   "name": "bm.raccoons.lv",
   "private": true,
   "dependencies": {
-    "babylonjs": "^2.4.1",
-    "microevent.js": "*"
+    "babylonjs": "^2.5.0",
+    "microevent.js": "*",
+    "lodash": "^4.17.4"
   }
 }

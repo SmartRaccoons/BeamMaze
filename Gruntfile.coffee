@@ -5,6 +5,7 @@ exec = require('child_process').exec
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-watch')
   coffee = [
+    'public/d/js/*/*.coffee'
     'public/d/js/*.coffee'
     'public/d/locale/*.coffee'
   ]

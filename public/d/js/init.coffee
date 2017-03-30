@@ -8,7 +8,11 @@ window._l = (key, subparams) ->
     )
   res
 
+window.o = {}
+
 window.App =
+  events: new MicroEvent()
+  classes: {}
   lang:
     active: 'en'
     strings:
