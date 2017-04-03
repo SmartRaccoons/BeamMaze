@@ -26,6 +26,8 @@ window.App.events.bind 'game:init', (scene, engine, light, camera)->
 window.o.Object = class Object extends MicroEvent
   _default: {}
   constructor: (options)->
+    _object_id++
+    @_id = _object_id
     @options = _.extend({}, @_default, options)
     if @options.parent_class
       @parent = @options.parent_class
@@ -67,11 +69,10 @@ window.o.Object = class Object extends MicroEvent
 
   _name: ->
     if not @__name
-      _object_id++
       name = ['ob']
       if @name
         name.push @name
-      name.push _object_id
+      name.push @_id
       @__name = name.join('_')
     return @__name
 
