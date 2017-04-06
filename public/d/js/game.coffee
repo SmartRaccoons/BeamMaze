@@ -28,6 +28,7 @@ window.Game = class Game extends MicroEvent
 
     scene = @_scene = new BABYLON.Scene(engine)
     scene.registerBeforeRender @_render_before_loop.bind(@)
+    scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
     @_camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), @_scene)
     @_camera.setPosition(new BABYLON.Vector3(0, 0, -150))
 #    @_light = new BABYLON.SpotLight('Light', new BABYLON.Vector3(-10, 10, -50), new BABYLON.Vector3(0, 0, 0), 1, 20, @_scene)

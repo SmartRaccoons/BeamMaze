@@ -39,6 +39,8 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: coffee
+      sass:
+        files: ['public/d/sass/screen.sass']
       static:
         files: ['public/d/**/*.css',
           'public/**/*.html',
@@ -53,5 +55,8 @@ module.exports = (grunt) ->
     if ext == 'coffee'
 #      console.info("compiling: #{file}")
       exec("#{coffee_command} #{file}", exec_callback)
+    if ext == 'sass'
+#      console.info("compiling: #{file}")
+      exec("cd public/d && compass compile --sourcemap sass/screen.sass", exec_callback)
 
   grunt.registerTask('default', ['watch'])

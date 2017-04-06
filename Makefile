@@ -29,4 +29,5 @@ production :
 	public/d/js/run.js \
 > public/d/all.js
 	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j.js
+	uglifycss public/d/css/screen.css > public/d/css/c.css
 	rm public/d/all.js
