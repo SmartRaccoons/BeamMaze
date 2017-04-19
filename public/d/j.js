@@ -31340,6 +31340,7 @@ return engine.resize();
 });
 scene = this._scene = new BABYLON.Scene(engine);
 scene.registerBeforeRender(this._render_before_loop.bind(this));
+scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), this._scene);
 this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
 this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-40, 60, -100), this._scene);
