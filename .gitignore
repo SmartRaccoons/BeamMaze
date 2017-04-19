@@ -5,3 +5,6 @@ node_modules/
 *.js.map
 !public/d/j.js
 !public/v/**/*.js
+public/d/.sass-cache/
+public/d/css/*
+!public/d/css/c.css

@@ -3,15 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>dev.html</title>
+    <link rel='stylesheet' href='d/css/screen.css' />
     <style type="text/css">
-        body {
-            margin: 0;
-            height: 100%;
-        }
-        canvas {
-            width: 100%;
-            height: 100%;
-        }
         #debug {
             position: absolute;
             top: 0;
@@ -23,7 +16,7 @@
         }
     </style>
 </head>
-<body>
+<body data-version='dev'>
 <div id="debug">
     <textarea id="map-actual"></textarea><button id="map-load">Load</button>
     <br />
@@ -36,6 +29,7 @@
 <script src="../bower_components/babylonjs/dist/preview release/babylon.js"></script>
 <script src="../bower_components/microevent.js/microevent.js"></script>
 <script src="../bower_components/lodash/lodash.js"></script>
+<script src="../bower_components/backbone/backbone.js"></script>
 <script src="d/js/init.js"></script>
 <script src="d/locale/en.js"></script>
 <script src="d/js/object/data.js"></script>

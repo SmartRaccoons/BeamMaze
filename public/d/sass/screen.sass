@@ -1,0 +1,349 @@
+$i : '../images/'
+@import compass
+
+=border-box
+  -moz-box-sizing: border-box
+  -webkit-box-sizing: border-box
+  box-sizing: border-box
+=clearfix
+  &:before, &:after
+    content: " "
+    display: table
+  &:after
+    clear: both
+  +has-layout-zoom
+=reset
+  margin: 0
+  padding: 0
+=reset-list
+  +reset
+  list-style: none
+=select-none
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+=layer-over
+  display: block
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: $colorhide
+
+$color1: #f04923
+$color2: rgb(151, 153, 156)
+$color202: rgba(151, 153, 156, 0.5)
+$color3: rgb(95, 88, 93)
+$colorhide: rgba(0, 0, 0, 0.8)
+
+@import "icon/*.png"
+
+@font-face
+  font-family: "retro"
+  src: url('../font/HIVNotRetro-Regular.woff') format('woff')
+*
+  +border-box
+html, body
+  height: 100%
+  +reset
+  background: #2b272b
+body
+  overflow-y: scroll
+  font: 20px/1.3 retro, arial
+  color: #fff
+  +select-none
+  &:after
+    content: attr(data-version)
+    display: block
+    position: absolute
+    top: 0
+    left: 0
+    padding: 0.2em
+    font-size: 0.6em
+    color: black
+    background: white
+.container
+  min-height: 100%
+  position: relative
+  .back-link
+    position: absolute
+    right: 0.2em
+    bottom: 0.2em
+    font-size: 1em
+
+.start
+  text-align: center
+  h1
+    color: $color1
+    font-size: 7em
+  nav
+    margin: 0
+    li
+      margin: 1.5em
+      &:first-child button
+        font-size: 4em
+  a
+    display: block
+    position: absolute
+    right: 0.2em
+    bottom: 0.2em
+    color: $color2
+    text-decoration: none
+    cursor: pointer
+    &:hover
+      color: $color1
+    &::before
+      content: ''
+      display: inline-block
+      vertical-align: middle
+      margin-right: 5px
+      width: 65px
+      height: 63px
+      background-image: url('../images/raccoon.png')
+.stages, .game
+  width: 100%
+  max-width: 800px
+  padding-bottom: 50%
+  position: relative
+  margin: 0 auto
+.stages[data-page='1']
+  display: block
+.stages
+  &[data-page='1'] .stages-previous,
+  &[data-page='last'] .stages-next
+    display: none
+  @for $i from 1 through 10
+    $j: $i - 1
+    $z: $i + 1
+    &[data-page='#{$i}']
+      ul:nth-child(#{$i}), ul:nth-child(#{$j}), ul:nth-child(#{$z})
+        display: block
+      ul:nth-child(#{$i})
+        left: 0
+      ul:nth-child(#{$z})
+        left: 100%
+      ul:nth-child(#{$j})
+        left: -100%
+  &[data-page='last']
+    ul:nth-last-child(1), ul:nth-last-child(2)
+      display: block
+    ul:nth-last-child(1)
+      left: 0
+    ul:nth-last-child(2)
+      left: -100%
+  nav
+    position: absolute
+    width: 100%
+    height: 100%
+    overflow: hidden
+  ul
+    +reset-list
+    left: 100%
+    display: none
+    transition: left 0.5s
+    position: absolute
+    height: 100%
+    width: 100%
+  li
+    position: relative
+    float: left
+    margin: 2.5%
+    width: 30%
+    height: 27%
+    border: 1px solid white
+    text-align: center
+    cursor: pointer
+    &:nth-child(3n+2)
+      margin-left: 0
+      margin-right: 0
+    &:nth-child(4), &:nth-child(5), &:nth-child(6)
+      margin-top: 0
+      margin-bottom: 0
+    &.stages-locked
+      cursor: default
+      &::after
+        content: ''
+        position: absolute
+        width: 100px
+        height: 125px
+        top: 50%
+        left: 50%
+        margin: -63px 0 0 -50px
+        +icon-sprite(locked)
+      &::before
+        content: ''
+        +layer-over
+  img
+    max-height: 100%
+  button
+    position: absolute
+    top: 50%
+    cursor: pointer
+    padding: 0.2em
+    &::after
+      display: block
+      content: ''
+      width: 26px
+      height: 21px
+    &.stages-next
+      right: -1em
+      &::after
+        +icon-sprite(stages-next)
+    &.stages-previous
+      left: -1em
+      &::after
+        +icon-sprite(stages-previous)
+.game
+  .game-container
+    position: absolute
+    width: 100%
+    height: 100%
+    background: rgba(0, 0, 0, 0.2)
+  .game-timer, .game-step
+    position: absolute
+    top: 1em
+    font-size: 1.5em
+    background: $color202
+    border-radius: 1.5em
+    width: 4.5em
+    height: 1.5em
+    line-height: 1.5em
+    white-space: nowrap
+    &::before
+      display: inline-block
+      content: ''
+      vertical-align: middle
+      margin: 0 0.3em
+  .game-timer
+    left: 1em
+    &::before
+      +icon-sprite(timer)
+      width: 32px
+      height: 37px
+  .game-step
+    right: 1em
+    &::before
+      +icon-sprite(step)
+      width: 37px
+      height: 27px
+  .game-controls
+    position: absolute
+    left: 10%
+    width: 80%
+    bottom: 1em
+    text-align: center
+    button
+      margin: 0 1em
+    small
+      font-size: 0.7em
+  .game-controls-next
+    float: right
+  .game-curtain
+    +layer-over
+    display: none
+    &::after
+      content: ''
+      position: absolute
+      top: 50%
+      left: 50%
+      margin: -10em 0 0 -5em
+      border: 10em solid transparent
+      border-left-color: white
+  &[data-type='paused'] .game-curtain
+    display: block
+
+  &[data-type='help']
+    .game-controls, .game-timer, .game-step
+      display: none
+  .game-tooltip, .game-tooltip-reverse
+    display: block
+    position: absolute
+    background: $color202
+    height: 40px
+    line-height: 38px
+    white-space: nowrap
+    &::after
+      content: ''
+      display: block
+      position: absolute
+      top: 0
+      height: 100%
+      width: 24px
+  .game-tooltip
+    right: 100%
+    transition: right 0.5s
+    padding-left: 0.5em
+    margin-right: 24px
+    border-radius: 1em 0 0 1em
+    &::after
+      right: 0
+      margin-right: -24px
+      +icon-sprite(game-help)
+  .game-tooltip-reverse
+    left: 100%
+    transition: left 0.5s
+    padding-right: 0.5em
+    margin-left: 24px
+    border-radius: 0 1em 1em 0
+    &::after
+      left: 0
+      margin-left: -24px
+      +icon-sprite(game-help-reverse)
+.popup
+  position: absolute
+  top: 0
+  left: 0
+  min-height: 100%
+  width: 100%
+  background: $color202
+  padding: 3em
+  text-align: center
+  >div
+    background: white
+    padding: 2em
+    position: relative
+  .popup-close
+    position: absolute
+    top: 0
+    right: 0
+    width: 1em
+    height: 1em
+    padding: 0
+    margin: -0.5em -0.5em 0 0
+    line-height: 1em
+    border-radius: 1em
+    font-size: 3.5em
+    &::after
+      content: "×"
+  .popup-content
+    margin: 1em 0
+    color: $color3
+  h1
+    color: black
+    font-size: 3em
+  nav button
+    margin: 0 0.5em
+
+nav ul
+  +reset-list
+h1
+  +reset
+button
+  font-family: inherit
+  background: $color2
+  border: 0
+  color: white
+  font-size: 2em
+  padding: 0 0.3em
+  &:hover
+    color: $color1
+  &.back-link
+    background: none
+    color: $color2
+    &:hover
+      color: $color1
