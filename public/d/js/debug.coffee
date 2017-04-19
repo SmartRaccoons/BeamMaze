@@ -1,6 +1,6 @@
-el = (id)-> document.getElementById(id)
-
-window.Game = class GameDebug extends window.Game
+# el = (id)-> document.getElementById(id)
+#
+# window.o.Game = class GameDebug extends window.o.Game
   # constructor: ->
   #   super
   #   @href = window.location.href.split('?')
@@ -89,9 +89,9 @@ window.Game = class GameDebug extends window.Game
   #     , 20
   #   super
   #
-  render: ->
-    super
-    @_camera.attachControl(document.body, true)
+  # render: ->
+  #   super
+  #   @_camera.attachControl(document.body, true)
   #
   # showAxis: (size = 10)->
   #   scene = @_scene

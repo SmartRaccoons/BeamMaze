@@ -1,3 +1,9 @@
+
+window.MicroEvent.prototype.remove = ->
+  if this._events
+    for ev, fn in this._events
+      @unbind(ev, fn)
+
 window._l = (key, subparams) ->
   res = App.lang.strings[App.lang.active][key]
   if subparams
@@ -14,6 +20,7 @@ window.App =
   events: new MicroEvent()
   classes: {}
   lang:
-    active: 'en'
+    active: 'lv'
     strings:
       'en': {}
+      'lv': {}

@@ -18,15 +18,15 @@ window.o.Platform = class Platform extends window.o.ObjectBox
     size = @options.size
     @_rotation_animations = []
     @clear()
-    @blank_put new window.o.Blank({pos: [-size, size], parent: @mesh}), ['l', 't']
-    @blank_put new window.o.Blank({pos: [-size, -size], parent: @mesh}), ['l', 'b']
-    @blank_put new window.o.Blank({pos: [size, size], parent: @mesh}), ['r', 't']
-    @blank_put new window.o.Blank({pos: [size, -size], parent: @mesh}), ['r', 'b']
+    @blank_put new window.o.ObjectBlank({pos: [-size, size], parent: @mesh}), ['l', 't']
+    @blank_put new window.o.ObjectBlank({pos: [-size, -size], parent: @mesh}), ['l', 'b']
+    @blank_put new window.o.ObjectBlank({pos: [size, size], parent: @mesh}), ['r', 't']
+    @blank_put new window.o.ObjectBlank({pos: [size, -size], parent: @mesh}), ['r', 'b']
     for s in [(-size + @_step)...size] by @_step
-      @blank_put new window.o.Blank({pos: [-size, s], parent: @mesh}), ['l']
-      @blank_put new window.o.Blank({pos: [size, s], parent: @mesh}), ['r']
-      @blank_put new window.o.Blank({pos: [s, -size], parent: @mesh}), ['b']
-      @blank_put new window.o.Blank({pos: [s, size], parent: @mesh}), ['t']
+      @blank_put new window.o.ObjectBlank({pos: [-size, s], parent: @mesh}), ['l']
+      @blank_put new window.o.ObjectBlank({pos: [size, s], parent: @mesh}), ['r']
+      @blank_put new window.o.ObjectBlank({pos: [s, -size], parent: @mesh}), ['b']
+      @blank_put new window.o.ObjectBlank({pos: [s, size], parent: @mesh}), ['t']
 
     [{
       size: [@_step, @_step]
@@ -79,6 +79,9 @@ window.o.Platform = class Platform extends window.o.ObjectBox
                 @blank_change(c.vector, true)
         }
       })
+      action.bind 'remove', =>
+        if c._mouseover
+          @blank_change(c.vector, false)
       @_controls.push action
       action.color(0, 0, 0, 0)
 
@@ -133,12 +136,17 @@ window.o.Platform = class Platform extends window.o.ObjectBox
     direction.forEach (d)=>
       [@_blanks_position[d], @_blanks_position[change[d]]] = [@_blanks_position[change[d]], @_blanks_position[d]]
 
-  dispose: ->
-    @_controls.forEach (c)-> dispose()
-    @_clear()
+  remove_controls: ->
+    @_controls.forEach (c)-> c.remove()
+    @_controls = []
+
+  remove: ->
+    @remove_controls()
+    @clear()
     super
 
   _rotate: (vector, callback)->
+    @trigger 'rotate'
     angle = Math.PI
     steps = 30
     @_rotation_animations.push {

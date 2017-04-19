@@ -1,4 +1,4 @@
-window.MAPS = [
+window.o.GameMapData = [
 #  0 - nothing
 #  1 - mirror pos 1 (right top)
 #  2 - mirror pos 2 (left top)
@@ -14,6 +14,12 @@ window.MAPS = [
 #  0800000
 #  """,
 
+  """
+  000
+  092
+  000
+  800
+  """,
   """
   01020
   00201
