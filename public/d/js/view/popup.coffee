@@ -23,7 +23,9 @@ window.o.ViewPopup = class Popup extends window.o.View
   events:
     'click .popup-close': -> @remove()
     'click button[data-action]': (e)->
-      @options.actions[$(e.target).attr('data-action')][1]()
+      action = @options.actions[$(e.target).attr('data-action')]
+      if Array.isArray(action)
+        action[1]()
       if @options.actions_leave
         @remove()
 

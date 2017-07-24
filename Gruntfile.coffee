@@ -17,7 +17,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile', ->
     html = fs.readFileSync(__dirname + '/public/index.html', 'utf8')
     [
-      [/(\d+\.\d+\.\d+)/, pjson.version]
+      [/(\d+\.\d+\.\d+)/g, pjson.version]
       [/<title>(.+)<\/title>/, "<title>#{pjson.name}</title>"]
     ].forEach (params)->
       html = html.replace(params[0], params[1])
@@ -31,8 +31,15 @@ module.exports = (grunt) ->
     if !fs.existsSync(dir)
       fs.mkdirSync(dir)
       fs.mkdirSync("#{dir}/d")
-    exec "cp -r public/d/img/ #{dir}/d/img/"
-    ['index.html', 'd/j.js'].forEach (f)->
+      fs.mkdirSync("#{dir}/d/css")
+      fs.mkdirSync("#{dir}/d/images")
+    exec "cp -r public/d/font/ #{dir}/d/font/"
+    exec "find public/d/images -maxdepth 1 -type f -exec cp {} #{dir}/d/images/ \\;"
+    exec "cp -r public/stage/ #{dir}/stage/"
+    ['index.html',
+      'd/j.js',
+      'd/css/c.css'
+    ].forEach (f)->
       exec "cp public/#{f} #{dir}/#{f}"
 
   grunt.initConfig

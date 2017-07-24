@@ -6,7 +6,7 @@
 
 
 r = new window.o.ViewRouter({
-  user: 'shared' #free, shared, full
+  user: 'full' #free, shared, full
   # close: ->
   #   alert('close')
 })
