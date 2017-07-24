@@ -1,6 +1,6 @@
 Object = window.o.Object
 
-window.o.Beam = class Beam extends Object
+window.o.ObjectBeam = class Beam extends Object
   constructor: ->
     super
     @color(255, 243, 21)
@@ -35,7 +35,7 @@ class BeamSphere extends window.o.ObjectSphere
     @
 
 
-window.o.BeamSource = class BeamSource extends BeamSphere
+window.o.ObjectBeamSource = class BeamSource extends BeamSphere
   name: 'source'
   _default: {
     diameter: 4
@@ -65,7 +65,7 @@ window.o.BeamSource = class BeamSource extends BeamSphere
         points.push points[points.length - 1].add(direction)
       else
         points.push new BABYLON.Vector3(Math.round(pick_info.pickedPoint.x*0.1)*10, Math.round(pick_info.pickedPoint.y*0.1)*10, @options.position[2])
-      @_beam.push new window.o.Beam({start: points[points.length - 2], end: points[points.length - 1]})
+      @_beam.push new window.o.ObjectBeam({start: points[points.length - 2], end: points[points.length - 1]})
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
@@ -78,14 +78,14 @@ window.o.BeamSource = class BeamSource extends BeamSphere
 
   beam_remove: ->
     @_mirror.forEach (m)-> m.deactive()
-    @_beam.forEach (b)-> b.dispose()
+    @_beam.forEach (b)-> b.remove()
 
-  dispose: ->
+  remove: ->
     @beam_remove()
     super
 
 
-window.o.BeamTarget = class BeamTarget extends BeamSphere
+window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
   name: 'target'
   _default: {
     diameter: 4

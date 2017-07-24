@@ -31,7 +31,7 @@ class ConnectorRight extends Connector
     @mesh.position = new BABYLON.Vector3(1.05, 0, 0)
 
 
-window.o.Blank = class Blank extends window.o.Object
+window.o.ObjectBlank = class Blank extends window.o.Object
   name: 'blank'
   clear: ->
     @_connectors = []

@@ -57,7 +57,7 @@ class MirrorTube
     @color_default()
 
 
-window.o.Mirror = class Mirror extends window.o.Object
+window.o.ObjectMirror = class Mirror extends window.o.Object
   name: 'mirror'
   constructor: ->
     super

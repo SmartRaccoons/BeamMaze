@@ -2,6 +2,7 @@
 _object_id = 0
 
 meshes = {}
+vertexes = null
 _scene = null
 _engine = null
 _light = null
@@ -12,15 +13,17 @@ window.App.events.bind 'game:init', (scene, engine, light, camera)->
   _engine = engine
   _light = light
   _camera = camera
-  for k, v of window.o.ObjectRawData
+  meshes = {}
+  for k, v of window.o.ObjectData
     vertex = new BABYLON.VertexData()
-    vertex.positions = v.positions
-    vertex.normals = v.normals
-    vertex.indices = v.indices
+    vertex.positions = v.positions.slice()
+    vertex.normals = v.normals.slice()
+    vertex.indices = v.indices.slice()
     meshes[k] = new BABYLON.Mesh("preload_#{k}", _scene)
     vertex.applyToMesh(meshes[k])
     meshes[k].convertToFlatShadedMesh()
     meshes[k].isVisible = false
+  _convertToFlat = true
 
 
 window.o.Object = class Object extends MicroEvent
@@ -64,9 +67,6 @@ window.o.Object = class Object extends MicroEvent
   godrays: ->
     new BABYLON.VolumetricLightScatteringPostProcess("godrays_#{@_name()}", 1, _camera, @mesh, 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, _engine, false)
 
-  dispose: ->
-    @mesh.dispose()
-
   _name: ->
     if not @__name
       name = ['ob']
@@ -75,6 +75,11 @@ window.o.Object = class Object extends MicroEvent
       name.push @_id
       @__name = name.join('_')
     return @__name
+
+  remove: ->
+    @trigger 'remove'
+    super
+    @mesh.dispose()
 
 
 window.o.ObjectSphere = class ObjectSphere extends Object

@@ -1,4 +1,4 @@
-window.o.Map = class Map extends MicroEvent
+window.o.GameMap = class Map extends MicroEvent
   constructor: ->
     @clear()
     @_before_render_fn = []
@@ -48,14 +48,18 @@ window.o.Map = class Map extends MicroEvent
         methods[map[m + middle][x + middle]](parent.mesh, x, m)
         methods[map[-m + middle][x + middle]](parent.mesh, x, -m)
 
-  unload: ->
+  remove_controls: ->
+    @_platform.forEach (ob)-> ob.remove_controls()
+
+  remove: ->
+    super
     if @_source
-      @_source.dispose()
+      @_source.remove()
     if @_target
-      @_target.dispose()
-    @_mirror.forEach (ob)-> ob.dispose()
-    @_platform.forEach (ob)-> ob.dispose()
-    @_clear()
+      @_target.remove()
+    @_mirror.forEach (ob)-> ob.remove()
+    @_platform.forEach (ob)-> ob.remove()
+    @clear()
 
   render: ->
     if @_before_render_fn.length > 0
@@ -71,19 +75,20 @@ window.o.Map = class Map extends MicroEvent
         @_before_render_fn.push =>
           @_source.beam()
           @solved = @_source.solved
-          @trigger 'beam'
+          @trigger 'beam', @_source._mirror.length
 
-  beam_source: (coors)-> @_source = new window.o.BeamSource({position: [coors[0], coors[1], -0.55 * 4.2]})
+  beam_source: (coors)-> @_source = new window.o.ObjectBeamSource({position: [coors[0], coors[1], -0.55 * 4.2]})
 
-  target: -> @_target = new window.o.BeamTarget({position: [0, 0, -0.55 * 4.2]})
+  target: -> @_target = new window.o.ObjectBeamTarget({position: [0, 0, -0.55 * 4.2]})
 
   platform: (size)->
     ob = new window.o.Platform({size: size})
+    ob.bind 'rotate', => @trigger 'rotate'
     @_platform.push ob
     return ob
 
-  mirror_reverse: (parent, coors)-> @_mirror.push new window.o.Mirror({pos: [coors[0], coors[1]], parent: parent, reverse: true})
+  mirror_reverse: (parent, coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], parent: parent, reverse: true})
 
-  mirror: (parent, coors)-> @_mirror.push new window.o.Mirror({pos: [coors[0], coors[1]], parent: parent})
+  mirror: (parent, coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], parent: parent})
 
   obstacle: (parent, coors)->
