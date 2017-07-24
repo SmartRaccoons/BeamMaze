@@ -9,7 +9,7 @@ window.Game = class GameDebug extends window.Game
     update = =>
       map = @get_map()
       el('map-actual').value = map.join("\n")
-      el('map-url').value = @href[0] + '?' + map.join('|')
+      el('map-url').value = @href[0] + '?' + map.join(',')
     @bind 'beam', update
     setTimeout update, 1000
     el('map-solve').onclick = =>
@@ -63,7 +63,7 @@ window.Game = class GameDebug extends window.Game
         if @_solved
           right_map = @get_map()
           if right.indexOf(right_map) is -1
-            right.push right_map
+            right.push right_map.join("\n")
         c.forEach (combination)=> rotate(@_platform[combination[0]], directions[combination[1]], true)
         callback()
       , 10
@@ -85,6 +85,6 @@ window.Game = class GameDebug extends window.Game
   load_map: ->
     if @href[1]
       return setTimeout =>
-        @map(@href[1].split('|').join("\n"))
+        @map(@href[1].split(',').join("\n"))
       , 20
     super
