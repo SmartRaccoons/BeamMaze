@@ -28,7 +28,7 @@ App.lang.strings.lv =
     Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />
     Jāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,
     kura maksā mazāk kā viena krūzīte labas kafijas.<br />
-    Toties šajā spēlē nav reklāmu un kādu citu apslēptu maksājumu.<br />
+    Toties šajā spēlē nav reklāmu vai kādu citu slēptu maksājumu.<br />
     Tikai nieka {price}
   """
   'Buy game shared': 'pilna versija par {price}'

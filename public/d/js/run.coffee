@@ -1,19 +1,20 @@
 
-# g = new window.o.Game({
-#   path: window.location.pathname.substr(0,window.location.pathname.lastIndexOf('/')) + '/d'
-# })
-# g.render()
-
 
 r = new window.o.ViewRouter({
-  user: 'full' #free, shared, full
+  user: 'free' #free, shared, full
   # close: ->
   #   alert('close')
+  user_types: {free: 2, shared: 3}
+  game_last: 1
+  game_save: (stage)->
+    # console.info 'save stage: ' + stage
 })
 
 r.bind 'share-last', ->
   alert 'share last'
 r.bind 'share-user', ->
-  alert 'share user'
+  r.options.user = 'shared'
+  r.game()
 r.bind 'buy', ->
-  alert 'buy'
+  r.options.user = 'full'
+  r.game()

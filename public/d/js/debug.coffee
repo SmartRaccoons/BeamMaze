@@ -1,3 +1,8 @@
+
+window.o.ViewRouter = class Router extends window.o.ViewRouter
+  constructor: ->
+    super
+
 # el = (id)-> document.getElementById(id)
 #
 # window.o.Game = class GameDebug extends window.o.Game

@@ -9,7 +9,7 @@ window.o.ViewStages = class Stages extends window.o.View
           %>
           </ul><ul>
         <% } %>
-          <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/example.png' /></li>
+          <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/l-<%= i %>.png' /></li>
         <% } %>
       </ul>
     </nav>

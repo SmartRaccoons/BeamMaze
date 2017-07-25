@@ -27,7 +27,7 @@ window.o.ViewPopup = class Popup extends window.o.View
       if Array.isArray(action)
         action[1]()
       if @options.actions_leave
-        @remove()
+        @remove(true)
 
   constructor: ->
     @options =

@@ -40,3 +40,5 @@ production :
 	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j.js
 	uglifycss public/d/css/screen.css > public/d/css/c.css
 	rm public/d/all.js
+
+	# convert ../download.png -crop 400x400+200+50 -resize 200x200 public/stage/l-3.png

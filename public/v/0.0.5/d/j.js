@@ -31584,7 +31584,7 @@ Mirror: "Spogulis",
 "Game free over": "",
 "Game free over description": "Apsveicam, Tu izgāji {levels} līmeņus.<br />\nMēs rūpīgi taisījām šo spēli un vēlamies kādu no šiem atalgojumiem:<br />\n(1) padalies ar spēli vai<br />\n(2) iegādājies pilnu versiju par vienas kafijas cenu.",
 "Buy game": "pilna versija ({price})",
-"Game shared over description": "Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />\nJāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,\nkura maksā mazāk kā viena krūzīte labas kafijas.<br />\nToties šajā spēlē nav reklāmu un kādu citu apslēptu maksājumu.<br />\nTikai nieka {price}",
+"Game shared over description": "Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />\nJāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,\nkura maksā mazāk kā viena krūzīte labas kafijas.<br />\nToties šajā spēlē nav reklāmu vai kādu citu slēptu maksājumu.<br />\nTikai nieka {price}",
 "Buy game shared": "pilna versija par {price}",
 "Game over": "Spēles beigas",
 "Game over description": "  Diemžēl, visam kaut kad pienāk gals.\n  Arī šī spēlīte nav izņēmums un Tu esi pieveicis pēdējo līmeņi.\n<br />\n  Ja tik tālu esi ticis, tad pieņemam, ka spēle Tev patika.\n  Un mums ir liels gandarījums par to.\n<br />\n  Palīdzi šai spelei nonākt pie citiem un padalies.\n  Paldies Tev, un uz redzēšanos citās spēlēs!",
@@ -32467,8 +32467,8 @@ this.$el.on(m[1] + ".delegateEvents" + this._id, m[2], _.bind(v, this));
 }
 return this;
 };
-View.prototype.remove = function() {
-this.trigger("remove");
+View.prototype.remove = function(params) {
+this.trigger("remove", params);
 View.__super__.remove.apply(this, arguments);
 this.$el.off(".delegateEvents" + this._id);
 return this.$el.remove();
@@ -32507,11 +32507,8 @@ Router.__super__.constructor.apply(this, arguments);
 this.$back = this.$(".back-link");
 this._active = null;
 this.game_stages = window.o.GameMapData.length;
-this.game_stages_limit = {
-free: 2,
-shared: 3
-};
-this.game_last = this._game_last_get();
+this.game_stages_limit = this.options.user_types;
+this.game_last = this.options.game_last;
 if (this.game_last === 1) {
 this.game();
 } else {
@@ -32525,9 +32522,7 @@ close: this.options.close
 });
 this._active.bind("continue", function(_this) {
 return function() {
-return _this._game_stage_available(function() {
 return _this.game();
-});
 };
 }(this));
 return this._active.bind("stages", function(_this) {
@@ -32547,14 +32542,11 @@ return _this.game(id);
 };
 }(this));
 };
-Router.prototype._game_last_get = function() {
-return 3;
-};
-Router.prototype._game_stage_available = function(callback) {
+Router.prototype._game_stage_available = function(stage, callback) {
 if (this.options.user === "full") {
 return callback();
 }
-if (this.options.user === "shared" && this.game_stages_limit.shared <= this.game_last) {
+if (this.options.user === "shared" && this.game_stages_limit.shared < stage) {
 return new window.o.ViewPopup({
 content: _l("Game shared over description", {
 levels: this.game_last,
@@ -32568,12 +32560,14 @@ return _this.trigger("buy");
 };
 }(this) ] ]
 }).bind("remove", function(_this) {
-return function() {
+return function(action) {
+if (!action) {
 return _this.start();
+}
 };
 }(this));
 }
-if (this.options.user === "free" && this.game_stages_limit.free <= this.game_last) {
+if (this.options.user === "free" && this.game_stages_limit.free < stage) {
 return new window.o.ViewPopup({
 content: _l("Game free over description", {
 levels: this.game_last
@@ -32590,8 +32584,10 @@ return _this.trigger("buy");
 };
 }(this) ] ]
 }).bind("remove", function(_this) {
-return function() {
+return function(action) {
+if (!action) {
 return _this.start();
+}
 };
 }(this));
 }
@@ -32613,15 +32609,30 @@ return _this.start();
 };
 }(this));
 };
-Router.prototype.game = function(id) {
+Router.prototype.game = function(id, check) {
 if (id == null) {
 id = this.game_last;
+}
+if (check == null) {
+check = true;
+}
+if (check) {
+return this._game_stage_available(id, function(_this) {
+return function() {
+return _this.game(id, false);
+};
+}(this));
 }
 this._load("game" + (id === 1 ? "Help" : ""), {
 stage: id
 });
 this._active.bind("solved", function(_this) {
-return function() {};
+return function() {
+if (id === _this.game_last && _this.game_last !== _this.game_stages) {
+_this.game_last++;
+return _this.options.game_save(_this.game_last);
+}
+};
 }(this));
 this._active.bind("next", function(_this) {
 return function() {
@@ -32631,10 +32642,7 @@ return _this.game(id + 1);
 if (_this.game_last === _this.game_stages) {
 return _this._game_completed();
 }
-return _this._game_stage_available(function() {
-_this.game_last++;
 return _this.game();
-});
 };
 }(this));
 return this._active.bind("reset", function(_this) {
@@ -32708,7 +32716,7 @@ return child;
 window.o.ViewStages = Stages = function(_super) {
 __extends(Stages, _super);
 Stages.prototype.className = "stages";
-Stages.prototype.template = "<nav>\n  <ul>\n    <% for(var i=0; i<stages; i++) {%>\n    <% if(i % 9 == 0 && i > 0){\n      if (i > last) { break; }\n      %>\n      </ul><ul>\n    <% } %>\n      <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/example.png' /></li>\n    <% } %>\n  </ul>\n</nav>\n<button class='stages-next'></button>\n<button class='stages-previous'></button>";
+Stages.prototype.template = "<nav>\n  <ul>\n    <% for(var i=0; i<stages; i++) {%>\n    <% if(i % 9 == 0 && i > 0){\n      if (i > last) { break; }\n      %>\n      </ul><ul>\n    <% } %>\n      <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/l-<%= i %>.png' /></li>\n    <% } %>\n  </ul>\n</nav>\n<button class='stages-next'></button>\n<button class='stages-previous'></button>";
 Stages.prototype.events = {
 "click .stages-next": function() {
 return this.page(1);
@@ -33278,7 +33286,7 @@ if (Array.isArray(action)) {
 action[1]();
 }
 if (this.options.actions_leave) {
-return this.remove();
+return this.remove(true);
 }
 }
 };
@@ -33297,15 +33305,23 @@ return Popup;
 (function() {
 var r;
 r = new window.o.ViewRouter({
-user: "full"
+user: "free",
+user_types: {
+free: 2,
+shared: 3
+},
+game_last: 1,
+game_save: function(stage) {}
 });
 r.bind("share-last", function() {
 return alert("share last");
 });
 r.bind("share-user", function() {
-return alert("share user");
+r.options.user = "shared";
+return r.game();
 });
 r.bind("buy", function() {
-return alert("buy");
+r.options.user = "full";
+return r.game();
 });
 }).call(this);

@@ -26,8 +26,8 @@ window.o.View = class View extends MicroEvent
         @$el.on m[1] + '.delegateEvents' + @_id, m[2], _.bind v, @
     @
 
-  remove: ->
-    @trigger 'remove'
+  remove: (params)->
+    @trigger 'remove', params
     super
     @$el.off('.delegateEvents' + @_id)
     @$el.remove()
