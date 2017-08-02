@@ -11,7 +11,9 @@ window.o.ViewStart = class start extends window.o.View
           <% } %>
          </ul>
         </nav>
-        <a target='_parent' href='http://raccoons.lv'>#{_l('Credits')}</a>
+        <%= author_link ? "<a class='start-author' target='_parent' href='http://raccoons.lv'>" : "<span class='start-author'>" %>
+        #{_l('Credits')}
+        <%= author_link ? "</a>" : '<span>' %>
   """
 
   events:

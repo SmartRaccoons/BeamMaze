@@ -19,7 +19,8 @@ window.o.ViewGame = class Game extends window.o.View
       @_timer_start()
       @$el.toggleClass('game-paused')
     'click .game-controls-next': -> @trigger 'next'
-    'click .game-controls-reset': -> @trigger 'reset'
+    'click .game-controls-reset': ->
+      @trigger 'reset', {seconds_total: @_time().seconds_total}
 
   constructor: ->
     super
@@ -40,8 +41,16 @@ window.o.ViewGame = class Game extends window.o.View
     })
     @game.bind 'rotate', => @step()
     @game.bind 'solved', (mirrors)=>
-      @trigger 'solved'
-      @completed(mirrors)
+      @_timer_stop()
+      t = @_time()
+      t['steps'] = @_steps
+      t['mirrors'] = mirrors
+      @trigger 'solved', t
+      @$game_controls.html "<button class='game-controls-next'>#{_l('Next level')}</button>" + _l('Completed', _.extend(t, {
+          minutes: @_digit(t['minutes'])
+          seconds: @_digit(t['seconds'])
+          mls: @_digit(t['mls'], 3)
+        }))
     @game.render()
     @game.load_map @options.stage, => @_timer_reset()
 
@@ -78,6 +87,7 @@ window.o.ViewGame = class Game extends window.o.View
     data['seconds'] = diff % 60
     diff = diff - data['seconds']
     data['minutes'] = diff / 60
+    data['seconds_total'] = data['minutes'] * 60 + data['seconds']
     data
 
   _timer_reset: ->
@@ -91,16 +101,6 @@ window.o.ViewGame = class Game extends window.o.View
   step: ->
     @_steps++
     @$step.html(@_steps)
-
-  completed: (mirrors)->
-    @_timer_stop()
-    t = @_time()
-    t['steps'] = @_steps
-    t['mirrors'] = mirrors
-    t['minutes'] = @_digit(t['minutes'])
-    t['seconds'] = @_digit(t['seconds'])
-    t['mls'] = @_digit(t['mls'], 3)
-    @$game_controls.html("<button class='game-controls-next'>#{_l('Next level')}</button>" + _l('Completed', t))
 
   remove: ->
     @_timer_stop()

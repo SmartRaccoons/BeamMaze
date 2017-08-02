@@ -90,16 +90,13 @@ canvas
       padding: 0.75em
       &:first-child button
         font-size: 4em
-  a
+  .start-author
     display: block
     position: absolute
     right: 0.2em
     bottom: 0.2em
     color: $color2
     text-decoration: none
-    cursor: pointer
-    &:hover
-      color: $color1
     &::before
       content: ''
       display: inline-block
@@ -108,6 +105,8 @@ canvas
       width: 65px
       height: 63px
       background-image: url('../images/raccoon.png')
+  a.start-author:hover
+    color: $color1
 .stages, .game
   width: 100%
   max-width: 800px
