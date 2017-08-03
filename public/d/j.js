@@ -35081,7 +35081,7 @@ return ga("set", "&uid", App.user.user.id);
 GameAnalytics("setEnabledInfoLog", App.version_dev);
 GameAnalytics("setEnabledVerboseLog", App.version_dev);
 GameAnalytics("configureBuild", "web " + App.version);
-GameAnalytics("configureUserId", App.user.user.id);
+GameAnalytics("configureUserId", "" + App.user.user.id);
 GameAnalytics("initialize", "6cbc7e51b3786c24cc780fcd1fe367a2", "697a173d885cd4063e50a81f7da2466b2e1dd139");
 progression = function(event, id, seconds) {
 GameAnalytics("addProgressionEvent", event, "level" + (id < 10 ? "0" + id : id), "", "", seconds);
