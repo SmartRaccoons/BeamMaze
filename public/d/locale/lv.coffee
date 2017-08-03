@@ -47,3 +47,8 @@ App.lang.strings.lv =
 
   'Share': 'Padalīties'
   'Share close': 'Nē, nedalīšos'
+
+  'Authorize error': """
+    Neizdevās autorizēties. Pamēģini atjaunot aplikāciju, nospiežot F5.<br />
+    Ja neizdodas, tad raksti mums uz <u>smart@raccoons.lv</u>
+  """

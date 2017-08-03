@@ -11,8 +11,9 @@ window.o.ViewRouter = class Router extends window.o.View
     @$back = @$('.back-link')
     @_active = null
     @game_stages = window.o.GameMapData.length
-    @game_stages_limit = @options.user_types
     @game_last = @options.game_last
+
+  run: ->
     if @game_last is 1
       @game()
     else
@@ -20,32 +21,34 @@ window.o.ViewRouter = class Router extends window.o.View
     @
 
   start: ->
-    @_load('start', {close: @options.close})
+    App.events.trigger 'router:start'
+    @_load('start', {close: @options.close, author_link: @options.author_link})
     @_active.bind 'continue', => @game()
     @_active.bind 'stages', => @stages()
 
   stages: ->
+    App.events.trigger 'router:stages'
     @_load('stages', {stages: @game_stages, last: @game_last})
     @_active.bind 'stage', (id)=> @game(id)
 
   _game_stage_available: (stage, callback)->
     if @options.user is 'full'
       return callback()
-    if @options.user is 'shared' and @game_stages_limit.shared < stage
+    if @options.user is 'shared' and @options.user_types.shared < stage
       return new window.o.ViewPopup({
           content: _l('Game shared over description', {levels: @game_last, price: '0,99 €'})
           actions: [
-            [_l('Buy game shared', {price: '0,99 €'}), => @trigger 'buy']
+            [_l('Buy game shared', {price: '0,99 €'}), => @trigger('buy', @_active._name, 'buy')]
           ]
         }).bind 'remove', (action)=>
           if !action
             @start()
-    if @options.user is 'free' and @game_stages_limit.free < stage
+    if @options.user is 'free' and @options.user_types.free < stage
       return new window.o.ViewPopup({
           content: _l('Game free over description', {levels: @game_last})
           actions: [
-            [_l('Share'), => @trigger 'share-user']
-            [_l('Buy game', {price: '0,99 €'}), => @trigger 'buy']
+            [_l('Share'), => @trigger('share-user', @_active._name)]
+            [_l('Buy game', {price: '0,99 €'}), => @trigger('buy', @_active._name, 'share')]
           ]
         }).bind 'remove', (action)=>
           if !action
@@ -66,8 +69,10 @@ window.o.ViewRouter = class Router extends window.o.View
   game: (id = @game_last, check = true)->
     if check
       return @_game_stage_available id, => @game(id, false)
+    App.events.trigger 'router:game', id
     @_load('game' + (if id is 1 then 'Help' else ''), {stage: id})
-    @_active.bind 'solved', =>
+    @_active.bind 'solved', (data)=>
+      App.events.trigger 'router:game-solved', id, data
       if id is @game_last and @game_last isnt @game_stages
         @game_last++
         @options.game_save(@game_last)
@@ -77,11 +82,14 @@ window.o.ViewRouter = class Router extends window.o.View
       if @game_last is @game_stages
         return @_game_completed()
       @game()
-    @_active.bind 'reset', => @_active.load()
+    @_active.bind 'reset', (data)=>
+      App.events.trigger 'router:game-reset', id, data
+      @_active.load()
 
   _load: (view, options)->
     if @_active
       @_active.remove()
     @$back.css('display', if view is 'start' then 'none' else '')
     @_active = new window.o['View' + view.charAt(0).toUpperCase() + view.slice(1)](_.extend({parent: @$el}, options))
+    @_active._name = view
     @_active

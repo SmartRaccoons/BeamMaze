@@ -17,6 +17,8 @@ window._l = (key, subparams) ->
 window.o = {}
 
 window.App =
+  version: $('body').attr('data-version')
+  version_dev: $('body').attr('data-version') is 'dev'
   events: new MicroEvent()
   classes: {}
   lang:
