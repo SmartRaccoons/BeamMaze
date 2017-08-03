@@ -12,10 +12,13 @@ run :
 
 production :
 	grunt compile
-	cat bower_components/babylonjs/dist/preview\ release/babylon.js \
+	cat node_modules/gameanalytics/dist/GameAnalytics.js \
+	bower_components/babylonjs/dist/preview\ release/babylon.js \
 	bower_components/microevent.js/microevent.js \
 	bower_components/lodash/lodash.js \
 	bower_components/zepto/zepto.js \
+	bower_components/universalapi/uniapi.js \
+	bower_components/js-cookie/src/js.cookie.js \
 	public/d/js/init.js \
 	public/d/locale/en.js \
 	public/d/locale/lv.js \
@@ -35,6 +38,7 @@ production :
 	public/d/js/game/map.js \
 	public/d/js/game/game.js \
 	public/d/js/view/popup.js \
+	public/d/js/analytics.js \
 	public/d/js/run.js \
 > public/d/all.js
 	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j.js
