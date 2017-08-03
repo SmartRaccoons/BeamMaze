@@ -45,12 +45,9 @@ window.o.ViewGame = class Game extends window.o.View
       t = @_time()
       t['steps'] = @_steps
       t['mirrors'] = mirrors
+      @_completed(t)
       @trigger 'solved', t
-      @$game_controls.html "<button class='game-controls-next'>#{_l('Next level')}</button>" + _l('Completed', _.extend(t, {
-          minutes: @_digit(t['minutes'])
-          seconds: @_digit(t['seconds'])
-          mls: @_digit(t['mls'], 3)
-        }))
+
     @game.render()
     @game.load_map @options.stage, => @_timer_reset()
 
@@ -97,6 +94,14 @@ window.o.ViewGame = class Game extends window.o.View
     @timer_diff = 0
     @$timer.html('00:00')
     @_timer_start()
+
+  _completed: (t)->
+    @$game_controls.html "<button class='game-controls-next'>#{_l('Next level')}</button>" +
+     _l('Completed', _.extend(t, {
+      minutes: @_digit(t['minutes'])
+      seconds: @_digit(t['seconds'])
+      mls: @_digit(t['mls'], 3)
+    }))
 
   step: ->
     @_steps++

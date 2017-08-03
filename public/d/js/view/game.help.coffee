@@ -50,7 +50,7 @@ window.o.ViewGameHelp = class GameHelp extends Game
     , 3000
     super
 
-  completed: ->
+  _completed: ->
     @_t_clear()
     @$el.removeClass className
     super

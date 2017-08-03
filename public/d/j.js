@@ -34569,12 +34569,8 @@ _this._timer_stop();
 t = _this._time();
 t["steps"] = _this._steps;
 t["mirrors"] = mirrors;
-_this.trigger("solved", t);
-return _this.$game_controls.html("<button class='game-controls-next'>" + _l("Next level") + "</button>" + _l("Completed", _.extend(t, {
-minutes: _this._digit(t["minutes"]),
-seconds: _this._digit(t["seconds"]),
-mls: _this._digit(t["mls"], 3)
-})));
+_this._completed(t);
+return _this.trigger("solved", t);
 };
 }(this));
 this.game.render();
@@ -34635,6 +34631,13 @@ this._timer_stop();
 this.timer_diff = 0;
 this.$timer.html("00:00");
 return this._timer_start();
+};
+Game.prototype._completed = function(t) {
+return this.$game_controls.html("<button class='game-controls-next'>" + _l("Next level") + "</button>" + _l("Completed", _.extend(t, {
+minutes: this._digit(t["minutes"]),
+seconds: this._digit(t["seconds"]),
+mls: this._digit(t["mls"], 3)
+})));
 };
 Game.prototype.step = function() {
 this._steps++;
@@ -34737,10 +34740,10 @@ return platform.blank_change(vector, false);
 }(this), 3e3);
 return GameHelp.__super__._timer_start.apply(this, arguments);
 };
-GameHelp.prototype.completed = function() {
+GameHelp.prototype._completed = function() {
 this._t_clear();
 this.$el.removeClass(className);
-return GameHelp.__super__.completed.apply(this, arguments);
+return GameHelp.__super__._completed.apply(this, arguments);
 };
 GameHelp.prototype.remove = function() {
 this._t_clear();
