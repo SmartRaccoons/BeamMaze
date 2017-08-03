@@ -12,7 +12,7 @@ App.events.bind 'router:init', ->
   GameAnalytics("setEnabledVerboseLog", App.version_dev)
 
   GameAnalytics("configureBuild", "web #{App.version}")
-  GameAnalytics("configureUserId", App.user.user.id)
+  GameAnalytics("configureUserId", "#{App.user.user.id}")
 
   GameAnalytics("initialize", "6cbc7e51b3786c24cc780fcd1fe367a2", "697a173d885cd4063e50a81f7da2466b2e1dd139")
 
