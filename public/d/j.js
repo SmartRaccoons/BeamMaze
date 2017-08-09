@@ -34476,7 +34476,7 @@ return child;
 window.o.ViewStages = Stages = function(_super) {
 __extends(Stages, _super);
 Stages.prototype.className = "stages";
-Stages.prototype.template = "<nav>\n  <ul>\n    <% for(var i=0; i<stages; i++) {%>\n    <% if(i % 9 == 0 && i > 0){\n      if (i > last) { break; }\n      %>\n      </ul><ul>\n    <% } %>\n      <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/l-<%= i %>.png' /></li>\n    <% } %>\n  </ul>\n</nav>\n<button class='stages-next'></button>\n<button class='stages-previous'></button>";
+Stages.prototype.template = "<nav>\n  <ul>\n    <% for(var i=0; i<stages; i++) {%>\n    <% if(i % 9 == 0 && i > 0){\n      if (i > last) { break; }\n      %>\n      </ul><ul>\n    <% } %>\n      <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/l-<%= (i + 1) %>.png' /></li>\n    <% } %>\n  </ul>\n</nav>\n<button class='stages-next'></button>\n<button class='stages-previous'></button>";
 Stages.prototype.events = {
 "click .stages-next": function() {
 return this.page(1);
@@ -34754,7 +34754,7 @@ return GameHelp;
 }).call(this);
 
 (function() {
-window.o.GameMapData = [ "000\n092\n000\n800", "01020\n00201\n00900\n02000\n00000\n-8---", "200\n190\n200\n800", "01020\n00201\n00900\n02000\n00000\n08000" ];
+window.o.GameMapData = [ "000\n092\n000\n800", "000\n091\n000\n800", "200\n190\n200\n800", "102\n290\n000\n800", "110\n292\n020\n080", "01020\n00201\n00900\n02000\n00000\n08000", "0000020\n0100000\n2100020\n1119000\n0100000\n1001110\n2001000\n0800000" ];
 }).call(this);
 
 (function() {
@@ -34997,13 +34997,18 @@ scene = this._scene = new BABYLON.Scene(engine);
 scene.registerBeforeRender(this._render_before_loop.bind(this));
 scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), this._scene);
-this._camera.setPosition(new BABYLON.Vector3(0, 0, -120));
+this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
 this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-40, 60, -100), this._scene);
 return window.App.events.trigger("game:init", scene, engine, this._light, this._camera);
 };
 Game.prototype.load_map = function(id, callback) {
 return setTimeout(function(_this) {
 return function() {
+if (window.o.GameMapData[id - 1].length < 20) {
+_this._camera.setPosition(new BABYLON.Vector3(0, 0, -100));
+} else if (window.o.GameMapData[id - 1].length < 50) {
+_this._camera.setPosition(new BABYLON.Vector3(0, 0, -120));
+}
 _this._map.load(window.o.GameMapData[id - 1]);
 return callback();
 };
@@ -35143,10 +35148,10 @@ App.router = new window.o.ViewRouter({
 user: App.user.data("type") || "free",
 author_link: false,
 user_types: {
-free: 2,
-shared: 3
+free: 20,
+shared: 30
 },
-game_last: parseInt(App.user.data("game_last") || 1),
+game_last: parseInt(App.user.data("game_last") || 100),
 game_save: function(stage) {
 return App.user.data("game_last", stage);
 }
