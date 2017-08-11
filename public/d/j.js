@@ -33302,19 +33302,44 @@ version_dev: $("body").attr("data-version") === "dev",
 events: new MicroEvent(),
 classes: {},
 lang: {
-active: "lv",
 strings: {
 en: {},
 lv: {}
+},
+active: function() {
+if (window.location.href.indexOf("lang=en") > -1) {
+return "en";
+} else {
+return "lv";
 }
+}()
 }
 };
 }).call(this);
 
 (function() {
 App.lang.strings.en = {
-"well done": "Well done!",
-Completed: "Completed in {time}<small>.{timemil}</small><br />\nused {mirror} mirrors made {steps} steps"
+Credits: "Made",
+Continue: "Continue",
+"Choose stage": "Choose level",
+Quit: "Close",
+Menu: "Menu",
+Pause: "Pause",
+Reset: "Restart",
+"Next level": "Next",
+Completed: "Completed in {minutes}:{seconds}<small>.{mls}</small><br />\nwith {mirrors} mirrors and {steps} steps",
+Light: "Light",
+Mirror: "Mirror",
+"Rotate platform": "Rotate platform",
+"Game free over description": "Congratulations, Your completed {levels} levels.<br />\nWe carefully have been developing this game and want one of this rewards:<br />\n(1) share this game or<br />\n(2) buy full version for the price of less then one cup of good coffee.",
+"Buy game": "full version ({price})",
+"Game shared over description": "Very good, Your got to the {levels} level.<br />\nTo be honest other levels available only in the full version\nand You can get this version for price of less then one cup of good coffee.<br />\nwhilst this game do not have any kind of advertisment or any other hidden payment.<br />\nOnly scanty {price}",
+"Buy game shared": "full version for {price}",
+"Game over": "Game over",
+"Game over description": "  Unfortunately nothing lasts forever and this game is not exception.\n  You have accomplished last level.\n<br />\n  If you get so far then we think You like the game.\n  And this is the best satisfaction for us.\n<br />\n  Help this game to get in other hands and share it.\n  Thank You, and see You in our next games!",
+Share: "Share",
+"Share close": "No, I do not want to share",
+"Authorize error": "Can not authorize. Try to refresh application and press F5 button.<br />\nIf it does not work then write e–mail to <u>smart@raccoons.lv</u>"
 };
 }).call(this);
 
@@ -33332,7 +33357,6 @@ Completed: "Atrisināji {minutes}:{seconds}<small>.{mls}</small><br />\nar {mirr
 Light: "Gaisma",
 Mirror: "Spogulis",
 "Rotate platform": "Rotē platformu",
-"Game free over": "",
 "Game free over description": "Apsveicam, Tu izgāji {levels} līmeņus.<br />\nMēs rūpīgi taisījām šo spēli un vēlamies kādu no šiem atalgojumiem:<br />\n(1) padalies ar spēli vai<br />\n(2) iegādājies pilnu versiju par vienas kafijas cenu.",
 "Buy game": "pilna versija ({price})",
 "Game shared over description": "Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />\nJāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,\nkura maksā mazāk kā viena krūzīte labas kafijas.<br />\nToties šajā spēlē nav reklāmu vai kādu citu slēptu maksājumu.<br />\nTikai nieka {price}",

@@ -15,7 +15,6 @@ App.lang.strings.lv =
   'Mirror': 'Spogulis'
   'Rotate platform': 'Rotē platformu'
 
-  'Game free over': ''
   'Game free over description': """
     Apsveicam, Tu izgāji {levels} līmeņus.<br />
     Mēs rūpīgi taisījām šo spēli un vēlamies kādu no šiem atalgojumiem:<br />

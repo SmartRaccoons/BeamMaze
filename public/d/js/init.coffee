@@ -22,7 +22,9 @@ window.App =
   events: new MicroEvent()
   classes: {}
   lang:
-    active: 'lv'
     strings:
       'en': {}
       'lv': {}
+    active: (->
+      return if window.location.href.indexOf('lang=en')>-1 then 'en' else 'lv'
+    )()
