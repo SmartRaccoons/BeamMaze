@@ -34500,7 +34500,7 @@ return child;
 window.o.ViewStages = Stages = function(_super) {
 __extends(Stages, _super);
 Stages.prototype.className = "stages";
-Stages.prototype.template = "<nav>\n  <ul>\n    <% for(var i=0; i<stages; i++) {%>\n    <% if(i % 9 == 0 && i > 0){\n      if (i > last) { break; }\n      %>\n      </ul><ul>\n    <% } %>\n      <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/l-<%= (i + 1) %>.png' /></li>\n    <% } %>\n  </ul>\n</nav>\n<button class='stages-next'></button>\n<button class='stages-previous'></button>";
+Stages.prototype.template = "<nav>\n  <ul>\n    <% for(var i=0; i<stages; i++) {%>\n    <% if(i % 9 == 0 && i > 0){\n      if (i > last) { break; }\n      %>\n      </ul><ul>\n    <% } %>\n      <li data-id='<%= (i+1) %>'<% if(i >= last){ %> class='stages-locked'<% } %>><img src='stage/l-<%= (i + 1) %>.png' /></li>\n    <% } %>\n  </ul>\n</nav>\n<% if (last > 8 ){ %>\n  <button class='stages-previous'></button>\n<% } %>\n<button class='stages-next'></button>";
 Stages.prototype.events = {
 "click .stages-next": function() {
 return this.page(1);

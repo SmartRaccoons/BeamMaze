@@ -13,8 +13,10 @@ window.o.ViewStages = class Stages extends window.o.View
         <% } %>
       </ul>
     </nav>
+    <% if (last > 8 ){ %>
+      <button class='stages-previous'></button>
+    <% } %>
     <button class='stages-next'></button>
-    <button class='stages-previous'></button>
   """
 
   events:
