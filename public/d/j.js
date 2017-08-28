@@ -35180,7 +35180,7 @@ user_types: {
 free: 30,
 shared: 40
 },
-game_last: parseInt(App.user.data("game_last") || 100),
+game_last: parseInt(App.user.data("game_last")),
 game_save: function(stage) {
 return App.user.data("game_last", stage);
 }
