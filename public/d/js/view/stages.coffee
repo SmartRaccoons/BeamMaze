@@ -21,7 +21,10 @@ window.o.ViewStages = class Stages extends window.o.View
     'click .stages-next': -> @page(1)
     'click .stages-previous': -> @page(-1)
     'click li': (event)->
-      @trigger 'stage', parseInt($(event.target).closest('li').attr('data-id'))
+      li = $(event.target).closest('li')
+      if li.hasClass('stages-locked')
+        return
+      @trigger 'stage', parseInt(li.attr('data-id'))
 
   constructor: ->
     super
