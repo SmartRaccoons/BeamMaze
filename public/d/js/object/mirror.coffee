@@ -35,21 +35,18 @@ class MirrorTube
   constructor: (options)->
     @options = options
     tube_options = {parent_class: @, parent: @options.parent_class.mesh, back: @options.back}
-    @tube_in = new MirrorTubeIn(tube_options)
-    @tube_out = new MirrorTubeOut(tube_options)
-    @tube_in.rotate(@options.rotation)
-    @tube_out.rotate(@options.rotation)
+    @tubes = []
+    @tubes.push new MirrorTubeIn(tube_options)
+    @tubes.push  new MirrorTubeOut(tube_options)
+    @tubes.forEach (t)=> t.rotate(@options.rotation)
+    @_color = @options.parent_class._color
     @color_default()
 
   activate: ->
     @active = true
-    @tube_in.color(255, 243, 21)
-    @tube_out.color(255, 243, 21)
+    @tubes.forEach (t)=> t.color(255, 243, 21)
 
-  color_default: ->
-    # (108, 141, 150)
-    @tube_in.color(187, 230, 239)
-    @tube_out.color(187, 230, 239)
+  color_default: -> @tubes.forEach (t)=> t.color.apply(t, @_color)
 
   deactive: ->
     if !@active
@@ -61,7 +58,8 @@ window.o.ObjectMirror = class Mirror extends window.o.Object
   name: 'mirror'
   constructor: ->
     super
-    @color(187, 230, 239, 0.5)
+    @_color = [187, 230, 239] #[247, 192, 192]
+    @color.apply(@, @_color.concat([0.4]))
     @mesh.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2)
     @mesh.position = new BABYLON.Vector3(@options.pos[0], @options.pos[1], 0)
     @tubes = []
