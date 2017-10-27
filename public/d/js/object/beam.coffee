@@ -1,9 +1,10 @@
 Object = window.o.Object
 
 window.o.ObjectBeam = class Beam extends Object
+  _color: [255, 243, 21]
   constructor: ->
     super
-    @color(255, 243, 21)
+    @color.apply(@, @_color.concat(0.5))
     width = 0.25
     start = @options.start
     end = @options.end
@@ -22,16 +23,16 @@ window.o.ObjectBeam = class Beam extends Object
 class BeamSphere extends window.o.ObjectSphere
   _default: {
     diameter: 4
-    color: [255, 243, 21]
+    color: Beam::_color
   }
   constructor: ->
     super
-    @color(@options.color[0], @options.color[1], @options.color[2])
+    @color.apply(@, @options.color)
     @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])
     @sheath = new window.o.ObjectSphere({diameter: @options.diameter + 1, parent: @mesh})
-    @sheath.color(@options.color[0], @options.color[1], @options.color[2], 0.5)
+    @sheath.color.apply(@sheath, @options.color.concat(0.5))
     @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 2, parent: @mesh})
-    @sheath2.color(@options.color[0], @options.color[1], @options.color[2], 0.3)
+    @sheath2.color.apply(@sheath2, @options.color.concat(0.2))
     @
 
 

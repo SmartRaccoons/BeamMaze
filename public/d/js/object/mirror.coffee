@@ -32,21 +32,22 @@ class MirrorTubeOut extends MirrorTubeIn
 
 
 class MirrorTube
+  _color_active: window.o.ObjectBeam::_color
   constructor: (options)->
     @options = options
     tube_options = {parent_class: @, parent: @options.parent_class.mesh, back: @options.back}
     @tubes = []
     @tubes.push new MirrorTubeIn(tube_options)
-    @tubes.push  new MirrorTubeOut(tube_options)
+    @tubes.push new MirrorTubeOut(tube_options)
     @tubes.forEach (t)=> t.rotate(@options.rotation)
     @_color = @options.parent_class._color
     @color_default()
 
   activate: ->
     @active = true
-    @tubes.forEach (t)=> t.color(255, 243, 21)
+    @tubes.forEach (t)=> t.color.apply(t, @_color_active.concat(0.5))
 
-  color_default: -> @tubes.forEach (t)=> t.color.apply(t, @_color)
+  color_default: -> @tubes.forEach (t)=> t.color.apply(t, @_color.concat(0.5))
 
   deactive: ->
     if !@active
