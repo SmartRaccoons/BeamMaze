@@ -5,6 +5,7 @@ window.o.GameMap = class Map extends MicroEvent
     super
 
   clear: ->
+    @_blank = []
     @_mirror = []
     @_platform = []
     @_rotations = null
@@ -13,40 +14,21 @@ window.o.GameMap = class Map extends MicroEvent
   load: (map_string)->
     methods = {
       '-': null
-      '0': null
+      '0': 'blank'
       '1': 'mirror'
       '2': 'mirror_reverse'
       '8': 'beam_source'
       '9': 'target'
     }
+    call = (method, x=0, y=0)=>
+      if methods[method]
+        @[methods[method]]([x * 10, y * 10])
 
-    map = map_string.split("\n").map (s)->
-      s.trim().split('').map (ob)-> ob
-    @_map_size = size = map[0].length
-    middle = Math.floor(size/2)
-    for fn in Object.keys(methods)
-      methods[fn] = ((name, fn)=>
-        (parent=null, x=0, y=0)=>
-          if fn
-            params = [[x*10, y*10, 0]]
-            if parent
-              params.unshift(parent)
-            @[fn].apply(@, params)
-      )(fn, methods[fn])
-
-    methods[map[middle][middle]]()
-    map.reverse()
-    for m in [0...size]
-      methods[map[0][m]](null, m - middle, -middle - 1)
-    map.shift()
-    for m in [1..middle]
-      parent = @platform(m * 10)
-      for y in [-m..m]
-        methods[map[(y + middle)][m + middle]](parent.mesh, m, y)
-        methods[map[(y + middle)][-m + middle]](parent.mesh, -m, y)
-      for x in [(-m+1)...m]
-        methods[map[m + middle][x + middle]](parent.mesh, x, m)
-        methods[map[-m + middle][x + middle]](parent.mesh, x, -m)
+    map = map_string.split("\n").map (s)-> s.trim().split('')
+    middle = Math.floor(map[0].length/2)
+    map.forEach (row, y)->
+      row.forEach (cell, x)->
+        call(cell, x - middle, -y + middle)
 
   remove_controls: ->
     @_platform.forEach (ob)-> ob.remove_controls()
@@ -57,6 +39,7 @@ window.o.GameMap = class Map extends MicroEvent
       @_source.remove()
     if @_target
       @_target.remove()
+    @_blank.forEach (ob)-> ob.remove()
     @_mirror.forEach (ob)-> ob.remove()
     @_platform.forEach (ob)-> ob.remove()
     @clear()
@@ -64,9 +47,9 @@ window.o.GameMap = class Map extends MicroEvent
   render: ->
     if @_before_render_fn.length > 0
       @_before_render_fn.pop()()
-    if @_platform.length is 0
+    if @_mirror.length is 0
       return
-    changes = @_platform.map( (ob)-> ob._rotation_check()).some (res)-> res
+    changes = false
     if @_rotations isnt changes
       @_rotations = changes
       if changes
@@ -79,16 +62,12 @@ window.o.GameMap = class Map extends MicroEvent
 
   beam_source: (coors)-> @_source = new window.o.ObjectBeamSource({position: [coors[0], coors[1], -0.55 * 4.2]})
 
-  target: -> @_target = new window.o.ObjectBeamTarget({position: [0, 0, -0.55 * 4.2]})
+  target: (coors)-> @_target = new window.o.ObjectBeamTarget({position: [coors[0], coors[1], -0.55 * 4.2]})
 
-  platform: (size)->
-    ob = new window.o.Platform({size: size})
-    ob.bind 'rotate', => @trigger 'rotate'
-    @_platform.push ob
-    return ob
+  blank: (coors)-> @_blank.push new window.o.ObjectBlank({pos: coors})
 
-  mirror_reverse: (parent, coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], parent: parent, reverse: true})
+  mirror_reverse: (coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], reverse: true})
 
-  mirror: (parent, coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], parent: parent})
+  mirror: (coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]]})
 
   obstacle: (parent, coors)->
