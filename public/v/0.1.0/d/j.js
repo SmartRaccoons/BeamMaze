@@ -33350,7 +33350,13 @@ Continue: "Turpināt",
 "Choose stage": "Izvēlies līmeni",
 Quit: "Aizvērt",
 Menu: "Menu",
+Pause: "Pauze",
 Reset: "No jauna",
+"Next level": "Nākošais",
+Completed: "Atrisināji {minutes}:{seconds}<small>.{mls}</small><br />\nar {mirrors} spogulīšiem un {steps} gājieniem",
+Light: "Gaisma",
+Mirror: "Spogulis",
+"Rotate platform": "Rotē platformu",
 "Game free over description": "Apsveicam, Tu izgāji {levels} līmeņus.<br />\nMēs rūpīgi taisījām šo spēli un vēlamies kādu no šiem atalgojumiem:<br />\n(1) padalies ar spēli vai<br />\n(2) iegādājies pilnu versiju par vienas kafijas cenu.",
 "Buy game": "pilna versija ({price})",
 "Game shared over description": "Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />\nJāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,\nkura maksā mazāk kā viena krūzīte labas kafijas.<br />\nToties šajā spēlē nav reklāmu vai kādu citu slēptu maksājumu.<br />\nTikai nieka {price}",
@@ -33371,8 +33377,8 @@ normals: [ .3416, .3416, -.8756, -.3416, -.3416, -.8756, .3416, -.3416, -.8756, 
 indices: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 11, 16, 17, 9, 18, 10, 14, 6, 12, 19, 20, 4, 2, 7, 0, 21, 22, 13, 5, 8, 3, 23, 15, 10, 18, 16, 11, 1, 6, 9, 17, 14, 19, 12, 18, 13, 22, 8, 12, 6, 5, 23, 3, 22, 4, 20, 7, 3, 8, 2, 21, 0, 20, 1, 15, 17, 0, 7, 22, 15, 18, 0, 16, 1, 3, 21, 4, 6, 17, 7, 9, 19, 10, 12, 23, 13, 15, 11, 10, 16, 9, 11, 6, 19, 9, 14, 10, 19, 18, 14, 13, 8, 23, 12, 5, 13, 23, 22, 5, 4, 7, 21, 3, 2, 4, 21, 20, 2, 1, 17, 16, 0, 22, 20, 15 ]
 },
 connector: {
-positions: [ -.03, 1.3, -.03, -.3, 1, .1, -.3, 1, -.1, .03, 1.3, .03, .3, 1, .1, .3, 1, -.1, -.03, 1.3, .03, .03, 1.3, -.03 ],
-normals: [ -.3117, .7839, -.5369, -.7421, -.315, .5915, -.7421, -.315, -.5915, .3117, .7839, .5369, .7421, -.315, .5915, .7421, -.315, -.5915, -.3117, .7839, .5369, .3117, .7839, -.5369 ],
+positions: [ -.03, .1, -.03, -.2, -.05, .1, -.2, -.05, -.1, .03, .1, .03, .2, -.05, .1, .2, -.05, -.1, -.03, .1, .03, .03, .1, -.03 ],
+normals: [ -.2641, .8486, -.4584, -.743, -.257, .618, -.743, -.257, -.618, .2641, .8486, .4584, .743, -.257, .618, .743, -.257, -.618, -.2641, .8486, .4584, .2641, .8486, -.4584 ],
 indices: [ 0, 1, 2, 1, 3, 4, 3, 5, 4, 5, 0, 2, 4, 2, 1, 6, 7, 3, 0, 6, 1, 1, 6, 3, 3, 7, 5, 5, 7, 0, 4, 5, 2, 6, 0, 7 ]
 },
 mirror: {
@@ -33384,16 +33390,6 @@ mirrorTube: {
 positions: [ .1, .26, .1, -.08, .08, -.1, -.08, .08, .1, -.1, 1, -.1, -.1, .4, .1, -.1, .4, -.1, .1, 1, .1, .1, .26, -.1, .1, 1, -.1, -.25, .25, .1, -.1, 1, .1, -.25, .25, -.1 ],
 normals: [ .7173, -.2971, .6302, .5, -.5, -.7071, .5, -.5, .7071, -.5773, .5773, -.5773, -.5491, .2275, .8042, -.5491, .2275, -.8042, .5773, .5773, .5773, .7173, -.2971, -.6302, .5773, .5773, -.5773, -.5, .5, .7071, -.5773, .5773, .5773, -.5, .5, -.7071 ],
 indices: [ 0, 1, 2, 3, 4, 5, 4, 6, 0, 6, 7, 0, 8, 5, 7, 4, 2, 9, 10, 8, 6, 1, 5, 11, 5, 9, 11, 0, 7, 1, 3, 10, 4, 4, 10, 6, 6, 8, 7, 8, 3, 5, 4, 0, 2, 10, 3, 8, 1, 7, 5, 5, 4, 9 ]
-},
-mirrorTubeEmpty: {
-positions: [ -.1, 1, -.1, -.1, .25, .1, -.1, .25, -.1, -.1, 1, .1, .1, .25, .1, .1, 1, .1, .1, .25, -.1, .1, 1, -.1 ],
-normals: [ -.5773, .5773, -.5773, -.5773, -.5773, .5773, -.5773, -.5773, -.5773, -.5773, .5773, .5773, .5773, -.5773, .5773, .5773, .5773, .5773, .5773, -.5773, -.5773, .5773, .5773, -.5773 ],
-indices: [ 0, 1, 2, 3, 4, 1, 5, 6, 4, 7, 2, 6, 4, 2, 1, 3, 7, 5, 0, 3, 1, 3, 5, 4, 5, 7, 6, 7, 0, 2, 4, 6, 2, 3, 0, 7 ]
-},
-mirrorTubeStraight: {
-positions: [ -.1, 1, -.1, -.1, 0, .1, -.1, 0, -.1, -.1, 1, .1, .1, 0, .1, .1, 1, .1, .1, 0, -.1, .1, 1, -.1 ],
-normals: [ -.5773, .5773, -.5773, -.5773, -.5773, .5773, -.5773, -.5773, -.5773, -.5773, .5773, .5773, .5773, -.5773, .5773, .5773, .5773, .5773, .5773, -.5773, -.5773, .5773, .5773, -.5773 ],
-indices: [ 0, 1, 2, 3, 4, 1, 5, 6, 4, 7, 2, 6, 4, 2, 1, 3, 7, 5, 0, 3, 1, 3, 5, 4, 5, 7, 6, 7, 0, 2, 4, 6, 2, 3, 0, 7 ]
 }
 };
 }).call(this);
@@ -33441,19 +33437,18 @@ return _convertToFlat = true;
 });
 window.o.Object = Object = function(_super) {
 __extends(Object, _super);
-Object.prototype._color = [ 0, 0, 0 ];
 Object.prototype._default = {};
 function Object(options) {
 _object_id++;
 this._id = _object_id;
 this.options = _.extend({}, this._default, options);
+if (this.options.parent_class) {
+this.parent = this.options.parent_class;
+}
 this.mesh = this.mesh_build();
 this.mesh._type = this.name;
 if (this.options.parent) {
-this.parent = this.options.parent;
-if (this.parent.mesh) {
-this.mesh.parent = this.parent.mesh;
-}
+this.mesh.parent = this.options.parent;
 }
 if (this.options.position) {
 this.mesh.position = new BABYLON.Vector3(this.options.position[0], this.options.position[1] || 0, this.options.position[2] || 0);
@@ -33475,12 +33470,6 @@ if (action.mouseout) {
 return this.mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, action.mouseout));
 }
 };
-Object.prototype._action_remove = function() {
-if (!this.mesh.actionManager) {
-return;
-}
-return this.mesh.actionManager.actions = [];
-};
 Object.prototype.mesh_build = function() {
 var mesh;
 mesh = meshes[this.name].clone(meshes[this.name].name);
@@ -33488,27 +33477,18 @@ mesh.id = this._name();
 mesh.isVisible = true;
 return mesh;
 };
-Object.prototype.color = function(color, alpha) {
-if (color == null) {
-color = this._color;
-}
+Object.prototype.color = function(red, green, blue, alpha) {
 if (alpha == null) {
 alpha = 1;
 }
 if (!this.mesh.material) {
 this.mesh.material = new BABYLON.StandardMaterial("material_" + this._name(), this.scene());
 }
-this.mesh.material.diffuseColor = new BABYLON.Color3(color[0] / 255, color[1] / 255, color[2] / 255);
-return this.mesh.material.alpha = color[3] || alpha;
+this.mesh.material.diffuseColor = new BABYLON.Color3(red / 255, green / 255, blue / 255);
+return this.mesh.material.alpha = alpha;
 };
 Object.prototype.scene = function() {
 return _scene;
-};
-Object.prototype.hide = function() {
-return this.mesh.isVisible = false;
-};
-Object.prototype.show = function() {
-return this.mesh.isVisible = true;
 };
 Object.prototype.godrays = function() {
 return new BABYLON.VolumetricLightScatteringPostProcess("godrays_" + this._name(), 1, _camera, this.mesh, 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, _engine, false);
@@ -33562,7 +33542,7 @@ return ObjectSphere;
 }).call(this);
 
 (function() {
-var Blank, Connector, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Blank, Connector, ConnectorDown, ConnectorLeft, ConnectorRight, ConnectorUp, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -33579,50 +33559,63 @@ __extends(Connector, _super);
 Connector.prototype.name = "connector";
 function Connector() {
 Connector.__super__.constructor.apply(this, arguments);
-this.mesh.rotation.z = Math.PI;
-this.hide();
+this.mesh.scaling = new BABYLON.Vector3(2.5, 2.5, 1);
 }
-Connector.prototype.angle = function(angle) {
-var angle_diff, angle_start;
-this.show();
-angle = -Math.PI / 2 + angle;
-if (angle === this.mesh.rotation.z) {
-return;
-}
-angle_diff = angle - this.mesh.rotation.z;
-if (angle_diff > 0) {
-angle_diff = angle_diff - 2 * Math.PI;
-}
-angle_start = this.mesh.rotation.z;
-return window.App.events.trigger("map:animation", this._name(), function(_this) {
-return function(m, steps) {
-if (steps === 0) {
-return _this.mesh.rotation.z = angle;
-}
-return _this.mesh.rotation.z = angle_start + angle_diff * m;
-};
-}(this));
-};
 return Connector;
 }(window.o.Object);
+ConnectorUp = function(_super) {
+__extends(ConnectorUp, _super);
+function ConnectorUp() {
+ConnectorUp.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = 0;
+this.mesh.position = new BABYLON.Vector3(0, 1.1, 0);
+}
+return ConnectorUp;
+}(Connector);
+ConnectorDown = function(_super) {
+__extends(ConnectorDown, _super);
+function ConnectorDown() {
+ConnectorDown.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = Math.PI;
+this.mesh.position = new BABYLON.Vector3(0, -1.1, 0);
+}
+return ConnectorDown;
+}(Connector);
+ConnectorLeft = function(_super) {
+__extends(ConnectorLeft, _super);
+function ConnectorLeft() {
+ConnectorLeft.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = Math.PI / 2;
+this.mesh.position = new BABYLON.Vector3(-1.1, 0, 0);
+}
+return ConnectorLeft;
+}(Connector);
+ConnectorRight = function(_super) {
+__extends(ConnectorRight, _super);
+function ConnectorRight() {
+ConnectorRight.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = -Math.PI / 2;
+this.mesh.position = new BABYLON.Vector3(1.1, 0, 0);
+}
+return ConnectorRight;
+}(Connector);
 window.o.ObjectBlank = Blank = function(_super) {
 __extends(Blank, _super);
-Blank.prototype._color = [ 151, 153, 156 ];
-Blank.prototype._color_active = [ 103, 181, 229 ];
 Blank.prototype.name = "blank";
 Blank.prototype._switch = true;
 Blank.prototype._step = 10;
+Blank.prototype.clear = function() {
+return this._connectors = [];
+};
 function Blank() {
 Blank.__super__.constructor.apply(this, arguments);
 this.position = {
-x: this.options.position[0],
-y: this.options.position[1]
+x: this.options.pos[0],
+y: this.options.pos[1]
 };
-this._connector = new Connector({
-parent: this
-});
+this.clear();
 this.mesh.scaling = new BABYLON.Vector3(4, 4, 4);
-this._update_position(true);
+this._update_position();
 this.out();
 this;
 }
@@ -33631,38 +33624,54 @@ this.position.x = this.position.x + position.x;
 this.position.y = this.position.y + position.y;
 return this._update_position();
 };
-Blank.prototype._update_position = function(without_animation) {
-var position, position_diff, position_new, position_set;
-if (without_animation == null) {
-without_animation = false;
-}
-position_new = [ this.position.x * this._step, this.position.y * this._step ];
-position_set = function(_this) {
-return function() {
-return _this.mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], 0);
+Blank.prototype._update_position = function() {
+return this.mesh.position = new BABYLON.Vector3(this.position.x * this._step, this.position.y * this._step, 0);
 };
-}(this);
-if (without_animation) {
-return position_set();
-}
-position = [ this.mesh.position.x, this.mesh.position.y ];
-position_diff = [ position_new[0] - position[0], position_new[1] - position[1] ];
-return window.App.events.trigger("map:animation", this._name(), function(_this) {
-return function(m, steps) {
-if (steps === 0) {
-return position_set();
-}
-return _this.mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, (_this._switch ? -1 : 1) * 5 * Math.sin(Math.PI * m));
+Blank.prototype._animate = function(part, position) {
+var axis, diff;
+axis = position.x ? "x" : "y";
+diff = position[axis] - this._position_prev[axis];
+return this.mesh.position[axis] = this._position_prev[axis] + diff * part;
 };
-}(this), 20, true);
+Blank.prototype.connector = function(position) {
+var c;
+while (this._connectors.length) {
+this._connectors.shift().remove();
+}
+if (position.x === 1) {
+c = new ConnectorRight({
+parent: this.mesh
+});
+}
+if (position.x === -1) {
+c = new ConnectorLeft({
+parent: this.mesh
+});
+}
+if (position.y === 1) {
+c = new ConnectorUp({
+parent: this.mesh
+});
+}
+if (position.y === -1) {
+c = new ConnectorDown({
+parent: this.mesh
+});
+}
+this._connectors.push(c);
+return this.out();
 };
 Blank.prototype.over = function() {
-this.color(this._color_active);
-return this._connector.color(this._color_active);
+this.color(103, 181, 229);
+return this._connectors.forEach(function(c) {
+return c.color(103, 181, 229);
+});
 };
 Blank.prototype.out = function() {
-this.color(this._color);
-return this._connector.color(this._color);
+this.color(151, 153, 156);
+return this._connectors.forEach(function(c) {
+return c.color(151, 153, 156);
+});
 };
 return Blank;
 }(window.o.Object);
@@ -33688,7 +33697,7 @@ Beam.prototype._color = [ 255, 243, 21 ];
 function Beam() {
 var end, start, width;
 Beam.__super__.constructor.apply(this, arguments);
-this.color(null, .5);
+this.color.apply(this, this._color.concat(.5));
 width = .25;
 start = this.options.start;
 end = this.options.end;
@@ -33716,18 +33725,18 @@ color: Beam.prototype._color
 };
 function BeamSphere() {
 BeamSphere.__super__.constructor.apply(this, arguments);
-this.color(this.options.color);
+this.color.apply(this, this.options.color);
 this.mesh.position = new BABYLON.Vector3(this.options.position[0], this.options.position[1], this.options.position[2]);
 this.sheath = new window.o.ObjectSphere({
 diameter: this.options.diameter + 1,
-parent: this
+parent: this.mesh
 });
-this.sheath.color(this.options.color.concat(.5));
+this.sheath.color.apply(this.sheath, this.options.color.concat(.5));
 this.sheath2 = new window.o.ObjectSphere({
 diameter: this.options.diameter + 2,
-parent: this
+parent: this.mesh
 });
-this.sheath2.color(this.options.color.concat(.2));
+this.sheath2.color.apply(this.sheath2, this.options.color.concat(.2));
 this;
 }
 return BeamSphere;
@@ -33745,7 +33754,7 @@ this._mirror = [];
 BeamSource.__super__.constructor.apply(this, arguments);
 }
 BeamSource.prototype.beam = function() {
-var direction, i, last_mirror, pick_info, points, tube_check, _i, _results;
+var direction, i, last_mirror, pick_info, points, _i, _results;
 this.beam_remove();
 this.solved = false;
 this._beam = [];
@@ -33753,17 +33762,14 @@ this._mirror = [];
 points = [ new BABYLON.Vector3(this.options.position[0], this.options.position[1], this.options.position[2]) ];
 last_mirror = null;
 direction = new BABYLON.Vector3(0, 1e3, 0);
-tube_check = function(_type) {
-return _type && _type.indexOf("mirrorTube") > -1;
-};
 _results = [];
 for (i = _i = 0; _i < 100; i = ++_i) {
 pick_info = this.scene().pickWithRay(new BABYLON.Ray(points[points.length - 1], direction, 100), function(i) {
 return function(m) {
-if (i === 0 && m._type === "source" || tube_check(m._type) && last_mirror === m._class.mirror_id()) {
+if (i === 0 && m._type === "source" || m._type === "mirrorTube" && last_mirror === m._class.mirror_id()) {
 return false;
 }
-return tube_check(m._type) || [ "target", "source" ].indexOf(m._type) > -1;
+return [ "mirrorTube", "target", "obstacle", "source" ].indexOf(m._type) > -1;
 };
 }(i));
 if (!pick_info.pickedPoint) {
@@ -33781,16 +33787,12 @@ break;
 if (pick_info.pickedMesh._type === "target") {
 this.solved = true;
 }
-if (tube_check(pick_info.pickedMesh._type)) {
+if (pick_info.pickedMesh._type !== "mirrorTube") {
+break;
+}
 direction = pick_info.pickedMesh._class.reflect(direction);
 last_mirror = pick_info.pickedMesh._class.mirror_id();
-this._mirror.push(pick_info.pickedMesh._class.parent);
-}
-if ([ "mirrorTubeStraight", "mirrorTube" ].indexOf(pick_info.pickedMesh._type) === -1) {
-break;
-} else {
-_results.push(void 0);
-}
+_results.push(this._mirror.push(pick_info.pickedMesh._class.parent));
 }
 return _results;
 };
@@ -33826,7 +33828,7 @@ return BeamTarget;
 }).call(this);
 
 (function() {
-var MirrorContainer, MirrorEmpty, MirrorNormal, MirrorReverse, MirrorStraight, MirrorTube, MirrorTubeConnect, MirrorTubeConnectOut, MirrorTubeEmpty, MirrorTubeStraight, MirrorTubeStraightOut, _move_positions, _move_positions_coors, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Mirror, MirrorContainer, MirrorTube, MirrorTubeIn, MirrorTubeOut, _move_positions, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -33838,199 +33840,135 @@ child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
 };
-MirrorTube = function(_super) {
-__extends(MirrorTube, _super);
-MirrorTube.prototype._color = [ 187, 230, 239 ];
-MirrorTube.prototype._color_active = window.o.ObjectBeam.prototype._color;
-function MirrorTube() {
-MirrorTube.__super__.constructor.apply(this, arguments);
+MirrorTubeIn = function(_super) {
+__extends(MirrorTubeIn, _super);
+MirrorTubeIn.prototype.name = "mirrorTube";
+function MirrorTubeIn() {
+MirrorTubeIn.__super__.constructor.apply(this, arguments);
 this.mesh.position = new BABYLON.Vector3(0, 0, -.55);
 this.mesh._class = this;
-this.deactive();
-this.mesh.rotate(new BABYLON.Vector3(0, 0, 1), this.options.rotation * Math.PI / 2, BABYLON.Space.WORLD);
-this;
+this._out = false;
 }
-MirrorTube.prototype.mirror_id = function() {
-return this.parent.options.parent._name();
+MirrorTubeIn.prototype.rotate = function(rotation) {
+return this.mesh.rotate(new BABYLON.Vector3(0, 0, 1), rotation * Math.PI / 2, BABYLON.Space.WORLD);
 };
-MirrorTube.prototype.active = function(silent) {
-if (silent == null) {
-silent = false;
+MirrorTubeIn.prototype.mirror_id = function() {
+return this.parent.options.parent_class._name();
+};
+MirrorTubeIn.prototype.position = function() {
+return this.options.parent.position;
+};
+MirrorTubeIn.prototype.reflect = function(v) {
+this.parent.activate();
+if (this._out) {
+return new BABYLON.Vector3(-v.y, v.x, v.z);
 }
-this.color(this._color_active);
-if (!silent) {
-return this.trigger("active");
-}
-};
-MirrorTube.prototype.deactive = function() {
-return this.color(this._color);
-};
-MirrorTube.prototype.reflect = function(v) {
-return this.active();
-};
-return MirrorTube;
-}(window.o.Object);
-MirrorTubeConnect = function(_super) {
-__extends(MirrorTubeConnect, _super);
-function MirrorTubeConnect() {
-return MirrorTubeConnect.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeConnect.prototype.name = "mirrorTube";
-MirrorTubeConnect.prototype.reflect = function(v) {
-MirrorTubeConnect.__super__.reflect.apply(this, arguments);
 return new BABYLON.Vector3(v.y, -v.x, v.z);
 };
-return MirrorTubeConnect;
-}(MirrorTube);
-MirrorTubeConnectOut = function(_super) {
-__extends(MirrorTubeConnectOut, _super);
-function MirrorTubeConnectOut() {
-return MirrorTubeConnectOut.__super__.constructor.apply(this, arguments);
+return MirrorTubeIn;
+}(window.o.Object);
+MirrorTubeOut = function(_super) {
+__extends(MirrorTubeOut, _super);
+function MirrorTubeOut() {
+MirrorTubeOut.__super__.constructor.apply(this, arguments);
+this.mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD);
+this.mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI / 2, BABYLON.Space.WORLD);
+this._out = true;
 }
-MirrorTubeConnectOut.prototype.name = "mirrorTube";
-MirrorTubeConnectOut.prototype.mesh_build = function() {
-var mesh;
-mesh = MirrorTubeConnectOut.__super__.mesh_build.apply(this, arguments);
-mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD);
-mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI / 2, BABYLON.Space.WORLD);
-return mesh;
+return MirrorTubeOut;
+}(MirrorTubeIn);
+MirrorTube = function() {
+MirrorTube.prototype._color_active = window.o.ObjectBeam.prototype._color;
+function MirrorTube(options) {
+var tube_options;
+this.options = options;
+tube_options = {
+parent_class: this,
+parent: this.options.parent_class.mesh
 };
-MirrorTubeConnectOut.prototype.reflect = function(v) {
-MirrorTubeConnectOut.__super__.reflect.apply(this, arguments);
-return new BABYLON.Vector3(-v.y, v.x, v.z);
-};
-return MirrorTubeConnectOut;
-}(MirrorTube);
-MirrorTubeEmpty = function(_super) {
-__extends(MirrorTubeEmpty, _super);
-function MirrorTubeEmpty() {
-return MirrorTubeEmpty.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeEmpty.prototype.name = "mirrorTubeEmpty";
-return MirrorTubeEmpty;
-}(MirrorTube);
-MirrorTubeStraight = function(_super) {
-__extends(MirrorTubeStraight, _super);
-function MirrorTubeStraight() {
-return MirrorTubeStraight.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeStraight.prototype.name = "mirrorTubeStraight";
-MirrorTubeStraight.prototype.reflect = function(v) {
-MirrorTubeStraight.__super__.reflect.apply(this, arguments);
-return new BABYLON.Vector3(v.x, v.y, v.z);
-};
-return MirrorTubeStraight;
-}(MirrorTube);
-MirrorTubeStraightOut = function(_super) {
-__extends(MirrorTubeStraightOut, _super);
-function MirrorTubeStraightOut() {
-return MirrorTubeStraightOut.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeStraightOut.prototype.mesh_build = function() {
-var mesh;
-mesh = MirrorTubeStraightOut.__super__.mesh_build.apply(this, arguments);
-mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI, BABYLON.Space.WORLD);
-return mesh;
-};
-return MirrorTubeStraightOut;
-}(MirrorTubeStraight);
-MirrorNormal = function(_super) {
-__extends(MirrorNormal, _super);
-MirrorNormal.prototype.name = "mirror";
-MirrorNormal.prototype.connectors = [ [ MirrorTubeConnect, MirrorTubeConnectOut ], null, [ MirrorTubeConnect, MirrorTubeConnectOut ] ];
-function MirrorNormal() {
-MirrorNormal.__super__.constructor.apply(this, arguments);
-this.color(null, 0);
 this.tubes = [];
-this.connectors.forEach(function(_this) {
-return function(connectors, i) {
-var tubes;
-if (!connectors) {
-return;
-}
-tubes = (Array.isArray(connectors) ? connectors : [ connectors ]).map(function(connector) {
-return new connector({
-parent: _this,
-rotation: i
-});
-});
-tubes.forEach(function(t1, i) {
-return tubes.forEach(function(t2, j) {
-if (i === j) {
-return;
-}
-t1.bind("active", function() {
-return t2.active(true);
-});
-return t2.bind("active", function() {
-return t1.active(true);
-});
-});
-});
-return _this.tubes = _this.tubes.concat(tubes);
+this.tubes.push(new MirrorTubeIn(tube_options));
+this.tubes.push(new MirrorTubeOut(tube_options));
+this.tubes.forEach(function(_this) {
+return function(t) {
+return t.rotate(_this.options.rotation);
 };
 }(this));
+this._color = this.options.parent_class._color;
+this.color_default();
 }
-MirrorNormal.prototype.deactive = function() {
+MirrorTube.prototype.activate = function() {
+this.active = true;
+return this.tubes.forEach(function(_this) {
+return function(t) {
+return t.color.apply(t, _this._color_active.concat(.5));
+};
+}(this));
+};
+MirrorTube.prototype.color_default = function() {
+return this.tubes.forEach(function(_this) {
+return function(t) {
+return t.color.apply(t, _this._color.concat(.5));
+};
+}(this));
+};
+MirrorTube.prototype.deactive = function() {
+if (!this.active) {
+return;
+}
+return this.color_default();
+};
+return MirrorTube;
+}();
+Mirror = function(_super) {
+__extends(Mirror, _super);
+Mirror.prototype.name = "mirror";
+function Mirror() {
+var rotation, _i, _len, _ref;
+Mirror.__super__.constructor.apply(this, arguments);
+this._color = [ 187, 230, 239 ];
+this.color.apply(this, this._color.concat([ .4 ]));
+this.tubes = [];
+_ref = this.options.reverse ? [ 1, 3 ] : [ 0, 2 ];
+for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+rotation = _ref[_i];
+this.tubes.push(new MirrorTube({
+parent_class: this,
+rotation: rotation
+}));
+}
+}
+Mirror.prototype.deactive = function() {
 return this.tubes.forEach(function(t) {
 return t.deactive();
 });
 };
-return MirrorNormal;
+return Mirror;
 }(window.o.Object);
-MirrorReverse = function(_super) {
-__extends(MirrorReverse, _super);
-function MirrorReverse() {
-return MirrorReverse.__super__.constructor.apply(this, arguments);
-}
-MirrorReverse.prototype.connectors = [ null, [ MirrorTubeConnect, MirrorTubeConnectOut ], null, [ MirrorTubeConnect, MirrorTubeConnectOut ] ];
-return MirrorReverse;
-}(MirrorNormal);
-MirrorEmpty = function(_super) {
-__extends(MirrorEmpty, _super);
-function MirrorEmpty() {
-return MirrorEmpty.__super__.constructor.apply(this, arguments);
-}
-MirrorEmpty.prototype.connectors = [ MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty ];
-return MirrorEmpty;
-}(MirrorNormal);
-MirrorStraight = function(_super) {
-__extends(MirrorStraight, _super);
-function MirrorStraight() {
-return MirrorStraight.__super__.constructor.apply(this, arguments);
-}
-MirrorStraight.prototype.connectors = [ [ MirrorTubeStraight, MirrorTubeStraightOut ], MirrorTubeEmpty, null, MirrorTubeEmpty ];
-return MirrorStraight;
-}(MirrorNormal);
-_move_positions = [ Math.PI * 3 / 2, Math.PI, Math.PI / 2, 0 ];
-_move_positions_coors = _move_positions.map(function(angle) {
-return {
-y: Math.round(Math.sin(angle)),
-x: Math.round(Math.cos(angle))
-};
-});
+_move_positions = [ {
+y: -1,
+x: 0
+}, {
+y: 0,
+x: -1
+}, {
+y: 1,
+x: 0
+}, {
+y: 0,
+x: 1
+} ];
 window.o.ObjectMirror = MirrorContainer = function(_super) {
 __extends(MirrorContainer, _super);
 MirrorContainer.prototype._switch = false;
-MirrorContainer.prototype.classes = {
-normal: MirrorNormal,
-reverse: MirrorReverse,
-empty: MirrorEmpty,
-straight: MirrorStraight
-};
 function MirrorContainer() {
 MirrorContainer.__super__.constructor.apply(this, arguments);
-this.mirror = new this.classes[this.options.type]({
-parent: this
+this.mirror = new Mirror({
+parent: this.mesh,
+rotation: this.options.rotation
 });
 this._move_position = 0;
-}
-MirrorContainer.prototype._controls_add = function() {
-if (this._controls_added) {
-return;
-}
-this._controls_added = true;
-return this.mirror._action({
+this.mirror._action({
 mouseover: function(_this) {
 return function() {
 return _this.over();
@@ -34043,17 +33981,12 @@ return _this.out();
 }(this),
 click: function(_this) {
 return function() {
-return _this.trigger("move", _this.get_move_position());
+return _this.trigger("move", _this.get_position());
 };
 }(this)
 });
-};
-MirrorContainer.prototype._controls_remove = function() {
-this._controls_added = false;
-this.out();
-return this.mirror._action_remove();
-};
-MirrorContainer.prototype.get_move_position = function(n, full) {
+}
+MirrorContainer.prototype.get_position = function(n, full) {
 var p;
 if (n == null) {
 n = this._move_position;
@@ -34061,7 +33994,7 @@ n = this._move_position;
 if (full == null) {
 full = false;
 }
-p = _move_positions_coors[n];
+p = _move_positions[n];
 if (!full) {
 return p;
 }
@@ -34070,17 +34003,264 @@ x: p.x + this.position.x,
 y: p.y + this.position.y
 };
 };
-MirrorContainer.prototype.set_move_position = function(nr) {
-if (nr === null) {
-this._controls_remove();
-return this._connector.hide();
-}
-this._controls_add();
+MirrorContainer.prototype.set_position = function(nr) {
 this._move_position = nr;
-return this._connector.angle(_move_positions[nr]);
+return this.connector(this.get_position());
 };
 return MirrorContainer;
 }(window.o.ObjectBlank);
+}).call(this);
+
+(function() {
+var Platform, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+for (var key in parent) {
+if (__hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+};
+window.o.Platform = Platform = function(_super) {
+__extends(Platform, _super);
+Platform.prototype._step = 10;
+Platform.prototype.clear = function() {
+this._controls = [];
+this._blanks = {};
+return this._blanks_position = {
+l: [],
+r: [],
+t: [],
+b: []
+};
+};
+function Platform(options) {
+var s, size, width, _i, _ref, _ref1;
+width = options.size * 2 + this._step;
+Platform.__super__.constructor.call(this, _.extend({
+dimension: [ width, width, 0 ]
+}, options));
+this.color(0, 0, 0, 0);
+size = this.options.size;
+this._rotation_animations = [];
+this.clear();
+this.blank_put(new window.o.ObjectBlank({
+pos: [ -size, size ],
+parent: this.mesh
+}), [ "l", "t" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ -size, -size ],
+parent: this.mesh
+}), [ "l", "b" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ size, size ],
+parent: this.mesh
+}), [ "r", "t" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ size, -size ],
+parent: this.mesh
+}), [ "r", "b" ]);
+for (s = _i = _ref = -size + this._step, _ref1 = this._step; _ref1 > 0 ? _i < size : _i > size; s = _i += _ref1) {
+this.blank_put(new window.o.ObjectBlank({
+pos: [ -size, s ],
+parent: this.mesh
+}), [ "l" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ size, s ],
+parent: this.mesh
+}), [ "r" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ s, -size ],
+parent: this.mesh
+}), [ "b" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ s, size ],
+parent: this.mesh
+}), [ "t" ]);
+}
+[ {
+size: [ this._step, this._step ],
+position: [ -size, -size ],
+vector: new BABYLON.Vector3(-1, 1, 0)
+}, {
+size: [ this._step, this._step ],
+position: [ size, size ],
+vector: new BABYLON.Vector3(1, -1, 0)
+}, {
+size: [ this._step, this._step ],
+position: [ -size, size ],
+vector: new BABYLON.Vector3(1, 1, 0)
+}, {
+size: [ this._step, this._step ],
+position: [ size, -size ],
+vector: new BABYLON.Vector3(-1, -1, 0)
+}, {
+size: [ width - 2 * this._step, this._step ],
+position: [ 0, -size ],
+vector: new BABYLON.Vector3(-1, 0, 0)
+}, {
+size: [ width - 2 * this._step, this._step ],
+position: [ 0, size ],
+vector: new BABYLON.Vector3(1, 0, 0)
+}, {
+size: [ this._step, width - 2 * this._step ],
+position: [ size, 0 ],
+vector: new BABYLON.Vector3(0, -1, 0)
+}, {
+size: [ this._step, width - 2 * this._step ],
+position: [ -size, 0 ],
+vector: new BABYLON.Vector3(0, 1, 0)
+} ].forEach(function(_this) {
+return function(c) {
+var action;
+action = new window.o.ObjectBox({
+dimension: [ c.size[0], c.size[1], _this._step ],
+position: c.position,
+action: {
+mouseover: function() {
+c._mouseover = true;
+return _this.blank_change(c.vector, true);
+},
+mouseout: function() {
+c._mouseover = false;
+return _this.blank_change(c.vector, false);
+},
+click: function() {
+return _this._rotate(c.vector, function() {
+_this.blank_change(c.vector, false);
+_this.blank_rotate(c.vector);
+if (c._mouseover) {
+return _this.blank_change(c.vector, true);
+}
+});
+}
+}
+});
+action.bind("remove", function() {
+if (c._mouseover) {
+return _this.blank_change(c.vector, false);
+}
+});
+_this._controls.push(action);
+return action.color(0, 0, 0, 0);
+};
+}(this));
+}
+Platform.prototype.blank_put = function(blank, positions) {
+this._blanks[blank._id] = blank;
+return positions.forEach(function(_this) {
+return function(p) {
+return _this._blanks_position[p].push(blank._id);
+};
+}(this));
+};
+Platform.prototype._blank_direction = function(v) {
+var d;
+d = [];
+if (v.x === 1) {
+d.push("t");
+}
+if (v.x === -1) {
+d.push("b");
+}
+if (v.y === -1) {
+d.push("r");
+}
+if (v.y === 1) {
+d.push("l");
+}
+return d;
+};
+Platform.prototype.blank_change = function(v, over) {
+var direction;
+direction = this._blank_direction(v);
+return direction.forEach(function(_this) {
+return function(d) {
+return _this._blanks_position[d].forEach(function(id) {
+return _this._blanks[id][over ? "over" : "out"]();
+});
+};
+}(this));
+};
+Platform.prototype.blank_rotate = function(v) {
+var change, direction;
+direction = this._blank_direction(v);
+if (direction.length > 1) {
+if (v.x === v.y) {
+change = {
+t: "r",
+r: "t",
+l: "b",
+b: "l"
+};
+} else {
+change = {
+b: "r",
+r: "b",
+t: "l",
+l: "t"
+};
+}
+} else {
+change = {
+t: "b",
+b: "t",
+l: "r",
+r: "l"
+};
+}
+return direction.forEach(function(_this) {
+return function(d) {
+var _ref;
+return _ref = [ _this._blanks_position[change[d]], _this._blanks_position[d] ], 
+_this._blanks_position[d] = _ref[0], _this._blanks_position[change[d]] = _ref[1], 
+_ref;
+};
+}(this));
+};
+Platform.prototype.remove_controls = function() {
+this._controls.forEach(function(c) {
+return c.remove();
+});
+return this._controls = [];
+};
+Platform.prototype.remove = function() {
+this.remove_controls();
+this.clear();
+return Platform.__super__.remove.apply(this, arguments);
+};
+Platform.prototype._rotate = function(vector, callback) {
+var angle, steps;
+this.trigger("rotate");
+angle = Math.PI;
+steps = 30;
+return this._rotation_animations.push({
+vector: new BABYLON.Vector3(vector.x, vector.y, vector.z),
+steps: steps,
+step: angle / steps,
+callback: callback
+});
+};
+Platform.prototype._rotation_check = function() {
+if (!this._rotation_animation) {
+if (this._rotation_animations.length === 0) {
+return false;
+}
+this._rotation_animation = this._rotation_animations.shift();
+}
+this.mesh.rotate(this._rotation_animation.vector, this._rotation_animation.step, BABYLON.Space.WORLD);
+this._rotation_animation.steps--;
+if (this._rotation_animation.steps === 0) {
+this._rotation_animation.callback();
+this._rotation_animation = null;
+}
+return true;
+};
+return Platform;
+}(window.o.ObjectBox);
 }).call(this);
 
 (function() {
@@ -34173,7 +34353,7 @@ Router.__super__.constructor.apply(this, arguments);
 this.$back = this.$(".back-link");
 this._active = null;
 this.game_stages = window.o.GameMapData.length;
-this.game_last = this.options.game_last > this.game_stages ? this.game_stages : this.options.game_last;
+this.game_last = this.options.game_last;
 }
 Router.prototype.run = function() {
 if (this.game_last === 1) {
@@ -34264,7 +34444,6 @@ return _this.start();
 return callback();
 };
 Router.prototype._game_completed = function() {
-return this.start();
 return new window.o.ViewPopup({
 title: _l("Game over"),
 content: _l("Game over description"),
@@ -34301,7 +34480,7 @@ stage: id
 this._active.bind("solved", function(_this) {
 return function(data) {
 App.events.trigger("router:game-solved", id, data);
-if (id === _this.game_last && _this.game_last < _this.game_stages) {
+if (id === _this.game_last && _this.game_last !== _this.game_stages) {
 _this.game_last++;
 return _this.options.game_save(_this.game_last);
 }
@@ -34309,10 +34488,10 @@ return _this.options.game_save(_this.game_last);
 }(this));
 this._active.bind("next", function(_this) {
 return function() {
-if (id < _this.game_last) {
+if (id !== _this.game_last) {
 return _this.game(id + 1);
 }
-if (_this.game_last >= _this.game_stages) {
+if (_this.game_last === _this.game_stages) {
 return _this._game_completed();
 }
 return _this.game();
@@ -34440,50 +34619,131 @@ return child;
 window.o.ViewGame = Game = function(_super) {
 __extends(Game, _super);
 Game.prototype.className = "game";
-Game.prototype.template = "<div class='game-container'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>";
+Game.prototype.template = "<div class='game-container'></div>\n<span class='game-timer'></span>\n<span class='game-step'></span>\n<div class='game-controls'>\n  <button class='game-controls-pause'>" + _l("Pause") + "</button>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>\n<div class='game-curtain'></div>";
 Game.prototype.events = {
+"click .game-controls-pause": function() {
+this.$el.toggleClass("game-paused");
+return this._timer_stop();
+},
+"click .game-curtain": function() {
+this._timer_start();
+return this.$el.toggleClass("game-paused");
+},
+"click .game-controls-next": function() {
+return this.trigger("next");
+},
 "click .game-controls-reset": function() {
 return this.trigger("reset", {
-seconds_total: this._time()
+seconds_total: this._time().seconds_total
 });
 }
 };
 function Game() {
 Game.__super__.constructor.apply(this, arguments);
+this.$timer = this.$(".game-timer");
+this.$step = this.$(".game-step");
+this.$game_controls = this.$(".game-controls");
+this.$game_controls_reset = this.$(".game-controls-reset");
+this._steps = 0;
+this.timer_diff = 0;
 this.load();
 }
 Game.prototype.load = function() {
 if (this.game) {
+this._timer_stop();
 this.game.remove();
 }
 this.game = new window.o.Game({
 container: this.$(".game-container")
 });
-this.game.bind("solved", function(_this) {
+this.game.bind("rotate", function(_this) {
 return function() {
-_this.trigger("solved", {
-seconds_total: _this._time()
-});
-return setTimeout(function() {
-return _this.trigger("next");
-}, 1e3);
+return _this.step();
+};
+}(this));
+this.game.bind("solved", function(_this) {
+return function(mirrors) {
+var t;
+_this._timer_stop();
+t = _this._time();
+t["steps"] = _this._steps;
+t["mirrors"] = mirrors;
+_this._completed(t);
+return _this.trigger("solved", t);
 };
 }(this));
 this.game.render();
-this._time_set();
 return this.game.load_map(this.options.stage, function(_this) {
 return function() {
-return _this._time_set();
+return _this._timer_reset();
 };
 }(this));
 };
-Game.prototype._time_set = function() {
-return this._timer_start = new Date().getTime();
+Game.prototype._digit = function(t, hu) {
+t = t + "";
+if (hu) {
+if (t.length === 1) {
+return t + "00";
+}
+if (t.length === 2) {
+return t + "0";
+}
+return t;
+}
+if (t.length === 1) {
+return "0" + t;
+}
+return t;
+};
+Game.prototype._timer_start = function() {
+this._timer_count = true;
+this.timer_start = new Date().getTime();
+return this._timer_fn = setInterval(function(_this) {
+return function() {
+var t;
+t = _this._time();
+return _this.$timer.html([ _this._digit(t.minutes), _this._digit(t.seconds) ].join(":"));
+};
+}(this), 1e3);
+};
+Game.prototype._timer_stop = function() {
+this._timer_count = false;
+this.timer_diff = new Date().getTime() - this.timer_start + this.timer_diff;
+return clearTimeout(this._timer_fn);
 };
 Game.prototype._time = function() {
-return Math.round((new Date().getTime() - this._timer_start) / 1e3);
+var data, diff;
+diff = this._timer_count ? new Date().getTime() - this.timer_start + this.timer_diff : this.timer_diff;
+data = {};
+data["mls"] = diff % 1e3;
+diff = (diff - data["mls"]) / 1e3;
+data["seconds"] = diff % 60;
+diff = diff - data["seconds"];
+data["minutes"] = diff / 60;
+data["seconds_total"] = data["minutes"] * 60 + data["seconds"];
+return data;
+};
+Game.prototype._timer_reset = function() {
+this._steps = -1;
+this.step();
+this._timer_stop();
+this.timer_diff = 0;
+this.$timer.html("00:00");
+return this._timer_start();
+};
+Game.prototype._completed = function(t) {
+return this.$game_controls.html("<button class='game-controls-next'>" + _l("Next level") + "</button>" + _l("Completed", _.extend(t, {
+minutes: this._digit(t["minutes"]),
+seconds: this._digit(t["seconds"]),
+mls: this._digit(t["mls"], 3)
+})));
+};
+Game.prototype.step = function() {
+this._steps++;
+return this.$step.html(this._steps);
 };
 Game.prototype.remove = function() {
+this._timer_stop();
 this.game.remove();
 return Game.__super__.remove.apply(this, arguments);
 };
@@ -34492,11 +34752,7 @@ return Game;
 }).call(this);
 
 (function() {
-window.o.GameMapData = [ "1\n09\n8-", "009\n0-\n18", "2001\n0-00\n8--9", "2-0310\n000000\n0-0000\n8--90", "-9\n1-0110\n0-0-009\n0-00-0\n0-0000\n8", "10000\n01200\n00000\n809", "0000\n0120\n0000\n809", "---9\n0000\n0000\n1801", "00009\n3801", "000\n0-0\n200\n-01\n8-9", "001\n009\n3\n002\n8", "001\n009\n2\n002\n8", "9122\n-210\n-8", "139\n000\n-8", "0000\n9-0-\n-000-\n-0-002\n-1033\n-8", "9000\n--0-\n0000-\n30-002\n00000\n-8", "311\n309\n333\n-8", "000\n029\n010\n-8", "000\n9-0\n010\n120\n-8", "0000\n9--0\n0100\n12-0\n-8" ];
-}).call(this);
-
-(function() {
-var Map, MapAnimation, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Game, GameHelp, className, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -34508,123 +34764,134 @@ child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
 };
-MapAnimation = function(_super) {
-__extends(MapAnimation, _super);
-function MapAnimation() {
-var in_action_active, triggered_start;
-MapAnimation.__super__.constructor.apply(this, arguments);
-this.clear();
-in_action_active = 0;
-triggered_start = false;
-window.App.events.bind("map:animation", function(_this) {
-return function(animation, callback, steps, in_action) {
-if (steps == null) {
-steps = 30;
+Game = window.o.ViewGame;
+className = "game-help";
+window.o.ViewGameHelp = GameHelp = function(_super) {
+__extends(GameHelp, _super);
+GameHelp.prototype.className = [ Game.prototype.className, className ].join(" ");
+function GameHelp() {
+this._timeouts = [];
+GameHelp.__super__.constructor.apply(this, arguments);
 }
-if (in_action == null) {
-in_action = false;
+GameHelp.prototype._tooltip = function(txt, mesh, reverse, correction) {
+var el, position;
+if (reverse == null) {
+reverse = false;
 }
-if (!_this._animations[animation]) {
-_this._animations[animation] = [];
+if (correction == null) {
+correction = 30;
 }
-if (in_action) {
-in_action_active++;
-if (!triggered_start) {
-_this.trigger("animation_start");
-triggered_start = true;
-}
-}
-return _this._animations[animation].push({
-callback: function(m, steps) {
-callback.apply(_this, arguments);
-if (steps !== 0) {
-return;
-}
-if (in_action) {
-in_action_active--;
-if (in_action_active === 0) {
-_this.trigger("animation_end");
-return triggered_start = false;
-}
-}
-},
-steps: steps,
-steps_total: steps
+position = BABYLON.Vector3.Project(mesh.position, BABYLON.Matrix.Identity(), this.game._scene.getTransformMatrix(), this.game._camera.viewport.toGlobal(this.$el.width(), this.$el.height()));
+position.x = Math.round(position.x);
+position.y = Math.round(position.y);
+el = $("<span class='" + (reverse ? "game-tooltip-reverse" : "game-tooltip") + "'>" + txt);
+this.$el.append(el);
+el.css("top", position.y);
+return this._t(function(_this) {
+return function() {
+return el.css(reverse ? "left" : "right", reverse ? position.x + correction : _this.$el.width() - position.x + correction);
+};
+}(this), 10);
+};
+GameHelp.prototype._t = function(fn, timeout) {
+return this._timeouts.push(setTimeout(fn, timeout));
+};
+GameHelp.prototype._t_clear = function() {
+return this._timeouts.forEach(function(t) {
+return clearTimeout(t);
 });
 };
-}(this));
+GameHelp.prototype._timer_start = function() {
+var i, mirror, platform, source, vector, _i;
+source = this.game._map._source.mesh;
+mirror = this.game._map._mirror[0].mesh;
+window.platform = platform = this.game._map._platform[0];
+vector = new BABYLON.Vector3(0, 1, 0);
+for (i = _i = 0; _i <= 6; i = ++_i) {
+platform._controls[i].mesh.actionManager.actions.splice(0, 3);
 }
-MapAnimation.prototype.clear = function() {
-this._before_render_fn = [];
-return this._animations = {};
-};
-MapAnimation.prototype._before_render = function(callback) {
-return this._before_render_fn.push(callback);
-};
-MapAnimation.prototype.render = function() {
-if (this._before_render_fn.length > 0) {
-this._before_render_fn.pop()();
-}
-return function(_this) {
+this._t(function(_this) {
 return function() {
-var name, params, _ref, _results;
-_ref = _this._animations;
-_results = [];
-for (name in _ref) {
-params = _ref[name];
-if (params.length === 0) {
-delete _this._animations[name];
-continue;
-}
-params[0].steps--;
-params[0].callback((params[0].steps_total - params[0].steps) / params[0].steps_total, params[0].steps);
-if (params[0].steps === 0) {
-_results.push(_this._animations[name].shift());
-} else {
-_results.push(void 0);
-}
-}
-return _results;
+return _this._tooltip(_l("Light"), source, false);
 };
-}(this)();
+}(this), 1e3);
+this._t(function(_this) {
+return function() {
+return _this._tooltip(_l("Mirror"), mirror, true);
 };
-return MapAnimation;
-}(MicroEvent);
+}(this), 2e3);
+this._t(function(_this) {
+return function() {
+var blink;
+_this._tooltip(_l("Rotate platform"), platform._controls[7].mesh, false);
+blink = setInterval(function() {
+platform.blank_change(vector, true);
+return _this._t(function() {
+return platform.blank_change(vector, false);
+}, 500);
+}, 1e3);
+_this._timeouts.push(blink);
+return _this._t(function() {
+clearTimeout(blink);
+return platform.blank_change(vector, false);
+}, 4e3);
+};
+}(this), 3e3);
+return GameHelp.__super__._timer_start.apply(this, arguments);
+};
+GameHelp.prototype._completed = function() {
+this._t_clear();
+this.$el.removeClass(className);
+return GameHelp.__super__._completed.apply(this, arguments);
+};
+GameHelp.prototype.remove = function() {
+this._t_clear();
+return GameHelp.__super__.remove.apply(this, arguments);
+};
+return GameHelp;
+}(Game);
+}).call(this);
+
+(function() {
+window.o.GameMapData = [ "00000\n00002\n00901\n02000\n00--0\n-8---" ];
+}).call(this);
+
+(function() {
+var Map, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+for (var key in parent) {
+if (__hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+};
 window.o.GameMap = Map = function(_super) {
 __extends(Map, _super);
+Map.prototype._step_animation = 30;
 function Map() {
+this.clear();
+this._before_render_fn = [];
 Map.__super__.constructor.apply(this, arguments);
-this.bind("animation_start", function(_this) {
-return function() {
-return _this._source.beam_remove();
-};
-}(this));
-this.bind("animation_end", function(_this) {
-return function() {
-return _this._before_render(function() {
-_this.position_check();
-_this._source.beam();
-_this.solved = _this._source.solved;
-return _this.trigger("beam", _this._source._mirror.length);
-});
-};
-}(this));
 }
 Map.prototype.clear = function() {
-Map.__super__.clear.apply(this, arguments);
 this._blank = [];
 this._mirror = [];
+this._platform = [];
+this._rotation = null;
+this._rotation_animation = [];
 return this.solved = false;
 };
 Map.prototype.load = function(map_string) {
-var call, map, map_size, methods;
+var call, map, methods, middle;
 methods = {
 "-": null,
 "0": "blank",
 "1": "mirror",
 "2": "mirror_reverse",
-"3": "mirror_empty",
-"4": "mirror_straight",
 "8": "beam_source",
 "9": "target"
 };
@@ -34644,16 +34911,14 @@ return _this[methods[method]]([ x, y ]);
 map = map_string.split("\n").map(function(s) {
 return s.trim().split("");
 });
-map_size = [ Math.floor(map.reduce(function(max, v) {
-return Math.max(max, v.length);
-}, 0) / 2), Math.floor(map.length / 2) ];
+middle = Math.floor(map[0].length / 2);
 this._map = {};
-map.forEach(function(_this) {
+return map.forEach(function(_this) {
 return function(row, j) {
 return row.forEach(function(cell, i) {
 var x, y;
-y = -j + map_size[1];
-x = i - map_size[0];
+y = -j + middle;
+x = i - middle;
 if (!_this._map[y]) {
 _this._map[y] = {};
 }
@@ -34661,18 +34926,8 @@ return _this._map[y][x] = call(cell, x, y);
 });
 };
 }(this));
-setTimeout(function(_this) {
-return function() {
-return _this.trigger("animation_end");
 };
-}(this), 100);
-return map_size;
-};
-Map.prototype.remove_controls = function() {
-return this._mirror.forEach(function(m) {
-return m._controls_remove();
-});
-};
+Map.prototype.remove_controls = function() {};
 Map.prototype.remove = function() {
 Map.__super__.remove.apply(this, arguments);
 if (this._source) {
@@ -34687,91 +34942,114 @@ return ob.remove();
 this._mirror.forEach(function(ob) {
 return ob.remove();
 });
+this._platform.forEach(function(ob) {
+return ob.remove();
+});
 return this.clear();
 };
-Map.prototype.position_check = function() {
-return this._mirror.forEach(function(_this) {
-return function(m) {
-var i, nr, p, _i, _len, _ref;
-_ref = [ 0, 1, 2, 3 ];
-for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-i = _ref[_i];
-nr = (m._move_position + i) % 4;
-p = m.get_move_position(nr, true);
-if (_this._map[p.y] && _this._map[p.y][p.x] && _this._map[p.y][p.x]._switch) {
-m.set_move_position(nr);
+Map.prototype._animation = function() {
+if (this._rotation_animation.length === 0) {
+return false;
+}
+if (this._rotation_animation[0].steps === 0) {
+this._rotation_animation.shift();
+}
+return true;
+};
+Map.prototype.render = function() {
+var changes;
+if (this._before_render_fn.length > 0) {
+this._before_render_fn.pop()();
+}
+if (this._mirror.length === 0) {
 return;
 }
+changes = this._animation();
+if (this._rotation === changes) {
+return;
 }
-return m.set_move_position(null);
+this._rotation = changes;
+if (changes) {
+return this._source.beam_remove();
+}
+return this._before_render_fn.push(function(_this) {
+return function() {
+return _this.position_check();
 };
 }(this));
 };
+Map.prototype.position_check = function() {
+this._mirror.forEach(function(_this) {
+return function(m) {
+var i, nr, p, _i;
+for (i = _i = 0; _i <= 3; i = ++_i) {
+nr = (m._move_position + i) % 4;
+p = m.get_position(nr, true);
+if (_this._map[p.y] && _this._map[p.y][p.x] && _this._map[p.y][p.x]._switch) {
+m.set_position(nr);
+return;
+}
+}
+};
+}(this));
+this._source.beam_remove();
+return setTimeout(function(_this) {
+return function() {
+_this._source.beam();
+_this.solved = _this._source.solved;
+return _this.trigger("beam", _this._source._mirror.length);
+};
+}(this), 10);
+};
 Map.prototype.beam_source = function(coors) {
 this._source = new window.o.ObjectBeamSource({
-position: [ coors[0] * 10, coors[1] * 10, -.55 * 4 ]
+position: [ coors[0] * 10, coors[1] * 10, -.55 * 4.2 ]
 });
 return this._source;
 };
 Map.prototype.target = function(coors) {
 this._target = new window.o.ObjectBeamTarget({
-position: [ coors[0] * 10, coors[1] * 10, -.55 * 4 ]
+position: [ coors[0] * 10, coors[1] * 10, -.55 * 4.2 ]
 });
 return this._target;
 };
 Map.prototype.blank = function(coors) {
 return new window.o.ObjectBlank({
-position: coors
+pos: coors
 });
 };
-Map.prototype.mirror = function(coors, type) {
-var m;
-if (type == null) {
-type = "normal";
+Map.prototype.mirror_reverse = function(coors) {
+return this.mirror(coors, true);
+};
+Map.prototype.mirror = function(coors, reverse) {
+var m, position;
+if (reverse == null) {
+reverse = false;
 }
 m = new window.o.ObjectMirror({
-position: coors,
-type: type
+pos: [ coors[0], coors[1] ],
+reverse: reverse
 });
+position = [ m.mesh.position.x, m.mesh.position.y ];
 m.bind("move", function(_this) {
 return function(position) {
-var blank, i, x, y, _i;
-_this.trigger("rotate");
-for (i = _i = 1; _i <= 20; i = ++_i) {
-y = m.position.y + position.y * i;
-x = m.position.x + position.x * i;
-if (!(_this._map[y] && _this._map[y][x] && _this._map[y][x]._switch)) {
-i--;
-break;
-}
-blank = _this._map[y][x];
-}
+var blank;
+blank = _this._map[m.position.y + position.y][m.position.x + position.x];
 _this._map[m.position.y][m.position.x] = blank;
-_this._map[blank.position.y][blank.position.x] = m;
+_this._map[m.position.y + position.y][m.position.x + position.x] = m;
 blank.move({
-x: -position.x * i,
-y: -position.y * i
+x: -position.x,
+y: -position.y
 });
-return m.move({
-x: position.x * i,
-y: position.y * i
-});
+m.move(position);
+return _this.position_check();
 };
 }(this));
 this._mirror.push(m);
 return m;
 };
-Map.prototype.mirror_reverse = function(coors) {
-return this.mirror(coors, "reverse");
-};
-Map.prototype.mirror_empty = function(coors) {
-return this.mirror(coors, "empty");
-};
-Map.prototype.mirror_straight = function(coors) {
-return this.mirror(coors, "straight");
-};
 return Map;
-}(MapAnimation);
+}(MicroEvent);
 }).call(this);
 
 (function() {
@@ -34836,10 +35114,12 @@ return window.App.events.trigger("game:init", scene, engine, this._light, this._
 Game.prototype.load_map = function(id, callback) {
 return setTimeout(function(_this) {
 return function() {
-var map_size, max_size;
-map_size = _this._map.load(window.o.GameMapData[id - 1]);
-max_size = Math.max(map_size[0], map_size[1]);
-_this._camera.setPosition(new BABYLON.Vector3(0, 0, -80 - 20 * max_size));
+if (window.o.GameMapData[id - 1].length < 20) {
+_this._camera.setPosition(new BABYLON.Vector3(0, 0, -100));
+} else if (window.o.GameMapData[id - 1].length < 50) {
+_this._camera.setPosition(new BABYLON.Vector3(0, 0, -120));
+}
+_this._map.load(window.o.GameMapData[id - 1]);
 return callback();
 };
 }(this), 1e3);
@@ -34978,8 +35258,8 @@ App.router = new window.o.ViewRouter({
 user: App.user.data("type") || "free",
 author_link: false,
 user_types: {
-free: 130,
-shared: 140
+free: 30,
+shared: 40
 },
 game_last: parseInt(App.user.data("game_last") || 1),
 game_save: function(stage) {

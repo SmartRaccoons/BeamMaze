@@ -4,32 +4,11 @@
     <meta charset="UTF-8" />
     <title>dev.html</title>
     <link rel='stylesheet' href='d/css/screen.css' />
-    <style type="text/css">
-        #debug {
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: none;
-        }
-        #debug textarea {
-            width: 150px;
-            height: 150px;
-        }
-    </style>
 </head>
 <body data-version='dev'>
-<div id="debug">
-    <textarea id="map-actual"></textarea><button id="map-load">Load</button>
-    <br />
-    <input id="map-url" type="text" />
-    <br />
-    <textarea id="map-right"></textarea>
-    <button id="map-solve">Solve</button>
-</div>
 
 <script src="../node_modules/gameanalytics/dist/GameAnalytics.js"></script>
 <script src="../bower_components/babylonjs/dist/preview release/babylon.js"></script>
-<script src="../bower_components/microevent.js/microevent.js"></script>
 <script src="../bower_components/lodash/lodash.js"></script>
 <script src="../bower_components/zepto/zepto.js"></script>
 <script src="../bower_components/universalapi/uniapi.js"></script>
@@ -42,16 +21,14 @@
 <script src="d/js/object/blank.js"></script>
 <script src="d/js/object/beam.js"></script>
 <script src="d/js/object/mirror.js"></script>
-<script src="d/js/object/platform.js"></script>
+<script src="d/js/game/map.data.js"></script>
+<script src="d/js/game/map.js"></script>
+<script src="d/js/game/game.js"></script>
 <script src="d/js/view/view.js"></script>
 <script src="d/js/view/router.js"></script>
 <script src="d/js/view/start.js"></script>
 <script src="d/js/view/stages.js"></script>
 <script src="d/js/view/game.js"></script>
-<script src="d/js/view/game.help.js"></script>
-<script src="d/js/game/map.data.js"></script>
-<script src="d/js/game/map.js"></script>
-<script src="d/js/game/game.js"></script>
 <script src="d/js/view/popup.js"></script>
 <script src="d/js/debug.js"></script>
 <!-- <script src="d/js/analytics.js"></script> -->

@@ -27,13 +27,11 @@ production :
 	public/d/js/object/blank.js \
 	public/d/js/object/beam.js \
 	public/d/js/object/mirror.js \
-	public/d/js/object/platform.js \
 	public/d/js/view/view.js \
 	public/d/js/view/router.js \
 	public/d/js/view/start.js \
 	public/d/js/view/stages.js \
 	public/d/js/view/game.js \
-	public/d/js/view/game.help.js \
 	public/d/js/game/map.data.js \
 	public/d/js/game/map.js \
 	public/d/js/game/game.js \

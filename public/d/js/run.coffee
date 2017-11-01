@@ -15,7 +15,7 @@ App.user.authorize (user)->
     user: App.user.data('type') or 'free' #free, shared, full
     # close: -> alert('close')
     author_link: false
-    user_types: {free: 30, shared: 40}
+    user_types: {free: 130, shared: 140}
     game_last: parseInt(App.user.data('game_last') or 1)
     game_save: (stage)-> App.user.data('game_last', stage)
   })

@@ -1,72 +1,140 @@
-
-class MirrorTubeIn extends window.o.Object
-  name: 'mirrorTube'
+class MirrorTube extends window.o.Object
+  _color: [187, 230, 239]
+  _color_active: window.o.ObjectBeam::_color
   constructor: ->
     super
-    @mesh.position = new BABYLON.Vector3(0, 0, -0.55 * (if @options.back then -1 else 1))
+    @mesh.position = new BABYLON.Vector3(0, 0, -0.55)
     @mesh._class = @
-    @_out = @options.back
+    @deactive()
+    @mesh.rotate(new BABYLON.Vector3(0, 0, 1), @options.rotation * Math.PI / 2, BABYLON.Space.WORLD)
+    @
 
-  rotate: (rotation)->
-    @mesh.rotate(new BABYLON.Vector3(0, 0, 1), rotation * Math.PI / 2, BABYLON.Space.WORLD)
+  mirror_id: -> @parent.options.parent._name()
 
-  mirror_id: ->
-    @parent.options.parent_class._name()
+  active: (silent=false)->
+    @color(@_color_active)
+    if !silent
+      @trigger 'active'
 
-  position: ->
-    @options.parent.position
+  deactive: -> @color(@_color)
 
   reflect: (v)->
-    @parent.activate()
-    if @_out
-      return new BABYLON.Vector3(-v.y, v.x , v.z)
-    return new BABYLON.Vector3(v.y, -v.x , v.z)
+    @active()
 
 
-class MirrorTubeOut extends MirrorTubeIn
-  constructor: ->
+class MirrorTubeConnect extends MirrorTube
+  name: 'mirrorTube'
+
+  reflect: (v)->
     super
-    @mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD)
-    @mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI/2, BABYLON.Space.WORLD)
-    @_out = !@options.back
+    new BABYLON.Vector3(v.y, -v.x , v.z)
 
 
-class MirrorTube
-  _color_active: window.o.ObjectBeam::_color
-  constructor: (options)->
-    @options = options
-    tube_options = {parent_class: @, parent: @options.parent_class.mesh, back: @options.back}
-    @tubes = []
-    @tubes.push new MirrorTubeIn(tube_options)
-    @tubes.push new MirrorTubeOut(tube_options)
-    @tubes.forEach (t)=> t.rotate(@options.rotation)
-    @_color = @options.parent_class._color
-    @color_default()
+class MirrorTubeConnectOut extends MirrorTube
+  name: 'mirrorTube'
+  mesh_build: ->
+    mesh = super
+    mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD)
+    mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI/2, BABYLON.Space.WORLD)
+    return mesh
 
-  activate: ->
-    @active = true
-    @tubes.forEach (t)=> t.color.apply(t, @_color_active.concat(0.5))
-
-  color_default: -> @tubes.forEach (t)=> t.color.apply(t, @_color.concat(0.5))
-
-  deactive: ->
-    if !@active
-      return
-    @color_default()
+  reflect: (v)->
+    super
+    new BABYLON.Vector3(-v.y, v.x , v.z)
 
 
-window.o.ObjectMirror = class Mirror extends window.o.Object
+class MirrorTubeEmpty extends MirrorTube
+  name: 'mirrorTubeEmpty'
+
+
+class MirrorTubeStraight extends MirrorTube
+  name: 'mirrorTubeStraight'
+
+  reflect: (v)->
+    super
+    new BABYLON.Vector3(v.x, v.y , v.z)
+
+
+class MirrorTubeStraightOut extends MirrorTubeStraight
+  mesh_build: ->
+    mesh = super
+    mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI, BABYLON.Space.WORLD)
+    mesh
+
+
+class MirrorNormal extends window.o.Object
   name: 'mirror'
+  connectors: [[MirrorTubeConnect, MirrorTubeConnectOut], null, [MirrorTubeConnect, MirrorTubeConnectOut]]
   constructor: ->
     super
-    @_color = [187, 230, 239] #[247, 192, 192]
-    @color.apply(@, @_color.concat([0.4]))
-    @mesh.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2)
-    @mesh.position = new BABYLON.Vector3(@options.pos[0], @options.pos[1], 0)
+    @color(null, 0)
     @tubes = []
-    for rotation in (if @options.reverse then [1, 3] else [0, 2])
-      @tubes.push new MirrorTube({parent_class: @, rotation: rotation})
-      @tubes.push new MirrorTube({parent_class: @, rotation: rotation, back: true})
+    @connectors.forEach (connectors, i)=>
+      if !connectors
+        return
+      tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=> new connector({parent: @, rotation: i})
+      tubes.forEach (t1, i)->
+        tubes.forEach (t2, j)->
+          if i is j
+            return
+          t1.bind('active', -> t2.active(true) )
+          t2.bind('active', -> t1.active(true) )
+      @tubes = @tubes.concat(tubes)
 
-  deactive: ->
-    @tubes.forEach (t)-> t.deactive()
+  deactive: -> @tubes.forEach (t)-> t.deactive()
+
+
+class MirrorReverse extends MirrorNormal
+  connectors: [null, [MirrorTubeConnect, MirrorTubeConnectOut], null, [MirrorTubeConnect, MirrorTubeConnectOut]]
+
+
+class MirrorEmpty extends MirrorNormal
+  connectors: [MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty]
+
+
+class MirrorStraight extends MirrorNormal
+  connectors: [[MirrorTubeStraight, MirrorTubeStraightOut], MirrorTubeEmpty, null, MirrorTubeEmpty]
+
+
+_move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
+_move_positions_coors = _move_positions.map (angle)-> {y: Math.round(Math.sin(angle)), x: Math.round(Math.cos(angle))}
+
+window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
+  _switch: false
+  classes:
+    'normal': MirrorNormal
+    'reverse': MirrorReverse
+    'empty': MirrorEmpty
+    'straight': MirrorStraight
+  constructor: ->
+    super
+    @mirror = new @classes[@options.type]({parent: @})
+    @_move_position = 0
+
+  _controls_add: ->
+    if @_controls_added
+      return
+    @_controls_added = true
+    @mirror._action
+      mouseover: => @over()
+      mouseout: => @out()
+      click: => @trigger 'move', @get_move_position()
+
+  _controls_remove: ->
+    @_controls_added = false
+    @out()
+    @mirror._action_remove()
+
+  get_move_position: (n = @_move_position, full = false)->
+    p = _move_positions_coors[n]
+    if !full
+      return p
+    {x: p.x + @position.x, y: p.y + @position.y}
+
+  set_move_position: (nr)->
+    if nr is null
+      @_controls_remove()
+      return @_connector.hide()
+    @_controls_add()
+    @_move_position = nr
+    @_connector.angle(_move_positions[nr])

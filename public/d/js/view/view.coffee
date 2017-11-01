@@ -7,6 +7,7 @@ window.o.View = class View extends MicroEvent
   events: {}
 
   constructor: (options)->
+    super
     @options = _.extend(@options or {}, options)
     view_id++
     @_id = view_id
