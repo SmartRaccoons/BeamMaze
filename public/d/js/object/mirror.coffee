@@ -55,18 +55,29 @@ class MirrorTube
     @color_default()
 
 
-window.o.ObjectMirror = class Mirror extends window.o.Object
+class Mirror extends window.o.Object
   name: 'mirror'
   constructor: ->
     super
     @_color = [187, 230, 239] #[247, 192, 192]
     @color.apply(@, @_color.concat([0.4]))
-    @mesh.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2)
-    @mesh.position = new BABYLON.Vector3(@options.pos[0], @options.pos[1], 0)
     @tubes = []
     for rotation in (if @options.reverse then [1, 3] else [0, 2])
       @tubes.push new MirrorTube({parent_class: @, rotation: rotation})
-    @_blank = new window.o.ObjectBlank({parent: @mesh})
 
   deactive: ->
     @tubes.forEach (t)-> t.deactive()
+
+
+window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
+  constructor: ->
+    super
+    @mirror = new Mirror({parent: @mesh, rotation: @options.rotation})
+    @mirror._action
+      mouseover: =>
+        @over()
+      mouseout: =>
+        @out()
+      click: =>
+        @_position_prev = {x: @mesh.position.x, y: @mesh.position.y}
+        @trigger 'move', 'down'

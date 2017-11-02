@@ -41,14 +41,17 @@ window.o.Object = class Object extends MicroEvent
     if @options.position
       @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1] or 0, @options.position[2] or 0)
     if @options.action
-      @mesh.actionManager = new BABYLON.ActionManager(@scene())
-      if @options.action.click
-        @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, @options.action.click
-      if @options.action.mouseover
-        @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, @options.action.mouseover
-      if @options.action.mouseout
-        @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, @options.action.mouseout
+      @_action(@options.action)
     @
+
+  _action: (action)->
+    @mesh.actionManager = new BABYLON.ActionManager(@scene())
+    if action.click
+      @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPickTrigger, action.click
+    if action.mouseover
+      @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOverTrigger, action.mouseover
+    if action.mouseout
+      @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, action.mouseout
 
   mesh_build: ->
     mesh = meshes[@name].clone(meshes[@name].name)

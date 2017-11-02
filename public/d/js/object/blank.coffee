@@ -40,11 +40,25 @@ window.o.ObjectBlank = class Blank extends window.o.Object
     super
     @clear()
     # @color(187, 230, 239)
-    if !@options.parent
-      @mesh.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2)
-      @mesh.position = new BABYLON.Vector3(@options.pos[0], @options.pos[1], 0)
+    @mesh.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2)
+    @mesh.position = new BABYLON.Vector3(@options.pos[0], @options.pos[1], 0)
     @out()
     @
+
+  move: (where)->
+    if where is 'down'
+      @mesh.position.y = @mesh.position.y - 10
+    if where is 'up'
+      @mesh.position.y = @mesh.position.y + 10
+    if where is 'left'
+      @mesh.position.y = @mesh.position.x - 10
+    if where is 'right'
+      @mesh.position.y = @mesh.position.x + 10
+
+  _animate: (part, position)->
+    axis = if position.x then 'x' else 'y'
+    diff = position[axis] - @_position_prev[axis]
+    @mesh.position[axis] = @_position_prev[axis] + diff * part
 
   over: ->
     @color(103, 181, 229)
