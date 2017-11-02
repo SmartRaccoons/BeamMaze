@@ -33,27 +33,28 @@ class ConnectorRight extends Connector
 
 window.o.ObjectBlank = class Blank extends window.o.Object
   name: 'blank'
+  _switch: true
+  _step: 10
   clear: ->
     @_connectors = []
 
   constructor: ->
     super
+    @position = {x: @options.pos[0], y: @options.pos[1]}
     @clear()
     # @color(187, 230, 239)
     @mesh.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2)
-    @mesh.position = new BABYLON.Vector3(@options.pos[0], @options.pos[1], 0)
+    @_update_position()
     @out()
     @
 
-  move: (where)->
-    if where is 'down'
-      @mesh.position.y = @mesh.position.y - 10
-    if where is 'up'
-      @mesh.position.y = @mesh.position.y + 10
-    if where is 'left'
-      @mesh.position.y = @mesh.position.x - 10
-    if where is 'right'
-      @mesh.position.y = @mesh.position.x + 10
+  move: (position)->
+    @position.x = @position.x + position.x
+    @position.y = @position.y + position.y
+    @_update_position()
+
+  _update_position: ->
+    @mesh.position = new BABYLON.Vector3(@position.x * @_step, @position.y * @_step, 0)
 
   _animate: (part, position)->
     axis = if position.x then 'x' else 'y'

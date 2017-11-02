@@ -69,10 +69,13 @@ class Mirror extends window.o.Object
     @tubes.forEach (t)-> t.deactive()
 
 
+_move_positions = [{y: -1, x: 0}, {y: 0, x: -1}, {y: 1, x: 0}, {y: 0, x: 1}]
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
+  _switch: false
   constructor: ->
     super
     @mirror = new Mirror({parent: @mesh, rotation: @options.rotation})
+    @_move_position = 0
     @mirror._action
       mouseover: =>
         @over()
@@ -80,4 +83,12 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
         @out()
       click: =>
         @_position_prev = {x: @mesh.position.x, y: @mesh.position.y}
-        @trigger 'move', 'down'
+        @trigger 'move', @get_position()
+
+  get_position: (n = @_move_position, full = false)->
+    p = _move_positions[n]
+    if !full
+      return p
+    {x: p.x + @position.x, y: p.y + @position.y}
+
+  set_position: (nr)-> @_move_position = nr

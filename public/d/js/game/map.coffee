@@ -1,5 +1,4 @@
 window.o.GameMap = class Map extends MicroEvent
-  _step: 10
   _step_animation: 30
   constructor: ->
     @clear()
@@ -25,13 +24,18 @@ window.o.GameMap = class Map extends MicroEvent
     }
     call = (method, x=0, y=0)=>
       if methods[method]
-        @[methods[method]]([x * @_step, y * @_step])
+        @[methods[method]]([x, y])
 
     map = map_string.split("\n").map (s)-> s.trim().split('')
     middle = Math.floor(map[0].length/2)
-    map.forEach (row, y)->
-      row.forEach (cell, x)->
-        call(cell, x - middle, -y + middle)
+    @_map = {}
+    map.forEach (row, j)=>
+      row.forEach (cell, i)=>
+        y = -j + middle
+        x = i - middle
+        if not @_map[y]
+          @_map[y] = {}
+        @_map[y][x] = call(cell, x, y)
 
   remove_controls: ->
 
@@ -78,22 +82,38 @@ window.o.GameMap = class Map extends MicroEvent
       @solved = @_source.solved
       @trigger 'beam', @_source._mirror.length
 
-  beam_source: (coors)-> @_source = new window.o.ObjectBeamSource({position: [coors[0], coors[1], -0.55 * 4.2]})
+  beam_source: (coors)->
+    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
+    @_source
 
-  target: (coors)-> @_target = new window.o.ObjectBeamTarget({position: [coors[0], coors[1], -0.55 * 4.2]})
+  target: (coors)->
+    @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
+    @_target
 
-  blank: (coors)-> @_blank.push new window.o.ObjectBlank({pos: coors})
+  blank: (coors)-> new window.o.ObjectBlank({pos: coors})
 
   mirror_reverse: (coors)-> @mirror(coors, reverse)
 
   mirror: (coors, reverse=false)->
     m = new window.o.ObjectMirror({pos: [coors[0], coors[1]], reverse: reverse})
     position = [m.mesh.position.x, m.mesh.position.y]
-    m.bind 'move', (where)=>
-      m.move(where)
+    m.bind 'move', (position)=>
+      blank = @_map[m.position.y + position.y][m.position.x + position.x]
+      @_map[m.position.y][m.position.x] = blank
+      @_map[m.position.y + position.y][m.position.x + position.x] = m
+      blank.move({x: -position.x, y: -position.y})
+      m.move(position)
+      @_mirror.forEach (m)=>
+        for i in [0..3]
+          nr = (m._move_position + i) % 4
+          p = m.get_position(nr, true)
+          if @_map[p.y] and @_map[p.y][p.x] and @_map[p.y][p.x]._switch
+            m.set_position(nr)
+            break
       # @_rotation_animation.push {
       #   steps: @_step_animation
       #   callback: (part)->
       #     m.position()
       # }
     @_mirror.push m
+    m
