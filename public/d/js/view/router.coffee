@@ -70,7 +70,8 @@ window.o.ViewRouter = class Router extends window.o.View
     if check
       return @_game_stage_available id, => @game(id, false)
     App.events.trigger 'router:game', id
-    @_load('game' + (if id is 1 then 'Help' else ''), {stage: id})
+    # @_load('game' + (if id is 1 then 'Help' else ''), {stage: id})
+    @_load('game', {stage: id})
     @_active.bind 'solved', (data)=>
       App.events.trigger 'router:game-solved', id, data
       if id is @game_last and @game_last isnt @game_stages

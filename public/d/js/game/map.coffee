@@ -78,9 +78,25 @@ window.o.GameMap = class Map extends MicroEvent
     if changes
       return @_source.beam_remove()
     @_before_render_fn.push =>
+      @position_check()
+      # @_source.beam()
+      # @solved = @_source.solved
+      # @trigger 'beam', @_source._mirror.length
+
+  position_check: ->
+    @_mirror.forEach (m)=>
+      for i in [0..3]
+        nr = (m._move_position + i) % 4
+        p = m.get_position(nr, true)
+        if @_map[p.y] and @_map[p.y][p.x] and @_map[p.y][p.x]._switch
+          m.set_position(nr)
+          return
+    @_source.beam_remove()
+    setTimeout =>
       @_source.beam()
       @solved = @_source.solved
       @trigger 'beam', @_source._mirror.length
+    , 10
 
   beam_source: (coors)->
     @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
@@ -92,7 +108,7 @@ window.o.GameMap = class Map extends MicroEvent
 
   blank: (coors)-> new window.o.ObjectBlank({pos: coors})
 
-  mirror_reverse: (coors)-> @mirror(coors, reverse)
+  mirror_reverse: (coors)-> @mirror(coors, true)
 
   mirror: (coors, reverse=false)->
     m = new window.o.ObjectMirror({pos: [coors[0], coors[1]], reverse: reverse})
@@ -103,13 +119,7 @@ window.o.GameMap = class Map extends MicroEvent
       @_map[m.position.y + position.y][m.position.x + position.x] = m
       blank.move({x: -position.x, y: -position.y})
       m.move(position)
-      @_mirror.forEach (m)=>
-        for i in [0..3]
-          nr = (m._move_position + i) % 4
-          p = m.get_position(nr, true)
-          if @_map[p.y] and @_map[p.y][p.x] and @_map[p.y][p.x]._switch
-            m.set_position(nr)
-            break
+      @position_check()
       # @_rotation_animation.push {
       #   steps: @_step_animation
       #   callback: (part)->

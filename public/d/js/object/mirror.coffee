@@ -82,7 +82,6 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
       mouseout: =>
         @out()
       click: =>
-        @_position_prev = {x: @mesh.position.x, y: @mesh.position.y}
         @trigger 'move', @get_position()
 
   get_position: (n = @_move_position, full = false)->
@@ -91,4 +90,6 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
       return p
     {x: p.x + @position.x, y: p.y + @position.y}
 
-  set_position: (nr)-> @_move_position = nr
+  set_position: (nr)->
+    @_move_position = nr
+    @connector(@get_position())
