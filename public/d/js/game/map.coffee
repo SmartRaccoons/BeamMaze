@@ -1,16 +1,44 @@
 window.o.GameMap = class Map extends MicroEvent
-  _step_animation: 30
   constructor: ->
     @clear()
     @_before_render_fn = []
     super
+    in_action_active = 0
+    triggered_start = false
+    window.App.events.bind 'map:animation', (animation, callback, steps = 30, in_action=false)=>
+      if !@_animations[animation]
+        @_animations[animation] = []
+      if in_action
+        in_action_active++
+        if not triggered_start
+          @trigger 'animation_start'
+          triggered_start = true
+      @_animations[animation].push {
+        callback: (m, steps)=>
+          callback.apply(@, arguments)
+          if steps isnt 0
+            return
+          if in_action
+            in_action_active--
+            if in_action_active is 0
+              @trigger 'animation_end'
+              triggered_start = false
+        steps: steps
+        steps_total: steps
+      }
+    @bind 'animation_start', =>
+      @_source.beam_remove()
+    @bind 'animation_end', =>
+      @_before_render_fn.push =>
+        @position_check()
+        @_source.beam()
+        @solved = @_source.solved
+        @trigger 'beam', @_source._mirror.length
 
   clear: ->
     @_blank = []
     @_mirror = []
-    @_platform = []
-    @_rotation = null
-    @_rotation_animation = []
+    @_animations = {}
     @solved = false
 
   load: (map_string)->
@@ -36,8 +64,12 @@ window.o.GameMap = class Map extends MicroEvent
         if not @_map[y]
           @_map[y] = {}
         @_map[y][x] = call(cell, x, y)
+    setTimeout =>
+      @trigger 'animation_end'
+    , 10
 
   remove_controls: ->
+    @_mirror.forEach (m)-> m._controls_remove()
 
   remove: ->
     super
@@ -47,56 +79,31 @@ window.o.GameMap = class Map extends MicroEvent
       @_target.remove()
     @_blank.forEach (ob)-> ob.remove()
     @_mirror.forEach (ob)-> ob.remove()
-    @_platform.forEach (ob)-> ob.remove()
     @clear()
-
-  _animation: ->
-    if @_rotation_animation.length is 0
-      return false
-    if @_rotation_animation[0].steps is 0
-      @_rotation_animation.shift()
-    # if not @_rotation_animation
-    #   if @_rotation_animations.length is 0
-    #     return false
-    #   @_rotation_animation = @_rotation_animations.shift()
-    # @mesh.rotate(@_rotation_animation.vector, @_rotation_animation.step, BABYLON.Space.WORLD)
-    # @_rotation_animation.steps--
-    # if @_rotation_animation.steps is 0
-    #   @_rotation_animation.callback()
-    #   @_rotation_animation = null
-    return true
 
   render: ->
     if @_before_render_fn.length > 0
       @_before_render_fn.pop()()
-    if @_mirror.length is 0
-      return
-    changes = @_animation()
-    if @_rotation is changes
-      return
-    @_rotation = changes
-    if changes
-      return @_source.beam_remove()
-    @_before_render_fn.push =>
-      @position_check()
-      # @_source.beam()
-      # @solved = @_source.solved
-      # @trigger 'beam', @_source._mirror.length
+    (=>
+      for name, params of @_animations
+        if params.length is 0
+          delete @_animations[name]
+          continue
+        params[0].steps--
+        params[0].callback((params[0].steps_total - params[0].steps)/params[0].steps_total, params[0].steps)
+        if params[0].steps is 0
+          @_animations[name].shift()
+    )()
 
   position_check: ->
     @_mirror.forEach (m)=>
       for i in [0..3]
         nr = (m._move_position + i) % 4
-        p = m.get_position(nr, true)
+        p = m.get_move_position(nr, true)
         if @_map[p.y] and @_map[p.y][p.x] and @_map[p.y][p.x]._switch
-          m.set_position(nr)
+          m.set_move_position(nr)
           return
-    @_source.beam_remove()
-    setTimeout =>
-      @_source.beam()
-      @solved = @_source.solved
-      @trigger 'beam', @_source._mirror.length
-    , 10
+      m.set_move_position(null)
 
   beam_source: (coors)->
     @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
@@ -114,16 +121,11 @@ window.o.GameMap = class Map extends MicroEvent
     m = new window.o.ObjectMirror({pos: [coors[0], coors[1]], reverse: reverse})
     position = [m.mesh.position.x, m.mesh.position.y]
     m.bind 'move', (position)=>
+      @trigger 'rotate'
       blank = @_map[m.position.y + position.y][m.position.x + position.x]
       @_map[m.position.y][m.position.x] = blank
       @_map[m.position.y + position.y][m.position.x + position.x] = m
       blank.move({x: -position.x, y: -position.y})
       m.move(position)
-      @position_check()
-      # @_rotation_animation.push {
-      #   steps: @_step_animation
-      #   callback: (part)->
-      #     m.position()
-      # }
     @_mirror.push m
     m

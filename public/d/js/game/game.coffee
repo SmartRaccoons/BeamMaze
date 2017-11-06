@@ -33,9 +33,6 @@ window.o.Game = class Game extends MicroEvent
     scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
     @_camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), @_scene)
     @_camera.setPosition(new BABYLON.Vector3(0, 0, -150))
-#    @_light = new BABYLON.SpotLight('Light', new BABYLON.Vector3(-10, 10, -50), new BABYLON.Vector3(0, 0, 0), 1, 20, @_scene)
-    # @_light = new BABYLON.DirectionalLight('Light', new BABYLON.Vector3(10, -10, 10), @_scene)
-    # @_light.position = new BABYLON.Vector3(-100, 100, -50)
     @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-40, 60, -100), @_scene)
     window.App.events.trigger('game:init', scene, engine, @_light, @_camera)
 

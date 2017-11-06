@@ -69,27 +69,40 @@ class Mirror extends window.o.Object
     @tubes.forEach (t)-> t.deactive()
 
 
-_move_positions = [{y: -1, x: 0}, {y: 0, x: -1}, {y: 1, x: 0}, {y: 0, x: 1}]
+_move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
+_move_positions_coors = [{y: -1, x: 0}, {y: 0, x: -1}, {y: 1, x: 0}, {y: 0, x: 1}]
+
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _switch: false
   constructor: ->
     super
     @mirror = new Mirror({parent: @mesh, rotation: @options.rotation})
     @_move_position = 0
-    @mirror._action
-      mouseover: =>
-        @over()
-      mouseout: =>
-        @out()
-      click: =>
-        @trigger 'move', @get_position()
 
-  get_position: (n = @_move_position, full = false)->
-    p = _move_positions[n]
+  _controls_add: ->
+    if @_controls_added
+      return
+    @_controls_added = true
+    @mirror._action
+      mouseover: => @over()
+      mouseout: => @out()
+      click: => @trigger 'move', @get_move_position()
+
+  _controls_remove: ->
+    @_controls_added = false
+    @out()
+    @mirror._action_remove()
+
+  get_move_position: (n = @_move_position, full = false)->
+    p = _move_positions_coors[n]
     if !full
       return p
     {x: p.x + @position.x, y: p.y + @position.y}
 
-  set_position: (nr)->
+  set_move_position: (nr)->
+    if nr is null
+      @_controls_remove()
+      return @_connector.hide()
+    @_controls_add()
     @_move_position = nr
-    @connector(@get_position())
+    @_connector.angle(_move_positions[nr])
