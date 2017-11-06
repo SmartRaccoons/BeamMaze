@@ -60,7 +60,7 @@ class Mirror extends window.o.Object
   constructor: ->
     super
     @_color = [187, 230, 239] #[247, 192, 192]
-    @color.apply(@, @_color.concat([0.4]))
+    @color.apply(@, @_color.concat([0]))
     @tubes = []
     for rotation in (if @options.reverse then [1, 3] else [0, 2])
       @tubes.push new MirrorTube({parent_class: @, rotation: rotation})

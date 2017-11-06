@@ -3,35 +3,35 @@ class Connector extends window.o.Object
   name: 'connector'
   constructor: ->
     super
-    @mesh.scaling = new BABYLON.Vector3(2.5, 2.5, 1)
+    @mesh.scaling = new BABYLON.Vector3(1.5, 1.5, 1)
 
 
 class ConnectorUp extends Connector
   constructor: ->
     super
     @mesh.rotation.z = 0
-    @mesh.position = new BABYLON.Vector3(0, 1.1, 0)
+    @mesh.position = new BABYLON.Vector3(0, 1.15, 0)
 
 
 class ConnectorDown extends Connector
   constructor: ->
     super
     @mesh.rotation.z = Math.PI
-    @mesh.position = new BABYLON.Vector3(0, -1.1, 0)
+    @mesh.position = new BABYLON.Vector3(0, -1.15, 0)
 
 
 class ConnectorLeft extends Connector
   constructor: ->
     super
     @mesh.rotation.z = Math.PI/2
-    @mesh.position = new BABYLON.Vector3(-1.1, 0, 0)
+    @mesh.position = new BABYLON.Vector3(-1.15, 0, 0)
 
 
 class ConnectorRight extends Connector
   constructor: ->
     super
     @mesh.rotation.z = -Math.PI/2
-    @mesh.position = new BABYLON.Vector3(1.1, 0, 0)
+    @mesh.position = new BABYLON.Vector3(1.15, 0, 0)
 
 
 window.o.ObjectBlank = class Blank extends window.o.Object
