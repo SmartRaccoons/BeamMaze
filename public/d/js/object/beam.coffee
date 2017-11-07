@@ -60,7 +60,7 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
         (m)->
           if (i is 0 and m._type is 'source') or (m._type is 'mirrorTube' and last_mirror is m._class.mirror_id())
             return false
-          ['mirrorTube', 'target', 'obstacle', 'source'].indexOf(m._type) > -1
+          ['mirrorTube', 'target', 'mirrorTubeEmpty', 'source'].indexOf(m._type) > -1
       )(i)
       if not pick_info.pickedPoint
         points.push points[points.length - 1].add(direction)
@@ -71,6 +71,8 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
         break
       if pick_info.pickedMesh._type is 'target'
         @solved = true
+      if pick_info.pickedMesh._type is 'mirrorTubeEmpty'
+        pick_info.pickedMesh._class.reflect()
       if pick_info.pickedMesh._type isnt 'mirrorTube'
         break
       direction = pick_info.pickedMesh._class.reflect(direction)

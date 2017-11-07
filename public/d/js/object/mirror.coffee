@@ -1,3 +1,5 @@
+color_mirror = [187, 230, 239]
+
 
 class MirrorTubeIn extends window.o.Object
   name: 'mirrorTube'
@@ -59,7 +61,7 @@ class Mirror extends window.o.Object
   name: 'mirror'
   constructor: ->
     super
-    @_color = [187, 230, 239]
+    @_color = color_mirror
     @color.apply(@, @_color.concat([0]))
     @tubes = []
     for rotation in (if @options.reverse then [1, 3] else [0, 2])
@@ -73,6 +75,7 @@ _move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
 _move_positions_coors = [{y: -1, x: 0}, {y: 0, x: -1}, {y: 1, x: 0}, {y: 0, x: 1}]
 
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
+  _color: color_mirror
   _switch: false
   constructor: ->
     super

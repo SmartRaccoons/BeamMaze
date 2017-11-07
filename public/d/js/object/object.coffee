@@ -54,8 +54,9 @@ window.o.Object = class Object extends MicroEvent
       @mesh.actionManager.registerAction new BABYLON.ExecuteCodeAction BABYLON.ActionManager.OnPointerOutTrigger, action.mouseout
 
   _action_remove: ->
+    if not @mesh.actionManager
+      return
     @mesh.actionManager.actions = []
-    @_action_list = {}
 
   mesh_build: ->
     mesh = meshes[@name].clone(meshes[@name].name)

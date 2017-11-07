@@ -47,6 +47,7 @@ window.o.GameMap = class Map extends MicroEvent
       '0': 'blank'
       '1': 'mirror'
       '2': 'mirror_reverse'
+      '3': 'mirror_empty'
       '8': 'beam_source'
       '9': 'target'
     }
@@ -115,11 +116,8 @@ window.o.GameMap = class Map extends MicroEvent
 
   blank: (coors)-> new window.o.ObjectBlank({pos: coors})
 
-  mirror_reverse: (coors)-> @mirror(coors, true)
-
   mirror: (coors, reverse=false)->
     m = new window.o.ObjectMirror({pos: [coors[0], coors[1]], reverse: reverse})
-    position = [m.mesh.position.x, m.mesh.position.y]
     m.bind 'move', (position)=>
       @trigger 'rotate'
       blank = @_map[m.position.y + position.y][m.position.x + position.x]
@@ -129,3 +127,8 @@ window.o.GameMap = class Map extends MicroEvent
       m.move(position)
     @_mirror.push m
     m
+
+  mirror_reverse: (coors)-> @mirror(coors, true)
+
+  mirror_empty: (coors)->
+    new window.o.ObjectObstacle({pos: coors})
