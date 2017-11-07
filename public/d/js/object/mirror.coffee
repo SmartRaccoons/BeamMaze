@@ -59,7 +59,7 @@ class Mirror extends window.o.Object
   name: 'mirror'
   constructor: ->
     super
-    @_color = [187, 230, 239] #[247, 192, 192]
+    @_color = [187, 230, 239]
     @color.apply(@, @_color.concat([0]))
     @tubes = []
     for rotation in (if @options.reverse then [1, 3] else [0, 2])
@@ -76,7 +76,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _switch: false
   constructor: ->
     super
-    @mirror = new Mirror({parent: @mesh, rotation: @options.rotation})
+    @mirror = new Mirror({parent: @mesh, reverse: @options.reverse})
     @_move_position = 0
 
   _controls_add: ->
