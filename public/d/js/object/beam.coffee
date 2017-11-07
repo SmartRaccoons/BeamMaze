@@ -4,7 +4,7 @@ window.o.ObjectBeam = class Beam extends Object
   _color: [255, 243, 21]
   constructor: ->
     super
-    @color.apply(@, @_color.concat(0.5))
+    @color(null, 0.5)
     width = 0.25
     start = @options.start
     end = @options.end
@@ -27,12 +27,12 @@ class BeamSphere extends window.o.ObjectSphere
   }
   constructor: ->
     super
-    @color.apply(@, @options.color)
+    @color(@options.color)
     @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])
     @sheath = new window.o.ObjectSphere({diameter: @options.diameter + 1, parent: @mesh})
-    @sheath.color.apply(@sheath, @options.color.concat(0.5))
+    @sheath.color(@options.color.concat(0.5))
     @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 2, parent: @mesh})
-    @sheath2.color.apply(@sheath2, @options.color.concat(0.2))
+    @sheath2.color(@options.color.concat(0.2))
     @
 
 
@@ -71,13 +71,12 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
         break
       if pick_info.pickedMesh._type is 'target'
         @solved = true
-      if pick_info.pickedMesh._type is 'mirrorTubeEmpty'
-        pick_info.pickedMesh._class.reflect()
+      if ['mirrorTubeEmpty', 'mirrorTube'].indexOf(pick_info.pickedMesh._type) > -1
+        direction = pick_info.pickedMesh._class.reflect(direction)
+        last_mirror = pick_info.pickedMesh._class.mirror_id()
+        @_mirror.push pick_info.pickedMesh._class.parent
       if pick_info.pickedMesh._type isnt 'mirrorTube'
         break
-      direction = pick_info.pickedMesh._class.reflect(direction)
-      last_mirror = pick_info.pickedMesh._class.mirror_id()
-      @_mirror.push pick_info.pickedMesh._class.parent
 
   beam_remove: ->
     @_mirror.forEach (m)-> m.deactive()

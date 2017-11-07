@@ -1,8 +1,7 @@
-window.o.GameMap = class Map extends MicroEvent
+class MapAnimation extends MicroEvent
   constructor: ->
-    @clear()
-    @_before_render_fn = []
     super
+    @clear()
     in_action_active = 0
     triggered_start = false
     window.App.events.bind 'map:animation', (animation, callback, steps = 30, in_action=false)=>
@@ -26,19 +25,44 @@ window.o.GameMap = class Map extends MicroEvent
         steps: steps
         steps_total: steps
       }
+
+  clear: ->
+    @_before_render_fn = []
+    @_animations = {}
+
+  _before_render: (callback)-> @_before_render_fn.push callback
+
+  render: ->
+    if @_before_render_fn.length > 0
+      @_before_render_fn.pop()()
+    (=>
+      for name, params of @_animations
+        if params.length is 0
+          delete @_animations[name]
+          continue
+        params[0].steps--
+        params[0].callback((params[0].steps_total - params[0].steps)/params[0].steps_total, params[0].steps)
+        if params[0].steps is 0
+          @_animations[name].shift()
+    )()
+
+
+window.o.GameMap = class Map extends MapAnimation
+  constructor: ->
+    super
     @bind 'animation_start', =>
       @_source.beam_remove()
     @bind 'animation_end', =>
-      @_before_render_fn.push =>
+      @_before_render =>
         @position_check()
         @_source.beam()
         @solved = @_source.solved
         @trigger 'beam', @_source._mirror.length
 
   clear: ->
+    super
     @_blank = []
     @_mirror = []
-    @_animations = {}
     @solved = false
 
   load: (map_string)->
@@ -82,20 +106,6 @@ window.o.GameMap = class Map extends MicroEvent
     @_mirror.forEach (ob)-> ob.remove()
     @clear()
 
-  render: ->
-    if @_before_render_fn.length > 0
-      @_before_render_fn.pop()()
-    (=>
-      for name, params of @_animations
-        if params.length is 0
-          delete @_animations[name]
-          continue
-        params[0].steps--
-        params[0].callback((params[0].steps_total - params[0].steps)/params[0].steps_total, params[0].steps)
-        if params[0].steps is 0
-          @_animations[name].shift()
-    )()
-
   position_check: ->
     @_mirror.forEach (m)=>
       for i in [0..3]
@@ -114,10 +124,10 @@ window.o.GameMap = class Map extends MicroEvent
     @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
     @_target
 
-  blank: (coors)-> new window.o.ObjectBlank({pos: coors})
+  blank: (coors)-> new window.o.ObjectBlank({position: coors})
 
   mirror: (coors, reverse=false)->
-    m = new window.o.ObjectMirror({pos: [coors[0], coors[1]], reverse: reverse})
+    m = new window.o.ObjectMirror({position: coors, reverse: reverse})
     m.bind 'move', (position)=>
       @trigger 'rotate'
       blank = @_map[m.position.y + position.y][m.position.x + position.x]
@@ -131,4 +141,4 @@ window.o.GameMap = class Map extends MicroEvent
   mirror_reverse: (coors)-> @mirror(coors, true)
 
   mirror_empty: (coors)->
-    new window.o.ObjectObstacle({pos: coors})
+    new window.o.ObjectObstacle({position: coors})

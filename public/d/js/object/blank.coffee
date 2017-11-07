@@ -6,10 +6,6 @@ class Connector extends window.o.Object
     @mesh.rotation.z = Math.PI
     @hide()
 
-  hide: -> @mesh.scaling = new BABYLON.Vector3(0, 0, 0)
-
-  show: -> @mesh.scaling = new BABYLON.Vector3(1, 1, 1)
-
   angle: (angle)->
     @show()
     angle = -Math.PI/2 + angle
@@ -26,15 +22,16 @@ class Connector extends window.o.Object
 
 
 window.o.ObjectBlank = class Blank extends window.o.Object
+  _color: [151, 153, 156]
+  _color_active: [103, 181, 229]
   name: 'blank'
   _switch: true
   _step: 10
 
   constructor: ->
     super
-    @position = {x: @options.pos[0], y: @options.pos[1]}
+    @position = {x: @options.position[0], y: @options.position[1]}
     @_connector = new Connector({parent: @mesh})
-    # @color(187, 230, 239)
     @mesh.scaling = new BABYLON.Vector3(4, 4, 4)
     @_update_position(true)
     @out()
@@ -59,9 +56,9 @@ window.o.ObjectBlank = class Blank extends window.o.Object
     , 20, true
 
   over: ->
-    @color(103, 181, 229)
-    @_connector.color(103, 181, 229)
+    @color(@_color_active)
+    @_connector.color(@_color_active)
 
   out: ->
-    @color(151, 153, 156)
-    @_connector.color(151, 153, 156)
+    @color(@_color)
+    @_connector.color(@_color)

@@ -64,13 +64,17 @@ window.o.Object = class Object extends MicroEvent
     mesh.isVisible = true
     mesh
 
-  color: (red, green, blue, alpha = 1)->
+  color: (color = @_color, alpha = 1)->
     if !@mesh.material
       @mesh.material = new BABYLON.StandardMaterial("material_#{@_name()}", @scene())
-    @mesh.material.diffuseColor = new BABYLON.Color3(red/255, green/255, blue/255)
-    @mesh.material.alpha = alpha
+    @mesh.material.diffuseColor = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255)
+    @mesh.material.alpha = color[3] or alpha
 
   scene: -> _scene
+
+  hide: -> @mesh.isVisible = false
+
+  show: -> @mesh.isVisible = true
 
   godrays: ->
     new BABYLON.VolumetricLightScatteringPostProcess("godrays_#{@_name()}", 1, _camera, @mesh, 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, _engine, false)
