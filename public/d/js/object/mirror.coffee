@@ -13,13 +13,10 @@ class MirrorTubeIn extends window.o.Object
     @mesh.rotate(new BABYLON.Vector3(0, 0, 1), rotation * Math.PI / 2, BABYLON.Space.WORLD)
 
   mirror_id: ->
-    @parent.options.parent_class._name()
-
-  position: ->
-    @options.parent.position
+    @parent.options.parent._name()
 
   reflect: (v)->
-    @parent.activate()
+    @options.activate()
     if @_out
       return new BABYLON.Vector3(-v.y, v.x , v.z)
     return new BABYLON.Vector3(v.y, -v.x , v.z)
@@ -36,13 +33,12 @@ class MirrorTubeOut extends MirrorTubeIn
 class MirrorTube
   _color_active: window.o.ObjectBeam::_color
   constructor: (options)->
-    @options = options
-    tube_options = {parent_class: @, parent: @options.parent_class.mesh}
+    tube_options = {parent: options.parent, activate: => @activate()}
     @tubes = []
     @tubes.push new MirrorTubeIn(tube_options)
     @tubes.push new MirrorTubeOut(tube_options)
-    @tubes.forEach (t)=> t.rotate(@options.rotation)
-    @_color = @options.parent_class._color
+    @tubes.forEach (t)=> t.rotate(options.rotation)
+    @_color = options.parent._color
     @color_default()
 
   activate: ->
@@ -65,7 +61,7 @@ window.o.ObjectMirrorParent = class Mirror extends window.o.Object
     @color(null, 0)
     @tubes = []
     for rotation in (if @options.reverse then [1, 3] else [0, 2])
-      @tubes.push new MirrorTube({parent_class: @, rotation: rotation})
+      @tubes.push new MirrorTube({parent: @, rotation: rotation})
 
   deactive: ->
     @tubes.forEach (t)-> t.deactive()
@@ -78,7 +74,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _switch: false
   constructor: ->
     super
-    @mirror = new Mirror({parent: @mesh, reverse: @options.reverse})
+    @mirror = new Mirror({parent: @, reverse: @options.reverse})
     @_move_position = 0
 
   _controls_add: ->

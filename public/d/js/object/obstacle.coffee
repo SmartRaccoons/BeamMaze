@@ -21,6 +21,7 @@ window.o.ObjectObstacle = class Mirror extends window.o.ObjectBlank
   _color: window.o.ObjectMirror::_color
   constructor: ->
     super
+    return
     @tubes = []
     for rotation in [0..3]
       @tubes.push new MirrorTube({parent: @mesh, parent_class: @, rotation: rotation})

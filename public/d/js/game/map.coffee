@@ -91,7 +91,7 @@ window.o.GameMap = class Map extends MapAnimation
         @_map[y][x] = call(cell, x, y)
     setTimeout =>
       @trigger 'animation_end'
-    , 10
+    , 100
 
   remove_controls: ->
     @_mirror.forEach (m)-> m._controls_remove()

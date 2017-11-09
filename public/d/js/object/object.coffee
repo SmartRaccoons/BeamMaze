@@ -32,12 +32,11 @@ window.o.Object = class Object extends MicroEvent
     _object_id++
     @_id = _object_id
     @options = _.extend({}, @_default, options)
-    if @options.parent_class
-      @parent = @options.parent_class
     @mesh = @mesh_build()
     @mesh._type = @name
     if @options.parent
-      @mesh.parent = @options.parent
+      @parent = @options.parent
+      @mesh.parent = @options.parent.mesh
     if @options.position
       @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1] or 0, @options.position[2] or 0)
     if @options.action

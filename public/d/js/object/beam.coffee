@@ -29,9 +29,9 @@ class BeamSphere extends window.o.ObjectSphere
     super
     @color(@options.color)
     @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])
-    @sheath = new window.o.ObjectSphere({diameter: @options.diameter + 1, parent: @mesh})
+    @sheath = new window.o.ObjectSphere({diameter: @options.diameter + 1, parent: @})
     @sheath.color(@options.color.concat(0.5))
-    @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 2, parent: @mesh})
+    @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 2, parent: @})
     @sheath2.color(@options.color.concat(0.2))
     @
 

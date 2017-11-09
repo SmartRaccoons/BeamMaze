@@ -31,7 +31,7 @@ window.o.ObjectBlank = class Blank extends window.o.Object
   constructor: ->
     super
     @position = {x: @options.position[0], y: @options.position[1]}
-    @_connector = new Connector({parent: @mesh})
+    @_connector = new Connector({parent: @})
     @mesh.scaling = new BABYLON.Vector3(4, 4, 4)
     @_update_position(true)
     @out()
