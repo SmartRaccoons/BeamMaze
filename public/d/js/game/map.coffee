@@ -126,8 +126,8 @@ window.o.GameMap = class Map extends MapAnimation
 
   blank: (coors)-> new window.o.ObjectBlank({position: coors})
 
-  mirror: (coors, reverse=false)->
-    m = new window.o.ObjectMirror({position: coors, reverse: reverse})
+  mirror: (coors, type='normal')->
+    m = new window.o.ObjectMirror({position: coors, type: type})
     m.bind 'move', (position)=>
       @trigger 'rotate'
       blank = @_map[m.position.y + position.y][m.position.x + position.x]
@@ -138,7 +138,6 @@ window.o.GameMap = class Map extends MapAnimation
     @_mirror.push m
     m
 
-  mirror_reverse: (coors)-> @mirror(coors, true)
+  mirror_reverse: (coors)-> @mirror(coors, 'reverse')
 
-  mirror_empty: (coors)->
-    new window.o.ObjectObstacle({position: coors})
+  mirror_empty: (coors)-> @mirror(coors, 'empty')
