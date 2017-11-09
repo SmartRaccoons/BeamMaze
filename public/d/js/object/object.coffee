@@ -27,6 +27,7 @@ window.App.events.bind 'game:init', (scene, engine, light, camera)->
 
 
 window.o.Object = class Object extends MicroEvent
+  _color: [0, 0, 0]
   _default: {}
   constructor: (options)->
     _object_id++
@@ -36,7 +37,8 @@ window.o.Object = class Object extends MicroEvent
     @mesh._type = @name
     if @options.parent
       @parent = @options.parent
-      @mesh.parent = @options.parent.mesh
+      if @parent.mesh
+        @mesh.parent = @parent.mesh
     if @options.position
       @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1] or 0, @options.position[2] or 0)
     if @options.action

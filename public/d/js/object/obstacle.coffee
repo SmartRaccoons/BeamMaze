@@ -1,5 +1,5 @@
 class MirrorTube extends window.o.Object
-  _color: window.o.ObjectMirrorParent::_color
+  # _color: window.o.ObjectMirrorParent::_color
   _color_active: window.o.ObjectBeam::_color
   name: 'mirrorTubeEmpty'
   constructor: ->
@@ -18,7 +18,7 @@ class MirrorTube extends window.o.Object
 
 
 window.o.ObjectObstacle = class Mirror extends window.o.ObjectBlank
-  _color: window.o.ObjectMirror::_color
+  # _color: window.o.ObjectMirror::_color
   constructor: ->
     super
     return
