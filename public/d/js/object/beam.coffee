@@ -55,12 +55,13 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
     points = [new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])]
     last_mirror = null
     direction = new BABYLON.Vector3(0, 1000, 0)
+    tube_check = (_type)-> _type and _type.indexOf('mirrorTube') > -1
     for i in [0...100]
       pick_info = @scene().pickWithRay new BABYLON.Ray(points[points.length - 1], direction, 100), ((i)->
         (m)->
-          if (i is 0 and m._type is 'source') or (m._type is 'mirrorTube' and last_mirror is m._class.mirror_id())
+          if (i is 0 and m._type is 'source') or (tube_check(m._type) and last_mirror is m._class.mirror_id())
             return false
-          ['mirrorTube', 'target', 'mirrorTubeEmpty', 'source'].indexOf(m._type) > -1
+          tube_check(m._type) or ['target', 'source'].indexOf(m._type) > -1
       )(i)
       if not pick_info.pickedPoint
         points.push points[points.length - 1].add(direction)
@@ -71,11 +72,11 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
         break
       if pick_info.pickedMesh._type is 'target'
         @solved = true
-      if ['mirrorTubeEmpty', 'mirrorTube'].indexOf(pick_info.pickedMesh._type) > -1
+      if tube_check(pick_info.pickedMesh._type)
         direction = pick_info.pickedMesh._class.reflect(direction)
         last_mirror = pick_info.pickedMesh._class.mirror_id()
         @_mirror.push pick_info.pickedMesh._class.parent
-      if pick_info.pickedMesh._type isnt 'mirrorTube'
+      if ['mirrorTubeStraight', 'mirrorTube'].indexOf(pick_info.pickedMesh._type) is -1
         break
 
   beam_remove: ->

@@ -72,6 +72,7 @@ window.o.GameMap = class Map extends MapAnimation
       '1': 'mirror'
       '2': 'mirror_reverse'
       '3': 'mirror_empty'
+      '4': 'mirror_straight'
       '8': 'beam_source'
       '9': 'target'
     }
@@ -108,7 +109,7 @@ window.o.GameMap = class Map extends MapAnimation
 
   position_check: ->
     @_mirror.forEach (m)=>
-      for i in [0..3]
+      for i in [0, 1, 2, 3]
         nr = (m._move_position + i) % 4
         p = m.get_move_position(nr, true)
         if @_map[p.y] and @_map[p.y][p.x] and @_map[p.y][p.x]._switch
@@ -141,3 +142,5 @@ window.o.GameMap = class Map extends MapAnimation
   mirror_reverse: (coors)-> @mirror(coors, 'reverse')
 
   mirror_empty: (coors)-> @mirror(coors, 'empty')
+
+  mirror_straight: (coors)-> @mirror(coors, 'straight')

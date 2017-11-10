@@ -24,54 +24,76 @@ class MirrorTube extends window.o.Object
 
 class MirrorTubeConnect extends MirrorTube
   name: 'mirrorTube'
+
+  reflect: (v)->
+    super
+    new BABYLON.Vector3(v.y, -v.x , v.z)
+
+
+class MirrorTubeConnectOut extends MirrorTube
+  name: 'mirrorTube'
   mesh_build: ->
     mesh = super
-    if @options.out
-      mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD)
-      mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI/2, BABYLON.Space.WORLD)
-      @_out = true
+    mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD)
+    mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI/2, BABYLON.Space.WORLD)
     return mesh
 
   reflect: (v)->
     super
-    if @_out
-      return new BABYLON.Vector3(-v.y, v.x , v.z)
-    return new BABYLON.Vector3(v.y, -v.x , v.z)
+    new BABYLON.Vector3(-v.y, v.x , v.z)
 
 
 class MirrorTubeEmpty extends MirrorTube
   name: 'mirrorTubeEmpty'
 
 
+class MirrorTubeStraight extends MirrorTube
+  name: 'mirrorTubeStraight'
+
+  reflect: (v)->
+    super
+    new BABYLON.Vector3(v.x, v.y , v.z)
+
+
+class MirrorTubeStraightOut extends MirrorTubeStraight
+  mesh_build: ->
+    mesh = super
+    mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI, BABYLON.Space.WORLD)
+    mesh
+
+
 class MirrorNormal extends window.o.Object
   name: 'mirror'
-  _rotations: [0, 2]
-  _out: true
-  connector: MirrorTubeConnect
+  connectors: [[MirrorTubeConnect, MirrorTubeConnectOut], null, [MirrorTubeConnect, MirrorTubeConnectOut]]
   constructor: ->
     super
     @color(null, 0)
     @tubes = []
-    @_rotations.forEach (rotation)=>
-      t1 = new @connector({parent: @, rotation: rotation})
-      @tubes.push(t1)
-      if not @_out
+    @connectors.forEach (connectors, i)=>
+      if !connectors
         return
-      t2 = new @connector({parent: @, rotation: rotation, out: true})
-      @tubes.push(t2)
-      t1.bind('active', -> t2.active(true) )
-      t2.bind('active', -> t1.active(true) )
+      tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=> new connector({parent: @, rotation: i})
+      tubes.forEach (t1, i)->
+        tubes.forEach (t2, j)->
+          if i is j
+            return
+          t1.bind('active', -> t2.active(true) )
+          t2.bind('active', -> t1.active(true) )
+      @tubes = @tubes.concat(tubes)
 
   deactive: -> @tubes.forEach (t)-> t.deactive()
 
 
 class MirrorReverse extends MirrorNormal
-  _rotations: [1, 3]
+  connectors: [null, [MirrorTubeConnect, MirrorTubeConnectOut], null, [MirrorTubeConnect, MirrorTubeConnectOut]]
 
 
 class MirrorEmpty extends MirrorNormal
-  connector: MirrorTubeEmpty
-  _rotations: [0..3]
+  connectors: [MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty]
+
+
+class MirrorStraight extends MirrorNormal
+  connectors: [[MirrorTubeStraight, MirrorTubeStraightOut], MirrorTubeEmpty, null, MirrorTubeEmpty]
 
 
 _move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
@@ -83,6 +105,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'normal': MirrorNormal
     'reverse': MirrorReverse
     'empty': MirrorEmpty
+    'straight': MirrorStraight
   constructor: ->
     super
     @mirror = new @classes[@options.type]({parent: @})
