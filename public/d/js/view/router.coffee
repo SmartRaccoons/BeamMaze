@@ -56,6 +56,7 @@ window.o.ViewRouter = class Router extends window.o.View
     return callback()
 
   _game_completed: ->
+    return @start()
     new window.o.ViewPopup({
       title: _l('Game over')
       content: _l('Game over description')

@@ -81,18 +81,19 @@ window.o.GameMap = class Map extends MapAnimation
         @[methods[method]]([x, y])
 
     map = map_string.split("\n").map (s)-> s.trim().split('')
-    middle = Math.floor(map[0].length/2)
+    map_size = [Math.floor(map.reduce( ((max, v)-> Math.max(max, v.length)), 0)/2), Math.floor(map.length/2)]
     @_map = {}
     map.forEach (row, j)=>
       row.forEach (cell, i)=>
-        y = -j + middle
-        x = i - middle
+        y = -j + map_size[1]
+        x = i - map_size[0]
         if not @_map[y]
           @_map[y] = {}
         @_map[y][x] = call(cell, x, y)
     setTimeout =>
       @trigger 'animation_end'
     , 100
+    return map_size
 
   remove_controls: ->
     @_mirror.forEach (m)-> m._controls_remove()
@@ -118,11 +119,11 @@ window.o.GameMap = class Map extends MapAnimation
       m.set_move_position(null)
 
   beam_source: (coors)->
-    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
+    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
     @_source
 
   target: (coors)->
-    @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4.2]})
+    @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
     @_target
 
   blank: (coors)-> new window.o.ObjectBlank({position: coors})

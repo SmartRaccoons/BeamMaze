@@ -1,12 +1,31 @@
-#  0 - nothing
-#  1 - mirror pos 1 (right top)
-#  2 - mirror pos 2 (left top)
-#  9 - target
+# '-': null
+# '0': 'blank'
+# '1': 'mirror'
+# '2': 'mirror_reverse'
+# '3': 'mirror_empty'
+# '4': 'mirror_straight'
+# '8': 'beam_source'
+# '9': 'target'
 window.o.GameMapData = [
   """
-  --9
-  124
-  410
+  000
+  0-0
+  200
+  -01
+  8-9
+  """
+  """
+  001
+  009
+  3
+  002
+  8
+  """
+  """
+  001
+  009
+  2
+  002
   8
   """
   """

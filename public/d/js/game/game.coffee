@@ -38,11 +38,9 @@ window.o.Game = class Game extends MicroEvent
 
   load_map: (id, callback)->
     setTimeout =>
-      if window.o.GameMapData[id - 1].length < 20
-        @_camera.setPosition(new BABYLON.Vector3(0, 0, -100))
-      else if window.o.GameMapData[id - 1].length < 50
-        @_camera.setPosition(new BABYLON.Vector3(0, 0, -120))
-      @_map.load(window.o.GameMapData[id - 1])
+      map_size = @_map.load(window.o.GameMapData[id - 1])
+      max_size = Math.max(map_size[0], map_size[1])
+      @_camera.setPosition(new BABYLON.Vector3(0, 0, -80 - 20 * max_size))
       callback()
     , 1000
 

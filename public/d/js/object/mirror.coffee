@@ -12,11 +12,11 @@ class MirrorTube extends window.o.Object
   mirror_id: -> @parent.options.parent._name()
 
   active: (silent=false)->
-    @color(@_color_active.concat(0.5))
+    @color(@_color_active)
     if !silent
       @trigger 'active'
 
-  deactive: -> @color(@_color.concat(0.5))
+  deactive: -> @color(@_color)
 
   reflect: (v)->
     @active()
