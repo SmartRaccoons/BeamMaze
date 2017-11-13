@@ -27,7 +27,6 @@ production :
 	public/d/js/object/blank.js \
 	public/d/js/object/beam.js \
 	public/d/js/object/mirror.js \
-	public/d/js/object/platform.js \
 	public/d/js/view/view.js \
 	public/d/js/view/router.js \
 	public/d/js/view/start.js \
