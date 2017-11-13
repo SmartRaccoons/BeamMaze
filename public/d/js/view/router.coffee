@@ -11,7 +11,7 @@ window.o.ViewRouter = class Router extends window.o.View
     @$back = @$('.back-link')
     @_active = null
     @game_stages = window.o.GameMapData.length
-    @game_last = @options.game_last
+    @game_last = if @options.game_last > @game_stages then @game_stages else @options.game_last
 
   run: ->
     if @game_last is 1
@@ -75,13 +75,13 @@ window.o.ViewRouter = class Router extends window.o.View
     @_load('game', {stage: id})
     @_active.bind 'solved', (data)=>
       App.events.trigger 'router:game-solved', id, data
-      if id is @game_last and @game_last isnt @game_stages
+      if id is @game_last and @game_last < @game_stages
         @game_last++
         @options.game_save(@game_last)
     @_active.bind 'next', =>
-      if id isnt @game_last
+      if id < @game_last
         return @game(id + 1)
-      if @game_last is @game_stages
+      if @game_last >= @game_stages
         return @_game_completed()
       @game()
     @_active.bind 'reset', (data)=>

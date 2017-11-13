@@ -1,14 +1,20 @@
-param = (str)->
-  href = window.location.href.split('?')
-  if href.length < 2
-    return false
-  href[1].indexOf(str) > -1
+_split_params = (a)->
+  b = {}
+  if a is ''
+    return b
+  for pr in a
+    p = pr.split('=')
+    if p.length is 2
+      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "))
+  b
+GET = window.GET = _split_params(window.location.search.substr(1).split('&'))
+GET_hash = window.GET_hash = _split_params(window.location.hash.substr(1).split('&'))
 
 window.o.Game = class Game extends window.o.Game
   render: ->
     super
     @_camera.attachControl(document.body, true)
-    if param('axis')
+    if 'axis' in GET
       @show_axis(30)
 
   show_axis: (size = 10)->
@@ -63,5 +69,8 @@ window.o.GameMap = class GameMap extends window.o.GameMap
 window.o.ViewRouter = class Router extends window.o.ViewRouter
   constructor: ->
     super
+    # if 'map' in GET_hash
+    #   window.o.GameMapData[0] = GET_hash['map'].split("|").join("\n")
+    # $('<div>').append('<textarea></textarea><button>')
 
   run: -> @game(1)

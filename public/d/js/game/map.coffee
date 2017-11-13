@@ -132,11 +132,17 @@ window.o.GameMap = class Map extends MapAnimation
     m = new window.o.ObjectMirror({position: coors, type: type})
     m.bind 'move', (position)=>
       @trigger 'rotate'
-      blank = @_map[m.position.y + position.y][m.position.x + position.x]
+      for i in [1..20]
+        y = m.position.y + position.y * i
+        x = m.position.x + position.x * i
+        if !(@_map[y] and @_map[y][x] and @_map[y][x]._switch)
+          i--
+          break
+        blank = @_map[y][x]
       @_map[m.position.y][m.position.x] = blank
-      @_map[m.position.y + position.y][m.position.x + position.x] = m
-      blank.move({x: -position.x, y: -position.y})
-      m.move(position)
+      @_map[blank.position.y][blank.position.x] = m
+      blank.move({x: -position.x * i, y: -position.y * i})
+      m.move({x: position.x * i, y: position.y * i})
     @_mirror.push m
     m
 
