@@ -37,12 +37,15 @@ window.o.Game = class Game extends MicroEvent
     @_camera.setPosition(new BABYLON.Vector3(0, 0, -150))
     @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-40, 60, -100), @_scene)
     window.App.events.trigger('game:init', @_scene, @_engine, @_light, @_camera)
-    @_rendered = true
 
-  load_map: (id)->
-    map_size = @_map.load(window.o.GameMapData[id - 1])
+    map_size = @_map.load(window.o.GameMapData[options.stage - 1])
     max_size = Math.max(map_size[0], map_size[1])
-    @_camera.setPosition(new BABYLON.Vector3(0, 0, -80 - 20 * max_size))
+    window.App.events.trigger 'map:animation', 'camera_anime', (m, steps)=>
+      if steps is 0
+        return @_camera.setPosition(new BABYLON.Vector3(0, 0, -80 - 20 * max_size))
+      @_camera.setPosition(new BABYLON.Vector3(0, 0, -200 * Math.sin((1-m) * Math.PI/2) - 80 - 20 * max_size))
+    , 20
+    @_rendered = true
 
   clear: ->
     @unbind()

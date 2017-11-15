@@ -15,19 +15,25 @@ window.o.ViewGame = class Game extends window.o.View
 
   constructor: ->
     super
+    @_timeouts = []
     @load()
 
   load: ->
-    game.clear()
-    game.bind 'solved', =>
-      @trigger 'solved', {seconds_total: @_time()}
-      setTimeout =>
-        @trigger 'next'
-      , 1000
-
-    game.render({container: @$('.game-container')})
-    game.load_map @options.stage
-    @_timer_start = new Date().getTime()
+    @_timeouts.forEach (t)-> clearTimeout(t)
+    @_timeouts = []
+    @$el.removeClass("#{@className}-level-hide")
+    @$el.attr('data-level', @options.stage)
+    @_timeouts.push setTimeout =>
+      @$el.addClass("#{@className}-level-hide")
+      game.clear()
+      game.bind 'solved', =>
+        @trigger 'solved', {seconds_total: @_time()}
+        @_timeouts.push setTimeout =>
+          @trigger 'next'
+        , 2000
+      game.render({stage: @options.stage, container: @$('.game-container')})
+      @_timer_start = new Date().getTime()
+    , 800
 
   _time: -> Math.round((new Date().getTime() - @_timer_start) / 1000)
 

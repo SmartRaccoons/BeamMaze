@@ -14,10 +14,7 @@ window.o.ViewRouter = class Router extends window.o.View
     @game_last = if @options.game_last > @game_stages then @game_stages else @options.game_last
 
   run: ->
-    if @game_last is 1
-      @game()
-    else
-      @start()
+    @game()
     @
 
   start: ->
@@ -56,7 +53,9 @@ window.o.ViewRouter = class Router extends window.o.View
     return callback()
 
   _game_completed: ->
-    return @start()
+    @game_last = 1
+    @options.game_save(@game_last)
+    return @game()
     new window.o.ViewPopup({
       title: _l('Game over')
       content: _l('Game over description')
@@ -71,7 +70,6 @@ window.o.ViewRouter = class Router extends window.o.View
     if check
       return @_game_stage_available id, => @game(id, false)
     App.events.trigger 'router:game', id
-    # @_load('game' + (if id is 1 then 'Help' else ''), {stage: id})
     @_load('game', {stage: id})
     @_active.bind 'solved', (data)=>
       App.events.trigger 'router:game-solved', id, data

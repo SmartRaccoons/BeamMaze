@@ -73,4 +73,8 @@ window.o.ViewRouter = class Router extends window.o.ViewRouter
     #   window.o.GameMapData[0] = GET_hash['map'].split("|").join("\n")
     # $('<div>').append('<textarea></textarea><button>')
 
-  run: -> @game(1)
+  run: ->
+    if 'stage' of GET
+      @game_last = parseInt(GET['stage'])
+      return @game()
+    super

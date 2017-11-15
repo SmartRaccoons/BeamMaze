@@ -14,7 +14,6 @@ production :
 	grunt compile
 	cat node_modules/gameanalytics/dist/GameAnalytics.js \
 	bower_components/babylonjs/dist/preview\ release/babylon.js \
-	bower_components/microevent.js/microevent.js \
 	bower_components/lodash/lodash.js \
 	bower_components/zepto/zepto.js \
 	bower_components/universalapi/uniapi.js \
@@ -27,14 +26,14 @@ production :
 	public/d/js/object/blank.js \
 	public/d/js/object/beam.js \
 	public/d/js/object/mirror.js \
+	public/d/js/game/map.data.js \
+	public/d/js/game/map.js \
+	public/d/js/game/game.js \
 	public/d/js/view/view.js \
 	public/d/js/view/router.js \
 	public/d/js/view/start.js \
 	public/d/js/view/stages.js \
 	public/d/js/view/game.js \
-	public/d/js/game/map.data.js \
-	public/d/js/game/map.js \
-	public/d/js/game/game.js \
 	public/d/js/view/popup.js \
 	public/d/js/analytics.js \
 	public/d/js/run.js \
