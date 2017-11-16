@@ -30,14 +30,12 @@ class MapAnimation extends MicroEvent
     @bind 'remove', -> window.App.events.unbind 'map:animation', fn
 
   clear: ->
-    @_before_render_fn = []
+    @_render_after_fn = []
     @_animations = {}
 
-  _before_render: (callback)-> @_before_render_fn.push callback
+  _render_after_cl: (callback)-> @_render_after_fn.push callback
 
-  render: ->
-    if @_before_render_fn.length > 0
-      @_before_render_fn.pop()()
+  render_before: ->
     (=>
       for name, params of @_animations
         if params.length is 0
@@ -49,19 +47,11 @@ class MapAnimation extends MicroEvent
           @_animations[name].shift()
     )()
 
+  render_after: ->
+    if @_render_after_fn.length > 0
+      @_render_after_fn.pop()()
 
 window.o.GameMap = class Map extends MapAnimation
-  constructor: ->
-    super
-    @bind 'animation_start', =>
-      @_source.beam_remove()
-    @bind 'animation_end', =>
-      @_before_render =>
-        @position_check()
-        @_source.beam()
-        @solved = @_source.solved
-        @trigger 'beam', @_source._mirror.length
-
   clear: ->
     super
     @_blank = []
@@ -94,7 +84,7 @@ window.o.GameMap = class Map extends MapAnimation
           @_map[y] = {}
         @_map[y][x] = call(cell, x, y)
     setTimeout =>
-      @trigger 'animation_end'
+      @beam_show()
     , 100
     return map_size
 
@@ -121,6 +111,13 @@ window.o.GameMap = class Map extends MapAnimation
           return
       m.set_move_position(null)
 
+  beam_show: ->
+    @_render_after_cl =>
+      @position_check()
+      @_source.beam()
+      @solved = @_source.solved
+      @trigger 'beam', @_source._mirror.length
+
   beam_source: (coors)->
     @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
     @_source
@@ -135,6 +132,7 @@ window.o.GameMap = class Map extends MapAnimation
     m = new window.o.ObjectMirror({position: coors, type: type})
     m.bind 'move', (position)=>
       @trigger 'rotate'
+      @_source.beam_remove()
       for i in [1..20]
         y = m.position.y + position.y * i
         x = m.position.x + position.x * i
@@ -146,6 +144,8 @@ window.o.GameMap = class Map extends MapAnimation
       @_map[blank.position.y][blank.position.x] = m
       blank.move({x: -position.x * i, y: -position.y * i})
       m.move({x: position.x * i, y: position.y * i})
+
+    m.bind 'move_end', => @beam_show()
     @_mirror.push m
     m
 
