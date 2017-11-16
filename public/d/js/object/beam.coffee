@@ -40,7 +40,7 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
   name: 'source'
   _default: {
     diameter: 4
-    color: [255, 243, 21]
+    color: Beam::_color
   }
   constructor: ->
     @_beam = []
@@ -71,6 +71,7 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
+        @options.target.trigger 'solved'
         @solved = true
       if tube_check(pick_info.pickedMesh._type)
         direction = pick_info.pickedMesh._class.reflect(direction)
@@ -96,6 +97,15 @@ window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
   }
   constructor: ->
     super
+    @bind 'solved', =>
+      c1 = @options.color
+      c2 = Beam::_color
+      color_diff = [c2[0]-c1[0],c2[1]-c1[1],c2[2]-c1[2]]
+      window.App.events.trigger 'map:animation', 'camera_anime', (m, steps)=>
+        color = [m * color_diff[0] + c1[0], m * color_diff[1] + c1[1], m * color_diff[2] + c1[2]]
+        @color(color)
+        @sheath.color(color.concat(0.5))
+        @sheath2.color(color.concat(0.3))
     @sheath.mesh.material.alpha = 0
     @sheath2.mesh.material.alpha = 0
     @
