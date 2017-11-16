@@ -26451,6 +26451,44 @@ shadowsVertexDeclaration: "#ifdef SHADOWS\n#if defined(SPOTLIGHT{X}) || defined(
 }, BABYLON.CollisionWorker = 'var BABYLON;!function(t){var e=function(t,e,o,i){return!(t.x>o.x+i)&&(!(o.x-i>e.x)&&(!(t.y>o.y+i)&&(!(o.y-i>e.y)&&(!(t.z>o.z+i)&&!(o.z-i>e.z)))))},o=function(){var t={root:0,found:!1};return function(e,o,i,s){t.root=0,t.found=!1;var r=o*o-4*e*i;if(r<0)return t;var n=Math.sqrt(r),c=(-o-n)/(2*e),h=(-o+n)/(2*e);if(c>h){var a=h;h=c,c=a}return c>0&&c<s?(t.root=c,t.found=!0,t):h>0&&h<s?(t.root=h,t.found=!0,t):t}}(),i=function(){function i(){this.radius=new t.Vector3(1,1,1),this.retry=0,this.basePointWorld=t.Vector3.Zero(),this.velocityWorld=t.Vector3.Zero(),this.normalizedVelocity=t.Vector3.Zero(),this._collisionPoint=t.Vector3.Zero(),this._planeIntersectionPoint=t.Vector3.Zero(),this._tempVector=t.Vector3.Zero(),this._tempVector2=t.Vector3.Zero(),this._tempVector3=t.Vector3.Zero(),this._tempVector4=t.Vector3.Zero(),this._edge=t.Vector3.Zero(),this._baseToVertex=t.Vector3.Zero(),this._destinationPoint=t.Vector3.Zero(),this._slidePlaneNormal=t.Vector3.Zero(),this._displacementVector=t.Vector3.Zero()}return i.prototype._initialize=function(e,o,i){this.velocity=o,t.Vector3.NormalizeToRef(o,this.normalizedVelocity),this.basePoint=e,e.multiplyToRef(this.radius,this.basePointWorld),o.multiplyToRef(this.radius,this.velocityWorld),this.velocityWorldLength=this.velocityWorld.length(),this.epsilon=i,this.collisionFound=!1},i.prototype._checkPointInTriangle=function(e,o,i,s,r){o.subtractToRef(e,this._tempVector),i.subtractToRef(e,this._tempVector2),t.Vector3.CrossToRef(this._tempVector,this._tempVector2,this._tempVector4);var n=t.Vector3.Dot(this._tempVector4,r);return!(n<0)&&(s.subtractToRef(e,this._tempVector3),t.Vector3.CrossToRef(this._tempVector2,this._tempVector3,this._tempVector4),n=t.Vector3.Dot(this._tempVector4,r),!(n<0)&&(t.Vector3.CrossToRef(this._tempVector3,this._tempVector,this._tempVector4),n=t.Vector3.Dot(this._tempVector4,r),n>=0))},i.prototype._canDoCollision=function(o,i,s,r){var n=t.Vector3.Distance(this.basePointWorld,o),c=Math.max(this.radius.x,this.radius.y,this.radius.z);return!(n>this.velocityWorldLength+c+i)&&!!e(s,r,this.basePointWorld,this.velocityWorldLength+c)},i.prototype._testTriangle=function(e,i,s,r,n,c){var h,a=!1;i||(i=[]),i[e]||(i[e]=new t.Plane(0,0,0,0),i[e].copyFromPoints(s,r,n));var l=i[e];if(c||l.isFrontFacingTo(this.normalizedVelocity,0)){var _=l.signedDistanceTo(this.basePoint),d=t.Vector3.Dot(l.normal,this.velocity);if(0==d){if(Math.abs(_)>=1)return;a=!0,h=0}else{h=(-1-_)/d;var V=(1-_)/d;if(h>V){var u=V;V=h,h=u}if(h>1||V<0)return;h<0&&(h=0),h>1&&(h=1)}this._collisionPoint.copyFromFloats(0,0,0);var P=!1,p=1;if(a||(this.basePoint.subtractToRef(l.normal,this._planeIntersectionPoint),this.velocity.scaleToRef(h,this._tempVector),this._planeIntersectionPoint.addInPlace(this._tempVector),this._checkPointInTriangle(this._planeIntersectionPoint,s,r,n,l.normal)&&(P=!0,p=h,this._collisionPoint.copyFrom(this._planeIntersectionPoint))),!P){var f=this.velocity.lengthSquared(),m=f;this.basePoint.subtractToRef(s,this._tempVector);var T=2*t.Vector3.Dot(this.velocity,this._tempVector),b=this._tempVector.lengthSquared()-1,y=o(m,T,b,p);y.found&&(p=y.root,P=!0,this._collisionPoint.copyFrom(s)),this.basePoint.subtractToRef(r,this._tempVector),T=2*t.Vector3.Dot(this.velocity,this._tempVector),b=this._tempVector.lengthSquared()-1,y=o(m,T,b,p),y.found&&(p=y.root,P=!0,this._collisionPoint.copyFrom(r)),this.basePoint.subtractToRef(n,this._tempVector),T=2*t.Vector3.Dot(this.velocity,this._tempVector),b=this._tempVector.lengthSquared()-1,y=o(m,T,b,p),y.found&&(p=y.root,P=!0,this._collisionPoint.copyFrom(n)),r.subtractToRef(s,this._edge),s.subtractToRef(this.basePoint,this._baseToVertex);var g=this._edge.lengthSquared(),v=t.Vector3.Dot(this._edge,this.velocity),R=t.Vector3.Dot(this._edge,this._baseToVertex);if(m=g*-f+v*v,T=g*(2*t.Vector3.Dot(this.velocity,this._baseToVertex))-2*v*R,b=g*(1-this._baseToVertex.lengthSquared())+R*R,y=o(m,T,b,p),y.found){var D=(v*y.root-R)/g;D>=0&&D<=1&&(p=y.root,P=!0,this._edge.scaleInPlace(D),s.addToRef(this._edge,this._collisionPoint))}n.subtractToRef(r,this._edge),r.subtractToRef(this.basePoint,this._baseToVertex),g=this._edge.lengthSquared(),v=t.Vector3.Dot(this._edge,this.velocity),R=t.Vector3.Dot(this._edge,this._baseToVertex),m=g*-f+v*v,T=g*(2*t.Vector3.Dot(this.velocity,this._baseToVertex))-2*v*R,b=g*(1-this._baseToVertex.lengthSquared())+R*R,y=o(m,T,b,p),y.found&&(D=(v*y.root-R)/g,D>=0&&D<=1&&(p=y.root,P=!0,this._edge.scaleInPlace(D),r.addToRef(this._edge,this._collisionPoint))),s.subtractToRef(n,this._edge),n.subtractToRef(this.basePoint,this._baseToVertex),g=this._edge.lengthSquared(),v=t.Vector3.Dot(this._edge,this.velocity),R=t.Vector3.Dot(this._edge,this._baseToVertex),m=g*-f+v*v,T=g*(2*t.Vector3.Dot(this.velocity,this._baseToVertex))-2*v*R,b=g*(1-this._baseToVertex.lengthSquared())+R*R,y=o(m,T,b,p),y.found&&(D=(v*y.root-R)/g,D>=0&&D<=1&&(p=y.root,P=!0,this._edge.scaleInPlace(D),n.addToRef(this._edge,this._collisionPoint)))}if(P){var x=p*this.velocity.length();(!this.collisionFound||x<this.nearestDistance)&&(this.intersectionPoint?this.intersectionPoint.copyFrom(this._collisionPoint):this.intersectionPoint=this._collisionPoint.clone(),this.nearestDistance=x,this.collisionFound=!0)}}},i.prototype._collide=function(t,e,o,i,s,r,n){for(var c=i;c<s;c+=3){var h=e[o[c]-r],a=e[o[c+1]-r],l=e[o[c+2]-r];this._testTriangle(c,t,l,a,h,n)}},i.prototype._getResponse=function(e,o){e.addToRef(o,this._destinationPoint),o.scaleInPlace(this.nearestDistance/o.length()),this.basePoint.addToRef(o,e),e.subtractToRef(this.intersectionPoint,this._slidePlaneNormal),this._slidePlaneNormal.normalize(),this._slidePlaneNormal.scaleToRef(this.epsilon,this._displacementVector),e.addInPlace(this._displacementVector),this.intersectionPoint.addInPlace(this._displacementVector),this._slidePlaneNormal.scaleInPlace(t.Plane.SignedDistanceToPlaneFromPositionAndNormal(this.intersectionPoint,this._slidePlaneNormal,this._destinationPoint)),this._destinationPoint.subtractInPlace(this._slidePlaneNormal),this._destinationPoint.subtractToRef(this.intersectionPoint,o)},i}();t.Collider=i}(BABYLON||(BABYLON={}));var BABYLON;!function(o){o.WorkerIncluded=!0;var e=function(){function o(){this._meshes={},this._geometries={}}return o.prototype.getMeshes=function(){return this._meshes},o.prototype.getGeometries=function(){return this._geometries},o.prototype.getMesh=function(o){return this._meshes[o]},o.prototype.addMesh=function(o){this._meshes[o.uniqueId]=o},o.prototype.removeMesh=function(o){delete this._meshes[o]},o.prototype.getGeometry=function(o){return this._geometries[o]},o.prototype.addGeometry=function(o){this._geometries[o.id]=o},o.prototype.removeGeometry=function(o){delete this._geometries[o]},o}();o.CollisionCache=e;var i=function(){function e(e,i,r){this.collider=e,this._collisionCache=i,this.finalPosition=r,this.collisionsScalingMatrix=o.Matrix.Zero(),this.collisionTranformationMatrix=o.Matrix.Zero()}return e.prototype.collideWithWorld=function(o,e,i,r){var t=.01;if(this.collider.retry>=i)return void this.finalPosition.copyFrom(o);this.collider._initialize(o,e,t);for(var s,l=this._collisionCache.getMeshes(),n=Object.keys(l),a=n.length,c=0;c<a;++c)if(s=n[c],parseInt(s)!=r){var d=l[s];d.checkCollisions&&this.checkCollision(d)}return this.collider.collisionFound?(0===e.x&&0===e.y&&0===e.z||this.collider._getResponse(o,e),e.length()<=t?void this.finalPosition.copyFrom(o):(this.collider.retry++,void this.collideWithWorld(o,e,i,r))):void o.addToRef(e,this.finalPosition)},e.prototype.checkCollision=function(e){if(this.collider._canDoCollision(o.Vector3.FromArray(e.sphereCenter),e.sphereRadius,o.Vector3.FromArray(e.boxMinimum),o.Vector3.FromArray(e.boxMaximum))){o.Matrix.ScalingToRef(1/this.collider.radius.x,1/this.collider.radius.y,1/this.collider.radius.z,this.collisionsScalingMatrix);var i=o.Matrix.FromArray(e.worldMatrixFromCache);i.multiplyToRef(this.collisionsScalingMatrix,this.collisionTranformationMatrix),this.processCollisionsForSubMeshes(this.collisionTranformationMatrix,e)}},e.prototype.processCollisionsForSubMeshes=function(o,e){var i=e.subMeshes,r=i.length;if(!e.geometryId)return void console.log("no mesh geometry id");var t=this._collisionCache.getGeometry(e.geometryId);if(!t)return void console.log("couldn\'t find geometry",e.geometryId);for(var s=0;s<r;s++){var l=i[s];r>1&&!this.checkSubmeshCollision(l)||(this.collideForSubMesh(l,o,t),this.collider.collisionFound&&(this.collider.collidedMesh=e.uniqueId))}},e.prototype.collideForSubMesh=function(e,i,r){if(!r.positionsArray){r.positionsArray=[];for(var t=0,s=r.positions.length;t<s;t+=3){var l=o.Vector3.FromArray([r.positions[t],r.positions[t+1],r.positions[t+2]]);r.positionsArray.push(l)}}if(!e._lastColliderWorldVertices||!e._lastColliderTransformMatrix.equals(i)){e._lastColliderTransformMatrix=i.clone(),e._lastColliderWorldVertices=[],e._trianglePlanes=[];for(var n=e.verticesStart,a=e.verticesStart+e.verticesCount,t=n;t<a;t++)e._lastColliderWorldVertices.push(o.Vector3.TransformCoordinates(r.positionsArray[t],i))}this.collider._collide(e._trianglePlanes,e._lastColliderWorldVertices,r.indices,e.indexStart,e.indexStart+e.indexCount,e.verticesStart,e.hasMaterial)},e.prototype.checkSubmeshCollision=function(e){return this.collider._canDoCollision(o.Vector3.FromArray(e.sphereCenter),e.sphereRadius,o.Vector3.FromArray(e.boxMinimum),o.Vector3.FromArray(e.boxMaximum))},e}();o.CollideWorker=i;var r=function(){function r(){}return r.prototype.onInit=function(i){this._collisionCache=new e;var r={error:o.WorkerReplyType.SUCCESS,taskType:o.WorkerTaskType.INIT};postMessage(r,void 0)},r.prototype.onUpdate=function(e){var i=this,r={error:o.WorkerReplyType.SUCCESS,taskType:o.WorkerTaskType.UPDATE};try{for(var t in e.updatedGeometries)e.updatedGeometries.hasOwnProperty(t)&&this._collisionCache.addGeometry(e.updatedGeometries[t]);for(var s in e.updatedMeshes)e.updatedMeshes.hasOwnProperty(s)&&this._collisionCache.addMesh(e.updatedMeshes[s]);e.removedGeometries.forEach(function(o){i._collisionCache.removeGeometry(o)}),e.removedMeshes.forEach(function(o){i._collisionCache.removeMesh(o)})}catch(l){r.error=o.WorkerReplyType.UNKNOWN_ERROR}postMessage(r,void 0)},r.prototype.onCollision=function(e){var r=o.Vector3.Zero(),t=new o.Collider;t.radius=o.Vector3.FromArray(e.collider.radius);var s=new i(t,this._collisionCache,r);s.collideWithWorld(o.Vector3.FromArray(e.collider.position),o.Vector3.FromArray(e.collider.velocity),e.maximumRetry,e.excludedMeshUniqueId);var l={collidedMeshUniqueId:t.collidedMesh,collisionId:e.collisionId,newPosition:r.asArray()},n={error:o.WorkerReplyType.SUCCESS,taskType:o.WorkerTaskType.COLLIDE,payload:l};postMessage(n,void 0)},r}();o.CollisionDetectorTransferable=r;try{if(self&&self instanceof WorkerGlobalScope){window={},o.Collider||(importScripts("./babylon.collisionCoordinator.js"),importScripts("./babylon.collider.js"),importScripts("../Math/babylon.math.js"));var t=new r,s=function(e){var i=e.data;switch(i.taskType){case o.WorkerTaskType.INIT:t.onInit(i.payload);break;case o.WorkerTaskType.COLLIDE:t.onCollision(i.payload);break;case o.WorkerTaskType.UPDATE:t.onUpdate(i.payload)}};self.onmessage=s}}catch(l){console.log("single worker init")}}(BABYLON||(BABYLON={}));var BABYLON;!function(e){e.CollisionWorker="",function(e){e[e.INIT=0]="INIT",e[e.UPDATE=1]="UPDATE",e[e.COLLIDE=2]="COLLIDE"}(e.WorkerTaskType||(e.WorkerTaskType={}));var o=e.WorkerTaskType;!function(e){e[e.SUCCESS=0]="SUCCESS",e[e.UNKNOWN_ERROR=1]="UNKNOWN_ERROR"}(e.WorkerReplyType||(e.WorkerReplyType={}));var i=e.WorkerReplyType,t=function(){function t(){var r=this;this._scaledPosition=e.Vector3.Zero(),this._scaledVelocity=e.Vector3.Zero(),this.onMeshUpdated=function(e){r._addUpdateMeshesList[e.uniqueId]=t.SerializeMesh(e)},this.onGeometryUpdated=function(e){r._addUpdateGeometriesList[e.id]=t.SerializeGeometry(e)},this._afterRender=function(){if(r._init&&!(0==r._toRemoveGeometryArray.length&&0==r._toRemoveMeshesArray.length&&0==Object.keys(r._addUpdateGeometriesList).length&&0==Object.keys(r._addUpdateMeshesList).length||r._runningUpdated>4)){++r._runningUpdated;var e={updatedMeshes:r._addUpdateMeshesList,updatedGeometries:r._addUpdateGeometriesList,removedGeometries:r._toRemoveGeometryArray,removedMeshes:r._toRemoveMeshesArray},i={payload:e,taskType:o.UPDATE},t=[];for(var s in e.updatedGeometries)e.updatedGeometries.hasOwnProperty(s)&&(t.push(i.payload.updatedGeometries[s].indices.buffer),t.push(i.payload.updatedGeometries[s].normals.buffer),t.push(i.payload.updatedGeometries[s].positions.buffer));r._worker.postMessage(i,t),r._addUpdateMeshesList={},r._addUpdateGeometriesList={},r._toRemoveGeometryArray=[],r._toRemoveMeshesArray=[]}},this._onMessageFromWorker=function(t){var s=t.data;if(s.error!=i.SUCCESS)return void e.Tools.Warn("error returned from worker!");switch(s.taskType){case o.INIT:r._init=!0,r._scene.meshes.forEach(function(e){r.onMeshAdded(e)}),r._scene.getGeometries().forEach(function(e){r.onGeometryAdded(e)});break;case o.UPDATE:r._runningUpdated--;break;case o.COLLIDE:r._runningCollisionTask=!1;var n=s.payload;if(!r._collisionsCallbackArray[n.collisionId])return;r._collisionsCallbackArray[n.collisionId](n.collisionId,e.Vector3.FromArray(n.newPosition),r._scene.getMeshByUniqueID(n.collidedMeshUniqueId)),r._collisionsCallbackArray[n.collisionId]=void 0}},this._collisionsCallbackArray=[],this._init=!1,this._runningUpdated=0,this._runningCollisionTask=!1,this._addUpdateMeshesList={},this._addUpdateGeometriesList={},this._toRemoveGeometryArray=[],this._toRemoveMeshesArray=[]}return t.prototype.getNewPosition=function(e,i,t,r,s,n,a){if(this._init&&!this._collisionsCallbackArray[a]&&!this._collisionsCallbackArray[a+1e5]){e.divideToRef(t.radius,this._scaledPosition),i.divideToRef(t.radius,this._scaledVelocity),this._collisionsCallbackArray[a]=n;var d={collider:{position:this._scaledPosition.asArray(),velocity:this._scaledVelocity.asArray(),radius:t.radius.asArray()},collisionId:a,excludedMeshUniqueId:s?s.uniqueId:null,maximumRetry:r},l={payload:d,taskType:o.COLLIDE};this._worker.postMessage(l)}},t.prototype.init=function(i){this._scene=i,this._scene.registerAfterRender(this._afterRender);var t=e.WorkerIncluded?e.Engine.CodeRepository+"Collisions/babylon.collisionWorker.js":URL.createObjectURL(new Blob([e.CollisionWorker],{type:"application/javascript"}));this._worker=new Worker(t),this._worker.onmessage=this._onMessageFromWorker;var r={payload:{},taskType:o.INIT};this._worker.postMessage(r)},t.prototype.destroy=function(){this._scene.unregisterAfterRender(this._afterRender),this._worker.terminate()},t.prototype.onMeshAdded=function(e){e.registerAfterWorldMatrixUpdate(this.onMeshUpdated),this.onMeshUpdated(e)},t.prototype.onMeshRemoved=function(e){this._toRemoveMeshesArray.push(e.uniqueId)},t.prototype.onGeometryAdded=function(e){e.onGeometryUpdated=this.onGeometryUpdated,this.onGeometryUpdated(e)},t.prototype.onGeometryDeleted=function(e){this._toRemoveGeometryArray.push(e.id)},t.SerializeMesh=function(o){var i=[];o.subMeshes&&(i=o.subMeshes.map(function(e,o){return{position:o,verticesStart:e.verticesStart,verticesCount:e.verticesCount,indexStart:e.indexStart,indexCount:e.indexCount,hasMaterial:!!e.getMaterial(),sphereCenter:e.getBoundingInfo().boundingSphere.centerWorld.asArray(),sphereRadius:e.getBoundingInfo().boundingSphere.radiusWorld,boxMinimum:e.getBoundingInfo().boundingBox.minimumWorld.asArray(),boxMaximum:e.getBoundingInfo().boundingBox.maximumWorld.asArray()}}));var t=null;return o instanceof e.Mesh?t=o.geometry?o.geometry.id:null:o instanceof e.InstancedMesh&&(t=o.sourceMesh&&o.sourceMesh.geometry?o.sourceMesh.geometry.id:null),{uniqueId:o.uniqueId,id:o.id,name:o.name,geometryId:t,sphereCenter:o.getBoundingInfo().boundingSphere.centerWorld.asArray(),sphereRadius:o.getBoundingInfo().boundingSphere.radiusWorld,boxMinimum:o.getBoundingInfo().boundingBox.minimumWorld.asArray(),boxMaximum:o.getBoundingInfo().boundingBox.maximumWorld.asArray(),worldMatrixFromCache:o.worldMatrixFromCache.asArray(),subMeshes:i,checkCollisions:o.checkCollisions}},t.SerializeGeometry=function(o){return{id:o.id,positions:new Float32Array(o.getVerticesData(e.VertexBuffer.PositionKind)||[]),normals:new Float32Array(o.getVerticesData(e.VertexBuffer.NormalKind)||[]),indices:new Int32Array(o.getIndices()||[])}},t}();e.CollisionCoordinatorWorker=t;var r=function(){function o(){this._scaledPosition=e.Vector3.Zero(),this._scaledVelocity=e.Vector3.Zero(),this._finalPosition=e.Vector3.Zero()}return o.prototype.getNewPosition=function(e,o,i,t,r,s,n){e.divideToRef(i.radius,this._scaledPosition),o.divideToRef(i.radius,this._scaledVelocity),i.collidedMesh=null,i.retry=0,i.initialVelocity=this._scaledVelocity,i.initialPosition=this._scaledPosition,this._collideWithWorld(this._scaledPosition,this._scaledVelocity,i,t,this._finalPosition,r),this._finalPosition.multiplyInPlace(i.radius),s(n,this._finalPosition,i.collidedMesh)},o.prototype.init=function(e){this._scene=e},o.prototype.destroy=function(){},o.prototype.onMeshAdded=function(e){},o.prototype.onMeshUpdated=function(e){},o.prototype.onMeshRemoved=function(e){},o.prototype.onGeometryAdded=function(e){},o.prototype.onGeometryUpdated=function(e){},o.prototype.onGeometryDeleted=function(e){},o.prototype._collideWithWorld=function(o,i,t,r,s,n){void 0===n&&(n=null);var a=10*e.Engine.CollisionsEpsilon;if(t.retry>=r)return void s.copyFrom(o);t._initialize(o,i,a);for(var d=0;d<this._scene.meshes.length;d++){var l=this._scene.meshes[d];l.isEnabled()&&l.checkCollisions&&l.subMeshes&&l!==n&&l._checkCollision(t)}return t.collisionFound?(0===i.x&&0===i.y&&0===i.z||t._getResponse(o,i),i.length()<=a?void s.copyFrom(o):(t.retry++,void this._collideWithWorld(o,i,t,r,s,n))):void o.addToRef(i,s)},o}();e.CollisionCoordinatorLegacy=r}(BABYLON||(BABYLON={}));var BABYLON;!function(t){t.ToGammaSpace=1/2.2,t.ToLinearSpace=2.2,t.Epsilon=.001;var i=function(){function t(){}return t.WithinEpsilon=function(t,i,n){void 0===n&&(n=1.401298e-45);var r=t-i;return-n<=r&&r<=n},t.ToHex=function(t){var i=t.toString(16);return t<=15?("0"+i).toUpperCase():i.toUpperCase()},t.Sign=function(t){return t=+t,0===t||isNaN(t)?t:t>0?1:-1},t.Clamp=function(t,i,n){return void 0===i&&(i=0),void 0===n&&(n=1),Math.min(n,Math.max(i,t))},t}();t.MathTools=i;var n=function(){function n(t,i,n){void 0===t&&(t=0),void 0===i&&(i=0),void 0===n&&(n=0),this.r=t,this.g=i,this.b=n}return n.prototype.toString=function(){return"{R: "+this.r+" G:"+this.g+" B:"+this.b+"}"},n.prototype.getClassName=function(){return"Color3"},n.prototype.getHashCode=function(){var t=this.r||0;return t=397*t^(this.g||0),t=397*t^(this.b||0)},n.prototype.toArray=function(t,i){return void 0===i&&(i=0),t[i]=this.r,t[i+1]=this.g,t[i+2]=this.b,this},n.prototype.toColor4=function(t){return void 0===t&&(t=1),new r(this.r,this.g,this.b,t)},n.prototype.asArray=function(){var t=[];return this.toArray(t,0),t},n.prototype.toLuminance=function(){return.3*this.r+.59*this.g+.11*this.b},n.prototype.multiply=function(t){return new n(this.r*t.r,this.g*t.g,this.b*t.b)},n.prototype.multiplyToRef=function(t,i){return i.r=this.r*t.r,i.g=this.g*t.g,i.b=this.b*t.b,this},n.prototype.equals=function(t){return t&&this.r===t.r&&this.g===t.g&&this.b===t.b},n.prototype.equalsFloats=function(t,i,n){return this.r===t&&this.g===i&&this.b===n},n.prototype.scale=function(t){return new n(this.r*t,this.g*t,this.b*t)},n.prototype.scaleToRef=function(t,i){return i.r=this.r*t,i.g=this.g*t,i.b=this.b*t,this},n.prototype.add=function(t){return new n(this.r+t.r,this.g+t.g,this.b+t.b)},n.prototype.addToRef=function(t,i){return i.r=this.r+t.r,i.g=this.g+t.g,i.b=this.b+t.b,this},n.prototype.subtract=function(t){return new n(this.r-t.r,this.g-t.g,this.b-t.b)},n.prototype.subtractToRef=function(t,i){return i.r=this.r-t.r,i.g=this.g-t.g,i.b=this.b-t.b,this},n.prototype.clone=function(){return new n(this.r,this.g,this.b)},n.prototype.copyFrom=function(t){return this.r=t.r,this.g=t.g,this.b=t.b,this},n.prototype.copyFromFloats=function(t,i,n){return this.r=t,this.g=i,this.b=n,this},n.prototype.toHexString=function(){var t=255*this.r|0,n=255*this.g|0,r=255*this.b|0;return"#"+i.ToHex(t)+i.ToHex(n)+i.ToHex(r)},n.prototype.toLinearSpace=function(){var t=new n;return this.toLinearSpaceToRef(t),t},n.prototype.toLinearSpaceToRef=function(i){return i.r=Math.pow(this.r,t.ToLinearSpace),i.g=Math.pow(this.g,t.ToLinearSpace),i.b=Math.pow(this.b,t.ToLinearSpace),this},n.prototype.toGammaSpace=function(){var t=new n;return this.toGammaSpaceToRef(t),t},n.prototype.toGammaSpaceToRef=function(i){return i.r=Math.pow(this.r,t.ToGammaSpace),i.g=Math.pow(this.g,t.ToGammaSpace),i.b=Math.pow(this.b,t.ToGammaSpace),this},n.FromHexString=function(t){if("#"!==t.substring(0,1)||7!==t.length)return new n(0,0,0);var i=parseInt(t.substring(1,3),16),r=parseInt(t.substring(3,5),16),o=parseInt(t.substring(5,7),16);return n.FromInts(i,r,o)},n.FromArray=function(t,i){return void 0===i&&(i=0),new n(t[i],t[i+1],t[i+2])},n.FromInts=function(t,i,r){return new n(t/255,i/255,r/255)},n.Lerp=function(t,i,r){var o=t.r+(i.r-t.r)*r,e=t.g+(i.g-t.g)*r,s=t.b+(i.b-t.b)*r;return new n(o,e,s)},n.Red=function(){return new n(1,0,0)},n.Green=function(){return new n(0,1,0)},n.Blue=function(){return new n(0,0,1)},n.Black=function(){return new n(0,0,0)},n.White=function(){return new n(1,1,1)},n.Purple=function(){return new n(.5,0,.5)},n.Magenta=function(){return new n(1,0,1)},n.Yellow=function(){return new n(1,1,0)},n.Gray=function(){return new n(.5,.5,.5)},n}();t.Color3=n;var r=function(){function t(t,i,n,r){this.r=t,this.g=i,this.b=n,this.a=r}return t.prototype.addInPlace=function(t){return this.r+=t.r,this.g+=t.g,this.b+=t.b,this.a+=t.a,this},t.prototype.asArray=function(){var t=[];return this.toArray(t,0),t},t.prototype.toArray=function(t,i){return void 0===i&&(i=0),t[i]=this.r,t[i+1]=this.g,t[i+2]=this.b,t[i+3]=this.a,this},t.prototype.add=function(i){return new t(this.r+i.r,this.g+i.g,this.b+i.b,this.a+i.a)},t.prototype.subtract=function(i){return new t(this.r-i.r,this.g-i.g,this.b-i.b,this.a-i.a)},t.prototype.subtractToRef=function(t,i){return i.r=this.r-t.r,i.g=this.g-t.g,i.b=this.b-t.b,i.a=this.a-t.a,this},t.prototype.scale=function(i){return new t(this.r*i,this.g*i,this.b*i,this.a*i)},t.prototype.scaleToRef=function(t,i){return i.r=this.r*t,i.g=this.g*t,i.b=this.b*t,i.a=this.a*t,this},t.prototype.multiply=function(i){return new t(this.r*i.r,this.g*i.g,this.b*i.b,this.a*i.a)},t.prototype.multiplyToRef=function(t,i){return i.r=this.r*t.r,i.g=this.g*t.g,i.b=this.b*t.b,i.a=this.a*t.a,i},t.prototype.toString=function(){return"{R: "+this.r+" G:"+this.g+" B:"+this.b+" A:"+this.a+"}"},t.prototype.getClassName=function(){return"Color4"},t.prototype.getHashCode=function(){var t=this.r||0;return t=397*t^(this.g||0),t=397*t^(this.b||0),t=397*t^(this.a||0)},t.prototype.clone=function(){return new t(this.r,this.g,this.b,this.a)},t.prototype.copyFrom=function(t){return this.r=t.r,this.g=t.g,this.b=t.b,this.a=t.a,this},t.prototype.toHexString=function(){var t=255*this.r|0,n=255*this.g|0,r=255*this.b|0,o=255*this.a|0;return"#"+i.ToHex(t)+i.ToHex(n)+i.ToHex(r)+i.ToHex(o)},t.FromHexString=function(i){if("#"!==i.substring(0,1)||9!==i.length)return new t(0,0,0,0);var n=parseInt(i.substring(1,3),16),r=parseInt(i.substring(3,5),16),o=parseInt(i.substring(5,7),16),e=parseInt(i.substring(7,9),16);return t.FromInts(n,r,o,e)},t.Lerp=function(i,n,r){var o=new t(0,0,0,0);return t.LerpToRef(i,n,r,o),o},t.LerpToRef=function(t,i,n,r){r.r=t.r+(i.r-t.r)*n,r.g=t.g+(i.g-t.g)*n,r.b=t.b+(i.b-t.b)*n,r.a=t.a+(i.a-t.a)*n},t.FromArray=function(i,n){return void 0===n&&(n=0),new t(i[n],i[n+1],i[n+2],i[n+3])},t.FromInts=function(i,n,r,o){return new t(i/255,n/255,r/255,o/255)},t.CheckColors4=function(t,i){if(t.length===3*i){for(var n=[],r=0;r<t.length;r+=3){var o=r/3*4;n[o]=t[r],n[o+1]=t[r+1],n[o+2]=t[r+2],n[o+3]=1}return n}return t},t}();t.Color4=r;var o=function(){function n(t,i){this.x=t,this.y=i}return n.prototype.toString=function(){return"{X: "+this.x+" Y:"+this.y+"}"},n.prototype.getClassName=function(){return"Vector2"},n.prototype.getHashCode=function(){var t=this.x||0;return t=397*t^(this.y||0)},n.prototype.toArray=function(t,i){return void 0===i&&(i=0),t[i]=this.x,t[i+1]=this.y,this},n.prototype.asArray=function(){var t=[];return this.toArray(t,0),t},n.prototype.copyFrom=function(t){return this.x=t.x,this.y=t.y,this},n.prototype.copyFromFloats=function(t,i){return this.x=t,this.y=i,this},n.prototype.add=function(t){return new n(this.x+t.x,this.y+t.y)},n.prototype.addToRef=function(t,i){return i.x=this.x+t.x,i.y=this.y+t.y,this},n.prototype.addInPlace=function(t){return this.x+=t.x,this.y+=t.y,this},n.prototype.addVector3=function(t){return new n(this.x+t.x,this.y+t.y)},n.prototype.subtract=function(t){return new n(this.x-t.x,this.y-t.y)},n.prototype.subtractToRef=function(t,i){return i.x=this.x-t.x,i.y=this.y-t.y,this},n.prototype.subtractInPlace=function(t){return this.x-=t.x,this.y-=t.y,this},n.prototype.multiplyInPlace=function(t){return this.x*=t.x,this.y*=t.y,this},n.prototype.multiply=function(t){return new n(this.x*t.x,this.y*t.y)},n.prototype.multiplyToRef=function(t,i){return i.x=this.x*t.x,i.y=this.y*t.y,this},n.prototype.multiplyByFloats=function(t,i){return new n(this.x*t,this.y*i)},n.prototype.divide=function(t){return new n(this.x/t.x,this.y/t.y)},n.prototype.divideToRef=function(t,i){return i.x=this.x/t.x,i.y=this.y/t.y,this},n.prototype.negate=function(){return new n((-this.x),(-this.y))},n.prototype.scaleInPlace=function(t){return this.x*=t,this.y*=t,this},n.prototype.scale=function(t){return new n(this.x*t,this.y*t)},n.prototype.equals=function(t){return t&&this.x===t.x&&this.y===t.y},n.prototype.equalsWithEpsilon=function(n,r){return void 0===r&&(r=t.Epsilon),n&&i.WithinEpsilon(this.x,n.x,r)&&i.WithinEpsilon(this.y,n.y,r)},n.prototype.length=function(){return Math.sqrt(this.x*this.x+this.y*this.y)},n.prototype.lengthSquared=function(){return this.x*this.x+this.y*this.y},n.prototype.normalize=function(){var t=this.length();if(0===t)return this;var i=1/t;return this.x*=i,this.y*=i,this},n.prototype.clone=function(){return new n(this.x,this.y)},n.Zero=function(){return new n(0,0)},n.FromArray=function(t,i){return void 0===i&&(i=0),new n(t[i],t[i+1])},n.FromArrayToRef=function(t,i,n){n.x=t[i],n.y=t[i+1]},n.CatmullRom=function(t,i,r,o,e){var s=e*e,h=e*s,a=.5*(2*i.x+(-t.x+r.x)*e+(2*t.x-5*i.x+4*r.x-o.x)*s+(-t.x+3*i.x-3*r.x+o.x)*h),u=.5*(2*i.y+(-t.y+r.y)*e+(2*t.y-5*i.y+4*r.y-o.y)*s+(-t.y+3*i.y-3*r.y+o.y)*h);return new n(a,u)},n.Clamp=function(t,i,r){var o=t.x;o=o>r.x?r.x:o,o=o<i.x?i.x:o;var e=t.y;return e=e>r.y?r.y:e,e=e<i.y?i.y:e,new n(o,e)},n.Hermite=function(t,i,r,o,e){var s=e*e,h=e*s,a=2*h-3*s+1,u=-2*h+3*s,m=h-2*s+e,y=h-s,c=t.x*a+r.x*u+i.x*m+o.x*y,p=t.y*a+r.y*u+i.y*m+o.y*y;return new n(c,p)},n.Lerp=function(t,i,r){var o=t.x+(i.x-t.x)*r,e=t.y+(i.y-t.y)*r;return new n(o,e)},n.Dot=function(t,i){return t.x*i.x+t.y*i.y},n.Normalize=function(t){var i=t.clone();return i.normalize(),i},n.Minimize=function(t,i){var r=t.x<i.x?t.x:i.x,o=t.y<i.y?t.y:i.y;return new n(r,o)},n.Maximize=function(t,i){var r=t.x>i.x?t.x:i.x,o=t.y>i.y?t.y:i.y;return new n(r,o)},n.Transform=function(t,i){var r=n.Zero();return n.TransformToRef(t,i,r),r},n.TransformToRef=function(t,i,n){var r=t.x*i.m[0]+t.y*i.m[4]+i.m[12],o=t.x*i.m[1]+t.y*i.m[5]+i.m[13];n.x=r,n.y=o},n.PointInTriangle=function(t,i,n,r){var o=.5*(-n.y*r.x+i.y*(-n.x+r.x)+i.x*(n.y-r.y)+n.x*r.y),e=o<0?-1:1,s=(i.y*r.x-i.x*r.y+(r.y-i.y)*t.x+(i.x-r.x)*t.y)*e,h=(i.x*n.y-i.y*n.x+(i.y-n.y)*t.x+(n.x-i.x)*t.y)*e;return s>0&&h>0&&s+h<2*o*e},n.Distance=function(t,i){return Math.sqrt(n.DistanceSquared(t,i))},n.DistanceSquared=function(t,i){var n=t.x-i.x,r=t.y-i.y;return n*n+r*r},n.Center=function(t,i){var n=t.add(i);return n.scaleInPlace(.5),n},n.DistanceOfPointFromSegment=function(t,i,r){var o=n.DistanceSquared(i,r);if(0===o)return n.Distance(t,i);var e=r.subtract(i),s=Math.max(0,Math.min(1,n.Dot(t.subtract(i),e)/o)),h=i.add(e.multiplyByFloats(s,s));return n.Distance(t,h)},n}();t.Vector2=o;var e=function(){function n(t,i,n){this.x=t,this.y=i,this.z=n}return n.prototype.toString=function(){return"{X: "+this.x+" Y:"+this.y+" Z:"+this.z+"}"},n.prototype.getClassName=function(){return"Vector3"},n.prototype.getHashCode=function(){var t=this.x||0;return t=397*t^(this.y||0),t=397*t^(this.z||0)},n.prototype.asArray=function(){var t=[];return this.toArray(t,0),t},n.prototype.toArray=function(t,i){return void 0===i&&(i=0),t[i]=this.x,t[i+1]=this.y,t[i+2]=this.z,this},n.prototype.toQuaternion=function(){var t=new a(0,0,0,1),i=Math.cos(.5*(this.x+this.z)),n=Math.sin(.5*(this.x+this.z)),r=Math.cos(.5*(this.z-this.x)),o=Math.sin(.5*(this.z-this.x)),e=Math.cos(.5*this.y),s=Math.sin(.5*this.y);return t.x=r*s,t.y=-o*s,t.z=n*e,t.w=i*e,t},n.prototype.addInPlace=function(t){return this.x+=t.x,this.y+=t.y,this.z+=t.z,this},n.prototype.add=function(t){return new n(this.x+t.x,this.y+t.y,this.z+t.z)},n.prototype.addToRef=function(t,i){return i.x=this.x+t.x,i.y=this.y+t.y,i.z=this.z+t.z,this},n.prototype.subtractInPlace=function(t){return this.x-=t.x,this.y-=t.y,this.z-=t.z,this},n.prototype.subtract=function(t){return new n(this.x-t.x,this.y-t.y,this.z-t.z)},n.prototype.subtractToRef=function(t,i){return i.x=this.x-t.x,i.y=this.y-t.y,i.z=this.z-t.z,this},n.prototype.subtractFromFloats=function(t,i,r){return new n(this.x-t,this.y-i,this.z-r)},n.prototype.subtractFromFloatsToRef=function(t,i,n,r){return r.x=this.x-t,r.y=this.y-i,r.z=this.z-n,this},n.prototype.negate=function(){return new n((-this.x),(-this.y),(-this.z))},n.prototype.scaleInPlace=function(t){return this.x*=t,this.y*=t,this.z*=t,this},n.prototype.scale=function(t){return new n(this.x*t,this.y*t,this.z*t)},n.prototype.scaleToRef=function(t,i){i.x=this.x*t,i.y=this.y*t,i.z=this.z*t},n.prototype.equals=function(t){return t&&this.x===t.x&&this.y===t.y&&this.z===t.z},n.prototype.equalsWithEpsilon=function(n,r){return void 0===r&&(r=t.Epsilon),n&&i.WithinEpsilon(this.x,n.x,r)&&i.WithinEpsilon(this.y,n.y,r)&&i.WithinEpsilon(this.z,n.z,r)},n.prototype.equalsToFloats=function(t,i,n){return this.x===t&&this.y===i&&this.z===n},n.prototype.multiplyInPlace=function(t){return this.x*=t.x,this.y*=t.y,this.z*=t.z,this},n.prototype.multiply=function(t){return new n(this.x*t.x,this.y*t.y,this.z*t.z)},n.prototype.multiplyToRef=function(t,i){return i.x=this.x*t.x,i.y=this.y*t.y,i.z=this.z*t.z,this},n.prototype.multiplyByFloats=function(t,i,r){return new n(this.x*t,this.y*i,this.z*r)},n.prototype.divide=function(t){return new n(this.x/t.x,this.y/t.y,this.z/t.z)},n.prototype.divideToRef=function(t,i){return i.x=this.x/t.x,i.y=this.y/t.y,i.z=this.z/t.z,this},n.prototype.MinimizeInPlace=function(t){return t.x<this.x&&(this.x=t.x),t.y<this.y&&(this.y=t.y),t.z<this.z&&(this.z=t.z),this},n.prototype.MaximizeInPlace=function(t){return t.x>this.x&&(this.x=t.x),t.y>this.y&&(this.y=t.y),t.z>this.z&&(this.z=t.z),this},n.prototype.length=function(){return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z)},n.prototype.lengthSquared=function(){return this.x*this.x+this.y*this.y+this.z*this.z},n.prototype.normalize=function(){var t=this.length();if(0===t||1===t)return this;var i=1/t;return this.x*=i,this.y*=i,this.z*=i,this},n.prototype.clone=function(){return new n(this.x,this.y,this.z)},n.prototype.copyFrom=function(t){return this.x=t.x,this.y=t.y,this.z=t.z,this},n.prototype.copyFromFloats=function(t,i,n){return this.x=t,this.y=i,this.z=n,this},n.GetClipFactor=function(t,i,r,o){var e=n.Dot(t,r)-o,s=n.Dot(i,r)-o,h=e/(e-s);return h},n.FromArray=function(t,i){return i||(i=0),new n(t[i],t[i+1],t[i+2])},n.FromFloatArray=function(t,i){return i||(i=0),new n(t[i],t[i+1],t[i+2])},n.FromArrayToRef=function(t,i,n){n.x=t[i],n.y=t[i+1],n.z=t[i+2]},n.FromFloatArrayToRef=function(t,i,n){n.x=t[i],n.y=t[i+1],n.z=t[i+2]},n.FromFloatsToRef=function(t,i,n,r){r.x=t,r.y=i,r.z=n},n.Zero=function(){return new n(0,0,0)},n.Up=function(){return new n(0,1,0)},n.Forward=function(){return new n(0,0,1)},n.Right=function(){return new n(1,0,0)},n.Left=function(){return new n((-1),0,0)},n.TransformCoordinates=function(t,i){var r=n.Zero();return n.TransformCoordinatesToRef(t,i,r),r},n.TransformCoordinatesToRef=function(t,i,n){var r=t.x*i.m[0]+t.y*i.m[4]+t.z*i.m[8]+i.m[12],o=t.x*i.m[1]+t.y*i.m[5]+t.z*i.m[9]+i.m[13],e=t.x*i.m[2]+t.y*i.m[6]+t.z*i.m[10]+i.m[14],s=t.x*i.m[3]+t.y*i.m[7]+t.z*i.m[11]+i.m[15];n.x=r/s,n.y=o/s,n.z=e/s},n.TransformCoordinatesFromFloatsToRef=function(t,i,n,r,o){var e=t*r.m[0]+i*r.m[4]+n*r.m[8]+r.m[12],s=t*r.m[1]+i*r.m[5]+n*r.m[9]+r.m[13],h=t*r.m[2]+i*r.m[6]+n*r.m[10]+r.m[14],a=t*r.m[3]+i*r.m[7]+n*r.m[11]+r.m[15];o.x=e/a,o.y=s/a,o.z=h/a},n.TransformNormal=function(t,i){var r=n.Zero();return n.TransformNormalToRef(t,i,r),r},n.TransformNormalToRef=function(t,i,n){var r=t.x*i.m[0]+t.y*i.m[4]+t.z*i.m[8],o=t.x*i.m[1]+t.y*i.m[5]+t.z*i.m[9],e=t.x*i.m[2]+t.y*i.m[6]+t.z*i.m[10];n.x=r,n.y=o,n.z=e},n.TransformNormalFromFloatsToRef=function(t,i,n,r,o){o.x=t*r.m[0]+i*r.m[4]+n*r.m[8],o.y=t*r.m[1]+i*r.m[5]+n*r.m[9],o.z=t*r.m[2]+i*r.m[6]+n*r.m[10]},n.CatmullRom=function(t,i,r,o,e){var s=e*e,h=e*s,a=.5*(2*i.x+(-t.x+r.x)*e+(2*t.x-5*i.x+4*r.x-o.x)*s+(-t.x+3*i.x-3*r.x+o.x)*h),u=.5*(2*i.y+(-t.y+r.y)*e+(2*t.y-5*i.y+4*r.y-o.y)*s+(-t.y+3*i.y-3*r.y+o.y)*h),m=.5*(2*i.z+(-t.z+r.z)*e+(2*t.z-5*i.z+4*r.z-o.z)*s+(-t.z+3*i.z-3*r.z+o.z)*h);return new n(a,u,m)},n.Clamp=function(t,i,r){var o=t.x;o=o>r.x?r.x:o,o=o<i.x?i.x:o;var e=t.y;e=e>r.y?r.y:e,e=e<i.y?i.y:e;var s=t.z;return s=s>r.z?r.z:s,s=s<i.z?i.z:s,new n(o,e,s)},n.Hermite=function(t,i,r,o,e){var s=e*e,h=e*s,a=2*h-3*s+1,u=-2*h+3*s,m=h-2*s+e,y=h-s,c=t.x*a+r.x*u+i.x*m+o.x*y,p=t.y*a+r.y*u+i.y*m+o.y*y,f=t.z*a+r.z*u+i.z*m+o.z*y;return new n(c,p,f)},n.Lerp=function(t,i,r){var o=t.x+(i.x-t.x)*r,e=t.y+(i.y-t.y)*r,s=t.z+(i.z-t.z)*r;return new n(o,e,s)},n.Dot=function(t,i){return t.x*i.x+t.y*i.y+t.z*i.z},n.Cross=function(t,i){var r=n.Zero();return n.CrossToRef(t,i,r),r},n.CrossToRef=function(t,i,n){M.Vector3[0].x=t.y*i.z-t.z*i.y,M.Vector3[0].y=t.z*i.x-t.x*i.z,M.Vector3[0].z=t.x*i.y-t.y*i.x,n.copyFrom(M.Vector3[0])},n.Normalize=function(t){var i=n.Zero();return n.NormalizeToRef(t,i),i},n.NormalizeToRef=function(t,i){i.copyFrom(t),i.normalize()},n.Project=function(t,i,r,o){var e=o.width,s=o.height,h=o.x,a=o.y,m=n._viewportMatrixCache?n._viewportMatrixCache:n._viewportMatrixCache=new u;u.FromValuesToRef(e/2,0,0,0,0,-s/2,0,0,0,0,1,0,h+e/2,s/2+a,0,1,m);var y=n._matrixCache?n._matrixCache:n._matrixCache=new u;return i.multiplyToRef(r,y),y.multiplyToRef(m,y),n.TransformCoordinates(t,y)},n.UnprojectFromTransform=function(t,r,o,e,s){var h=n._matrixCache?n._matrixCache:n._matrixCache=new u;e.multiplyToRef(s,h),h.invert(),t.x=t.x/r*2-1,t.y=-(t.y/o*2-1);var a=n.TransformCoordinates(t,h),m=t.x*h.m[3]+t.y*h.m[7]+t.z*h.m[11]+h.m[15];return i.WithinEpsilon(m,1)&&(a=a.scale(1/m)),a},n.Unproject=function(t,r,o,e,s,h){var a=n._matrixCache?n._matrixCache:n._matrixCache=new u;e.multiplyToRef(s,a),a.multiplyToRef(h,a),a.invert();var m=new n(t.x/r*2-1,(-(t.y/o*2-1)),t.z),y=n.TransformCoordinates(m,a),c=m.x*a.m[3]+m.y*a.m[7]+m.z*a.m[11]+a.m[15];return i.WithinEpsilon(c,1)&&(y=y.scale(1/c)),y},n.Minimize=function(t,i){var n=t.clone();return n.MinimizeInPlace(i),n},n.Maximize=function(t,i){var n=t.clone();return n.MaximizeInPlace(i),n},n.Distance=function(t,i){return Math.sqrt(n.DistanceSquared(t,i))},n.DistanceSquared=function(t,i){var n=t.x-i.x,r=t.y-i.y,o=t.z-i.z;return n*n+r*r+o*o},n.Center=function(t,i){var n=t.add(i);return n.scaleInPlace(.5),n},n.RotationFromAxis=function(t,i,r){var o=n.Zero();return n.RotationFromAxisToRef(t,i,r,o),o},n.RotationFromAxisToRef=function(r,o,e,s){var h=r.normalize(),a=e.normalize(),u=p.X,m=p.Y,y=0,c=0,f=0,x=0,l=0,z=0,w=0,v=-1,d=0,g=M.Vector3[0],R=0,T=M.Vector3[1];i.WithinEpsilon(a.z,0,t.Epsilon)?z=1:i.WithinEpsilon(a.x,0,t.Epsilon)?x=1:(w=a.z/a.x,x=-w*Math.sqrt(1/(1+w*w)),z=Math.sqrt(1/(1+w*w))),T.x=x,T.y=l,T.z=z,T.normalize(),n.CrossToRef(h,T,g),g.normalize(),n.Dot(a,g)<0&&(v=1),R=n.Dot(h,T),R=Math.min(1,Math.max(-1,R)),f=Math.acos(R)*v,n.Dot(T,u)<0&&(f=Math.PI+f,T=T.scaleInPlace(-1),d++);var _=M.Vector3[2],A=M.Vector3[3];x=0,l=0,z=0,v=-1,i.WithinEpsilon(a.z,0,t.Epsilon)?x=1:(w=T.z/T.x,x=-w*Math.sqrt(1/(1+w*w)),z=Math.sqrt(1/(1+w*w))),_.x=x,_.y=l,_.z=z,_.normalize(),n.CrossToRef(_,T,A),A.normalize(),n.CrossToRef(a,_,g),g.normalize(),n.Dot(T,g)<0&&(v=1),R=n.Dot(a,_),R=Math.min(1,Math.max(-1,R)),c=Math.acos(R)*v,n.Dot(A,m)<0&&(c=Math.PI+c,d++),v=-1,n.CrossToRef(u,T,g),g.normalize(),n.Dot(g,m)<0&&(v=1),R=n.Dot(T,u),R=Math.min(1,Math.max(-1,R)),y=-Math.acos(R)*v,R<0&&d<2&&(y=Math.PI+y),s.x=c,s.y=y,s.z=f},n}();t.Vector3=e;var s=function(){function n(t,i,n,r){this.x=t,this.y=i,this.z=n,this.w=r}return n.prototype.toString=function(){return"{X: "+this.x+" Y:"+this.y+" Z:"+this.z+" W:"+this.w+"}"},n.prototype.getClassName=function(){return"Vector4"},n.prototype.getHashCode=function(){var t=this.x||0;return t=397*t^(this.y||0),t=397*t^(this.z||0),t=397*t^(this.w||0)},n.prototype.asArray=function(){var t=[];return this.toArray(t,0),t},n.prototype.toArray=function(t,i){return void 0===i&&(i=0),t[i]=this.x,t[i+1]=this.y,t[i+2]=this.z,t[i+3]=this.w,this},n.prototype.addInPlace=function(t){return this.x+=t.x,this.y+=t.y,this.z+=t.z,this.w+=t.w,this},n.prototype.add=function(t){return new n(this.x+t.x,this.y+t.y,this.z+t.z,this.w+t.w)},n.prototype.addToRef=function(t,i){return i.x=this.x+t.x,i.y=this.y+t.y,i.z=this.z+t.z,i.w=this.w+t.w,this},n.prototype.subtractInPlace=function(t){return this.x-=t.x,this.y-=t.y,this.z-=t.z,this.w-=t.w,this},n.prototype.subtract=function(t){return new n(this.x-t.x,this.y-t.y,this.z-t.z,this.w-t.w)},n.prototype.subtractToRef=function(t,i){return i.x=this.x-t.x,i.y=this.y-t.y,i.z=this.z-t.z,i.w=this.w-t.w,this},n.prototype.subtractFromFloats=function(t,i,r,o){return new n(this.x-t,this.y-i,this.z-r,this.w-o)},n.prototype.subtractFromFloatsToRef=function(t,i,n,r,o){return o.x=this.x-t,o.y=this.y-i,o.z=this.z-n,o.w=this.w-r,this},n.prototype.negate=function(){return new n((-this.x),(-this.y),(-this.z),(-this.w))},n.prototype.scaleInPlace=function(t){return this.x*=t,this.y*=t,this.z*=t,this.w*=t,this},n.prototype.scale=function(t){return new n(this.x*t,this.y*t,this.z*t,this.w*t)},n.prototype.scaleToRef=function(t,i){i.x=this.x*t,i.y=this.y*t,i.z=this.z*t,i.w=this.w*t},n.prototype.equals=function(t){return t&&this.x===t.x&&this.y===t.y&&this.z===t.z&&this.w===t.w},n.prototype.equalsWithEpsilon=function(n,r){return void 0===r&&(r=t.Epsilon),n&&i.WithinEpsilon(this.x,n.x,r)&&i.WithinEpsilon(this.y,n.y,r)&&i.WithinEpsilon(this.z,n.z,r)&&i.WithinEpsilon(this.w,n.w,r)},n.prototype.equalsToFloats=function(t,i,n,r){return this.x===t&&this.y===i&&this.z===n&&this.w===r},n.prototype.multiplyInPlace=function(t){return this.x*=t.x,this.y*=t.y,this.z*=t.z,this.w*=t.w,this},n.prototype.multiply=function(t){return new n(this.x*t.x,this.y*t.y,this.z*t.z,this.w*t.w)},n.prototype.multiplyToRef=function(t,i){return i.x=this.x*t.x,i.y=this.y*t.y,i.z=this.z*t.z,i.w=this.w*t.w,this},n.prototype.multiplyByFloats=function(t,i,r,o){return new n(this.x*t,this.y*i,this.z*r,this.w*o)},n.prototype.divide=function(t){return new n(this.x/t.x,this.y/t.y,this.z/t.z,this.w/t.w)},n.prototype.divideToRef=function(t,i){return i.x=this.x/t.x,i.y=this.y/t.y,i.z=this.z/t.z,i.w=this.w/t.w,this},n.prototype.MinimizeInPlace=function(t){return t.x<this.x&&(this.x=t.x),t.y<this.y&&(this.y=t.y),t.z<this.z&&(this.z=t.z),t.w<this.w&&(this.w=t.w),this},n.prototype.MaximizeInPlace=function(t){return t.x>this.x&&(this.x=t.x),t.y>this.y&&(this.y=t.y),t.z>this.z&&(this.z=t.z),t.w>this.w&&(this.w=t.w),this},n.prototype.length=function(){return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z+this.w*this.w)},n.prototype.lengthSquared=function(){return this.x*this.x+this.y*this.y+this.z*this.z+this.w*this.w},n.prototype.normalize=function(){var t=this.length();if(0===t)return this;var i=1/t;return this.x*=i,this.y*=i,this.z*=i,this.w*=i,this},n.prototype.toVector3=function(){return new e(this.x,this.y,this.z)},n.prototype.clone=function(){return new n(this.x,this.y,this.z,this.w)},n.prototype.copyFrom=function(t){return this.x=t.x,this.y=t.y,this.z=t.z,this.w=t.w,this},n.prototype.copyFromFloats=function(t,i,n,r){return this.x=t,this.y=i,this.z=n,this.w=r,this},n.FromArray=function(t,i){return i||(i=0),new n(t[i],t[i+1],t[i+2],t[i+3])},n.FromArrayToRef=function(t,i,n){n.x=t[i],n.y=t[i+1],n.z=t[i+2],n.w=t[i+3]},n.FromFloatArrayToRef=function(t,i,n){n.x=t[i],n.y=t[i+1],n.z=t[i+2],n.w=t[i+3]},n.FromFloatsToRef=function(t,i,n,r,o){o.x=t,o.y=i,o.z=n,o.w=r},n.Zero=function(){return new n(0,0,0,0)},n.Normalize=function(t){var i=n.Zero();return n.NormalizeToRef(t,i),i},n.NormalizeToRef=function(t,i){i.copyFrom(t),i.normalize()},n.Minimize=function(t,i){var n=t.clone();return n.MinimizeInPlace(i),n},n.Maximize=function(t,i){var n=t.clone();return n.MaximizeInPlace(i),n},n.Distance=function(t,i){return Math.sqrt(n.DistanceSquared(t,i))},n.DistanceSquared=function(t,i){var n=t.x-i.x,r=t.y-i.y,o=t.z-i.z,e=t.w-i.w;return n*n+r*r+o*o+e*e},n.Center=function(t,i){var n=t.add(i);return n.scaleInPlace(.5),n},n}();t.Vector4=s;var h=function(){function t(t,i){this.width=t,this.height=i}return t.prototype.toString=function(){return"{W: "+this.width+", H: "+this.height+"}"},t.prototype.getClassName=function(){return"Size"},t.prototype.getHashCode=function(){var t=this.width||0;return t=397*t^(this.height||0)},t.prototype.copyFrom=function(t){this.width=t.width,this.height=t.height},t.prototype.copyFromFloats=function(t,i){this.width=t,this.height=i},t.prototype.multiplyByFloats=function(i,n){return new t(this.width*i,this.height*n)},t.prototype.clone=function(){return new t(this.width,this.height)},t.prototype.equals=function(t){return!!t&&(this.width===t.width&&this.height===t.height)},Object.defineProperty(t.prototype,"surface",{get:function(){return this.width*this.height},enumerable:!0,configurable:!0}),t.Zero=function(){return new t(0,0)},t.prototype.add=function(i){var n=new t(this.width+i.width,this.height+i.height);return n},t.prototype.substract=function(i){var n=new t(this.width-i.width,this.height-i.height);return n},t.Lerp=function(i,n,r){var o=i.width+(n.width-i.width)*r,e=i.height+(n.height-i.height)*r;return new t(o,e)},t}();t.Size=h;var a=function(){function t(t,i,n,r){void 0===t&&(t=0),void 0===i&&(i=0),void 0===n&&(n=0),void 0===r&&(r=1),this.x=t,this.y=i,this.z=n,this.w=r}return t.prototype.toString=function(){return"{X: "+this.x+" Y:"+this.y+" Z:"+this.z+" W:"+this.w+"}"},t.prototype.getClassName=function(){return"Quaternion"},t.prototype.getHashCode=function(){var t=this.x||0;return t=397*t^(this.y||0),t=397*t^(this.z||0),t=397*t^(this.w||0)},t.prototype.asArray=function(){return[this.x,this.y,this.z,this.w]},t.prototype.equals=function(t){return t&&this.x===t.x&&this.y===t.y&&this.z===t.z&&this.w===t.w},t.prototype.clone=function(){return new t(this.x,this.y,this.z,this.w)},t.prototype.copyFrom=function(t){return this.x=t.x,this.y=t.y,this.z=t.z,this.w=t.w,this},t.prototype.copyFromFloats=function(t,i,n,r){return this.x=t,this.y=i,this.z=n,this.w=r,this},t.prototype.add=function(i){return new t(this.x+i.x,this.y+i.y,this.z+i.z,this.w+i.w)},t.prototype.subtract=function(i){return new t(this.x-i.x,this.y-i.y,this.z-i.z,this.w-i.w)},t.prototype.scale=function(i){return new t(this.x*i,this.y*i,this.z*i,this.w*i)},t.prototype.multiply=function(i){var n=new t(0,0,0,1);return this.multiplyToRef(i,n),n},t.prototype.multiplyToRef=function(t,i){var n=this.x*t.w+this.y*t.z-this.z*t.y+this.w*t.x,r=-this.x*t.z+this.y*t.w+this.z*t.x+this.w*t.y,o=this.x*t.y-this.y*t.x+this.z*t.w+this.w*t.z,e=-this.x*t.x-this.y*t.y-this.z*t.z+this.w*t.w;return i.copyFromFloats(n,r,o,e),this},t.prototype.multiplyInPlace=function(t){return this.multiplyToRef(t,this),this},t.prototype.conjugateToRef=function(t){return t.copyFromFloats(-this.x,-this.y,-this.z,this.w),this},t.prototype.conjugateInPlace=function(){return this.x*=-1,this.y*=-1,this.z*=-1,this},t.prototype.conjugate=function(){var i=new t((-this.x),(-this.y),(-this.z),this.w);return i},t.prototype.length=function(){return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z+this.w*this.w)},t.prototype.normalize=function(){var t=1/this.length();return this.x*=t,this.y*=t,this.z*=t,this.w*=t,this},t.prototype.toEulerAngles=function(t){void 0===t&&(t="YZX");var i=e.Zero();return this.toEulerAnglesToRef(i,t),i},t.prototype.toEulerAnglesToRef=function(t,i){void 0===i&&(i="YZX");var n=this.z,r=this.x,o=this.y,e=this.w,s=e*e,h=n*n,a=r*r,u=o*o,m=o*n-r*e,y=.4999999;return m<-y?(t.y=2*Math.atan2(o,e),t.x=Math.PI/2,t.z=0):m>y?(t.y=2*Math.atan2(o,e),t.x=-Math.PI/2,t.z=0):(t.z=Math.atan2(2*(r*o+n*e),-h-a+u+s),t.x=Math.asin(-2*(n*o-r*e)),t.y=Math.atan2(2*(n*r+o*e),h-a-u+s)),this},t.prototype.toRotationMatrix=function(t){var i=this.x*this.x,n=this.y*this.y,r=this.z*this.z,o=this.x*this.y,e=this.z*this.w,s=this.z*this.x,h=this.y*this.w,a=this.y*this.z,u=this.x*this.w;return t.m[0]=1-2*(n+r),t.m[1]=2*(o+e),t.m[2]=2*(s-h),t.m[3]=0,t.m[4]=2*(o-e),t.m[5]=1-2*(r+i),t.m[6]=2*(a+u),t.m[7]=0,t.m[8]=2*(s+h),t.m[9]=2*(a-u),t.m[10]=1-2*(n+i),t.m[11]=0,t.m[12]=0,t.m[13]=0,t.m[14]=0,t.m[15]=1,this},t.prototype.fromRotationMatrix=function(i){return t.FromRotationMatrixToRef(i,this),this},t.FromRotationMatrix=function(i){var n=new t;return t.FromRotationMatrixToRef(i,n),n},t.FromRotationMatrixToRef=function(t,i){var n,r=t.m,o=r[0],e=r[4],s=r[8],h=r[1],a=r[5],u=r[9],m=r[2],y=r[6],c=r[10],p=o+a+c;p>0?(n=.5/Math.sqrt(p+1),i.w=.25/n,i.x=(y-u)*n,i.y=(s-m)*n,i.z=(h-e)*n):o>a&&o>c?(n=2*Math.sqrt(1+o-a-c),i.w=(y-u)/n,i.x=.25*n,i.y=(e+h)/n,i.z=(s+m)/n):a>c?(n=2*Math.sqrt(1+a-o-c),i.w=(s-m)/n,i.x=(e+h)/n,i.y=.25*n,i.z=(u+y)/n):(n=2*Math.sqrt(1+c-o-a),i.w=(h-e)/n,i.x=(s+m)/n,i.y=(u+y)/n,i.z=.25*n)},t.Inverse=function(i){return new t((-i.x),(-i.y),(-i.z),i.w)},t.Identity=function(){return new t(0,0,0,1)},t.RotationAxis=function(i,n){return t.RotationAxisToRef(i,n,new t)},t.RotationAxisToRef=function(t,i,n){var r=Math.sin(i/2);return t.normalize(),n.w=Math.cos(i/2),n.x=t.x*r,n.y=t.y*r,n.z=t.z*r,n},t.FromArray=function(i,n){return n||(n=0),new t(i[n],i[n+1],i[n+2],i[n+3])},t.RotationYawPitchRoll=function(i,n,r){var o=new t;return t.RotationYawPitchRollToRef(i,n,r,o),o},t.RotationYawPitchRollToRef=function(t,i,n,r){var o=.5*n,e=.5*i,s=.5*t,h=Math.sin(o),a=Math.cos(o),u=Math.sin(e),m=Math.cos(e),y=Math.sin(s),c=Math.cos(s);r.x=c*u*a+y*m*h,r.y=y*m*a-c*u*h,r.z=c*m*h-y*u*a,r.w=c*m*a+y*u*h},t.RotationAlphaBetaGamma=function(i,n,r){var o=new t;return t.RotationAlphaBetaGammaToRef(i,n,r,o),o},t.RotationAlphaBetaGammaToRef=function(t,i,n,r){var o=.5*(n+t),e=.5*(n-t),s=.5*i;r.x=Math.cos(e)*Math.sin(s),r.y=Math.sin(e)*Math.sin(s),r.z=Math.sin(o)*Math.cos(s),r.w=Math.cos(o)*Math.cos(s)},t.Slerp=function(i,n,r){var o=t.Identity();return t.SlerpToRef(i,n,r,o),o},t.SlerpToRef=function(t,i,n,r){var o,e,s=n,h=t.x*i.x+t.y*i.y+t.z*i.z+t.w*i.w,a=!1;if(h<0&&(a=!0,h=-h),h>.999999)e=1-s,o=a?-s:s;else{var u=Math.acos(h),m=1/Math.sin(u);e=Math.sin((1-s)*u)*m,o=a?-Math.sin(s*u)*m:Math.sin(s*u)*m}r.x=e*t.x+o*i.x,r.y=e*t.y+o*i.y,r.z=e*t.z+o*i.z,r.w=e*t.w+o*i.w},t}();t.Quaternion=a;var u=function(){function t(){this.m=new Float32Array(16)}return t.prototype.isIdentity=function(){return 1===this.m[0]&&1===this.m[5]&&1===this.m[10]&&1===this.m[15]&&(0===this.m[1]&&0===this.m[2]&&0===this.m[3]&&0===this.m[4]&&0===this.m[6]&&0===this.m[7]&&0===this.m[8]&&0===this.m[9]&&0===this.m[11]&&0===this.m[12]&&0===this.m[13]&&0===this.m[14])},t.prototype.determinant=function(){var t=this.m[10]*this.m[15]-this.m[11]*this.m[14],i=this.m[9]*this.m[15]-this.m[11]*this.m[13],n=this.m[9]*this.m[14]-this.m[10]*this.m[13],r=this.m[8]*this.m[15]-this.m[11]*this.m[12],o=this.m[8]*this.m[14]-this.m[10]*this.m[12],e=this.m[8]*this.m[13]-this.m[9]*this.m[12];return this.m[0]*(this.m[5]*t-this.m[6]*i+this.m[7]*n)-this.m[1]*(this.m[4]*t-this.m[6]*r+this.m[7]*o)+this.m[2]*(this.m[4]*i-this.m[5]*r+this.m[7]*e)-this.m[3]*(this.m[4]*n-this.m[5]*o+this.m[6]*e)},t.prototype.toArray=function(){return this.m},t.prototype.asArray=function(){return this.toArray()},t.prototype.invert=function(){return this.invertToRef(this),this},t.prototype.reset=function(){for(var t=0;t<16;t++)this.m[t]=0;return this},t.prototype.add=function(i){var n=new t;return this.addToRef(i,n),n},t.prototype.addToRef=function(t,i){for(var n=0;n<16;n++)i.m[n]=this.m[n]+t.m[n];return this},t.prototype.addToSelf=function(t){for(var i=0;i<16;i++)this.m[i]+=t.m[i];return this},t.prototype.invertToRef=function(t){var i=this.m[0],n=this.m[1],r=this.m[2],o=this.m[3],e=this.m[4],s=this.m[5],h=this.m[6],a=this.m[7],u=this.m[8],m=this.m[9],y=this.m[10],c=this.m[11],p=this.m[12],f=this.m[13],x=this.m[14],l=this.m[15],z=y*l-c*x,w=m*l-c*f,v=m*x-y*f,d=u*l-c*p,g=u*x-y*p,R=u*f-m*p,T=s*z-h*w+a*v,_=-(e*z-h*d+a*g),M=e*w-s*d+a*R,A=-(e*v-s*g+h*R),b=1/(i*T+n*_+r*M+o*A),F=h*l-a*x,L=s*l-a*f,C=s*x-h*f,P=e*l-a*p,Z=e*x-h*p,S=e*f-s*p,I=h*c-a*y,H=s*c-a*m,q=s*y-h*m,D=e*c-a*u,V=e*y-h*u,N=e*m-s*u;return t.m[0]=T*b,t.m[4]=_*b,t.m[8]=M*b,t.m[12]=A*b,t.m[1]=-(n*z-r*w+o*v)*b,t.m[5]=(i*z-r*d+o*g)*b,t.m[9]=-(i*w-n*d+o*R)*b,t.m[13]=(i*v-n*g+r*R)*b,t.m[2]=(n*F-r*L+o*C)*b,t.m[6]=-(i*F-r*P+o*Z)*b,t.m[10]=(i*L-n*P+o*S)*b,t.m[14]=-(i*C-n*Z+r*S)*b,t.m[3]=-(n*I-r*H+o*q)*b,t.m[7]=(i*I-r*D+o*V)*b,t.m[11]=-(i*H-n*D+o*N)*b,t.m[15]=(i*q-n*V+r*N)*b,this},t.prototype.setTranslation=function(t){return this.m[12]=t.x,this.m[13]=t.y,this.m[14]=t.z,this},t.prototype.getTranslation=function(){return new e(this.m[12],this.m[13],this.m[14])},t.prototype.multiply=function(i){var n=new t;return this.multiplyToRef(i,n),n},t.prototype.copyFrom=function(t){for(var i=0;i<16;i++)this.m[i]=t.m[i];return this;\n},t.prototype.copyToArray=function(t,i){void 0===i&&(i=0);for(var n=0;n<16;n++)t[i+n]=this.m[n];return this},t.prototype.multiplyToRef=function(t,i){return this.multiplyToArray(t,i.m,0),this},t.prototype.multiplyToArray=function(t,i,n){var r=this.m[0],o=this.m[1],e=this.m[2],s=this.m[3],h=this.m[4],a=this.m[5],u=this.m[6],m=this.m[7],y=this.m[8],c=this.m[9],p=this.m[10],f=this.m[11],x=this.m[12],l=this.m[13],z=this.m[14],w=this.m[15],v=t.m[0],d=t.m[1],g=t.m[2],R=t.m[3],T=t.m[4],_=t.m[5],M=t.m[6],A=t.m[7],b=t.m[8],F=t.m[9],L=t.m[10],C=t.m[11],P=t.m[12],Z=t.m[13],S=t.m[14],I=t.m[15];return i[n]=r*v+o*T+e*b+s*P,i[n+1]=r*d+o*_+e*F+s*Z,i[n+2]=r*g+o*M+e*L+s*S,i[n+3]=r*R+o*A+e*C+s*I,i[n+4]=h*v+a*T+u*b+m*P,i[n+5]=h*d+a*_+u*F+m*Z,i[n+6]=h*g+a*M+u*L+m*S,i[n+7]=h*R+a*A+u*C+m*I,i[n+8]=y*v+c*T+p*b+f*P,i[n+9]=y*d+c*_+p*F+f*Z,i[n+10]=y*g+c*M+p*L+f*S,i[n+11]=y*R+c*A+p*C+f*I,i[n+12]=x*v+l*T+z*b+w*P,i[n+13]=x*d+l*_+z*F+w*Z,i[n+14]=x*g+l*M+z*L+w*S,i[n+15]=x*R+l*A+z*C+w*I,this},t.prototype.equals=function(t){return t&&this.m[0]===t.m[0]&&this.m[1]===t.m[1]&&this.m[2]===t.m[2]&&this.m[3]===t.m[3]&&this.m[4]===t.m[4]&&this.m[5]===t.m[5]&&this.m[6]===t.m[6]&&this.m[7]===t.m[7]&&this.m[8]===t.m[8]&&this.m[9]===t.m[9]&&this.m[10]===t.m[10]&&this.m[11]===t.m[11]&&this.m[12]===t.m[12]&&this.m[13]===t.m[13]&&this.m[14]===t.m[14]&&this.m[15]===t.m[15]},t.prototype.clone=function(){return t.FromValues(this.m[0],this.m[1],this.m[2],this.m[3],this.m[4],this.m[5],this.m[6],this.m[7],this.m[8],this.m[9],this.m[10],this.m[11],this.m[12],this.m[13],this.m[14],this.m[15])},t.prototype.getClassName=function(){return"Matrix"},t.prototype.getHashCode=function(){for(var t=this.m[0]||0,i=1;i<16;i++)t=397*t^(this.m[i]||0);return t},t.prototype.decompose=function(n,r,o){o.x=this.m[12],o.y=this.m[13],o.z=this.m[14];var e=i.Sign(this.m[0]*this.m[1]*this.m[2]*this.m[3])<0?-1:1,s=i.Sign(this.m[4]*this.m[5]*this.m[6]*this.m[7])<0?-1:1,h=i.Sign(this.m[8]*this.m[9]*this.m[10]*this.m[11])<0?-1:1;return n.x=e*Math.sqrt(this.m[0]*this.m[0]+this.m[1]*this.m[1]+this.m[2]*this.m[2]),n.y=s*Math.sqrt(this.m[4]*this.m[4]+this.m[5]*this.m[5]+this.m[6]*this.m[6]),n.z=h*Math.sqrt(this.m[8]*this.m[8]+this.m[9]*this.m[9]+this.m[10]*this.m[10]),0===n.x||0===n.y||0===n.z?(r.x=0,r.y=0,r.z=0,r.w=1,!1):(t.FromValuesToRef(this.m[0]/n.x,this.m[1]/n.x,this.m[2]/n.x,0,this.m[4]/n.y,this.m[5]/n.y,this.m[6]/n.y,0,this.m[8]/n.z,this.m[9]/n.z,this.m[10]/n.z,0,0,0,0,1,M.Matrix[0]),a.FromRotationMatrixToRef(M.Matrix[0],r),!0)},t.prototype.getRotationMatrix=function(){var i=t.Identity();return this.getRotationMatrixToRef(i),i},t.prototype.getRotationMatrixToRef=function(i){var n=this.m,r=n[0]*n[1]*n[2]*n[3]<0?-1:1,o=n[4]*n[5]*n[6]*n[7]<0?-1:1,e=n[8]*n[9]*n[10]*n[11]<0?-1:1,s=r*Math.sqrt(n[0]*n[0]+n[1]*n[1]+n[2]*n[2]),h=o*Math.sqrt(n[4]*n[4]+n[5]*n[5]+n[6]*n[6]),a=e*Math.sqrt(n[8]*n[8]+n[9]*n[9]+n[10]*n[10]);t.FromValuesToRef(n[0]/s,n[1]/s,n[2]/s,0,n[4]/h,n[5]/h,n[6]/h,0,n[8]/a,n[9]/a,n[10]/a,0,0,0,0,1,i)},t.FromArray=function(i,n){var r=new t;return n||(n=0),t.FromArrayToRef(i,n,r),r},t.FromArrayToRef=function(t,i,n){for(var r=0;r<16;r++)n.m[r]=t[r+i]},t.FromFloat32ArrayToRefScaled=function(t,i,n,r){for(var o=0;o<16;o++)r.m[o]=t[o+i]*n},t.FromValuesToRef=function(t,i,n,r,o,e,s,h,a,u,m,y,c,p,f,x,l){l.m[0]=t,l.m[1]=i,l.m[2]=n,l.m[3]=r,l.m[4]=o,l.m[5]=e,l.m[6]=s,l.m[7]=h,l.m[8]=a,l.m[9]=u,l.m[10]=m,l.m[11]=y,l.m[12]=c,l.m[13]=p,l.m[14]=f,l.m[15]=x},t.prototype.getRow=function(t){if(t<0||t>3)return null;var i=4*t;return new s(this.m[i+0],this.m[i+1],this.m[i+2],this.m[i+3])},t.prototype.setRow=function(t,i){if(t<0||t>3)return this;var n=4*t;return this.m[n+0]=i.x,this.m[n+1]=i.y,this.m[n+2]=i.z,this.m[n+3]=i.w,this},t.FromValues=function(i,n,r,o,e,s,h,a,u,m,y,c,p,f,x,l){var z=new t;return z.m[0]=i,z.m[1]=n,z.m[2]=r,z.m[3]=o,z.m[4]=e,z.m[5]=s,z.m[6]=h,z.m[7]=a,z.m[8]=u,z.m[9]=m,z.m[10]=y,z.m[11]=c,z.m[12]=p,z.m[13]=f,z.m[14]=x,z.m[15]=l,z},t.Compose=function(i,n,r){var o=t.FromValues(i.x,0,0,0,0,i.y,0,0,0,0,i.z,0,0,0,0,1),e=t.Identity();return n.toRotationMatrix(e),o=o.multiply(e),o.setTranslation(r),o},t.Identity=function(){return t.FromValues(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)},t.IdentityToRef=function(i){t.FromValuesToRef(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,i)},t.Zero=function(){return t.FromValues(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)},t.RotationX=function(i){var n=new t;return t.RotationXToRef(i,n),n},t.Invert=function(i){var n=new t;return i.invertToRef(n),n},t.RotationXToRef=function(t,i){var n=Math.sin(t),r=Math.cos(t);i.m[0]=1,i.m[15]=1,i.m[5]=r,i.m[10]=r,i.m[9]=-n,i.m[6]=n,i.m[1]=0,i.m[2]=0,i.m[3]=0,i.m[4]=0,i.m[7]=0,i.m[8]=0,i.m[11]=0,i.m[12]=0,i.m[13]=0,i.m[14]=0},t.RotationY=function(i){var n=new t;return t.RotationYToRef(i,n),n},t.RotationYToRef=function(t,i){var n=Math.sin(t),r=Math.cos(t);i.m[5]=1,i.m[15]=1,i.m[0]=r,i.m[2]=-n,i.m[8]=n,i.m[10]=r,i.m[1]=0,i.m[3]=0,i.m[4]=0,i.m[6]=0,i.m[7]=0,i.m[9]=0,i.m[11]=0,i.m[12]=0,i.m[13]=0,i.m[14]=0},t.RotationZ=function(i){var n=new t;return t.RotationZToRef(i,n),n},t.RotationZToRef=function(t,i){var n=Math.sin(t),r=Math.cos(t);i.m[10]=1,i.m[15]=1,i.m[0]=r,i.m[1]=n,i.m[4]=-n,i.m[5]=r,i.m[2]=0,i.m[3]=0,i.m[6]=0,i.m[7]=0,i.m[8]=0,i.m[9]=0,i.m[11]=0,i.m[12]=0,i.m[13]=0,i.m[14]=0},t.RotationAxis=function(i,n){var r=t.Zero();return t.RotationAxisToRef(i,n,r),r},t.RotationAxisToRef=function(t,i,n){var r=Math.sin(-i),o=Math.cos(-i),e=1-o;t.normalize(),n.m[0]=t.x*t.x*e+o,n.m[1]=t.x*t.y*e-t.z*r,n.m[2]=t.x*t.z*e+t.y*r,n.m[3]=0,n.m[4]=t.y*t.x*e+t.z*r,n.m[5]=t.y*t.y*e+o,n.m[6]=t.y*t.z*e-t.x*r,n.m[7]=0,n.m[8]=t.z*t.x*e-t.y*r,n.m[9]=t.z*t.y*e+t.x*r,n.m[10]=t.z*t.z*e+o,n.m[11]=0,n.m[15]=1},t.RotationYawPitchRoll=function(i,n,r){var o=new t;return t.RotationYawPitchRollToRef(i,n,r,o),o},t.RotationYawPitchRollToRef=function(t,i,n,r){a.RotationYawPitchRollToRef(t,i,n,this._tempQuaternion),this._tempQuaternion.toRotationMatrix(r)},t.Scaling=function(i,n,r){var o=t.Zero();return t.ScalingToRef(i,n,r,o),o},t.ScalingToRef=function(t,i,n,r){r.m[0]=t,r.m[1]=0,r.m[2]=0,r.m[3]=0,r.m[4]=0,r.m[5]=i,r.m[6]=0,r.m[7]=0,r.m[8]=0,r.m[9]=0,r.m[10]=n,r.m[11]=0,r.m[12]=0,r.m[13]=0,r.m[14]=0,r.m[15]=1},t.Translation=function(i,n,r){var o=t.Identity();return t.TranslationToRef(i,n,r,o),o},t.TranslationToRef=function(i,n,r,o){t.FromValuesToRef(1,0,0,0,0,1,0,0,0,0,1,0,i,n,r,1,o)},t.Lerp=function(i,n,r){for(var o=t.Zero(),e=0;e<16;e++)o.m[e]=i.m[e]*(1-r)+n.m[e]*r;return o},t.DecomposeLerp=function(i,n,r){var o=new e(0,0,0),s=new a,h=new e(0,0,0);i.decompose(o,s,h);var u=new e(0,0,0),m=new a,y=new e(0,0,0);n.decompose(u,m,y);var c=e.Lerp(o,u,r),p=a.Slerp(s,m,r),f=e.Lerp(h,y,r);return t.Compose(c,p,f)},t.LookAtLH=function(i,n,r){var o=t.Zero();return t.LookAtLHToRef(i,n,r,o),o},t.LookAtLHToRef=function(i,n,r,o){n.subtractToRef(i,this._zAxis),this._zAxis.normalize(),e.CrossToRef(r,this._zAxis,this._xAxis),0===this._xAxis.lengthSquared()?this._xAxis.x=1:this._xAxis.normalize(),e.CrossToRef(this._zAxis,this._xAxis,this._yAxis),this._yAxis.normalize();var s=-e.Dot(this._xAxis,i),h=-e.Dot(this._yAxis,i),a=-e.Dot(this._zAxis,i);return t.FromValuesToRef(this._xAxis.x,this._yAxis.x,this._zAxis.x,0,this._xAxis.y,this._yAxis.y,this._zAxis.y,0,this._xAxis.z,this._yAxis.z,this._zAxis.z,0,s,h,a,1,o)},t.LookAtRH=function(i,n,r){var o=t.Zero();return t.LookAtRHToRef(i,n,r,o),o},t.LookAtRHToRef=function(i,n,r,o){i.subtractToRef(n,this._zAxis),this._zAxis.normalize(),e.CrossToRef(r,this._zAxis,this._xAxis),0===this._xAxis.lengthSquared()?this._xAxis.x=1:this._xAxis.normalize(),e.CrossToRef(this._zAxis,this._xAxis,this._yAxis),this._yAxis.normalize();var s=-e.Dot(this._xAxis,i),h=-e.Dot(this._yAxis,i),a=-e.Dot(this._zAxis,i);return t.FromValuesToRef(this._xAxis.x,this._yAxis.x,this._zAxis.x,0,this._xAxis.y,this._yAxis.y,this._zAxis.y,0,this._xAxis.z,this._yAxis.z,this._zAxis.z,0,s,h,a,1,o)},t.OrthoLH=function(i,n,r,o){var e=t.Zero();return t.OrthoLHToRef(i,n,r,o,e),e},t.OrthoLHToRef=function(i,n,r,o,e){var s=2/i,h=2/n,a=1/(o-r),u=r/(r-o);t.FromValuesToRef(s,0,0,0,0,h,0,0,0,0,a,0,0,0,u,1,e)},t.OrthoOffCenterLH=function(i,n,r,o,e,s){var h=t.Zero();return t.OrthoOffCenterLHToRef(i,n,r,o,e,s,h),h},t.OrthoOffCenterLHToRef=function(t,i,n,r,o,e,s){s.m[0]=2/(i-t),s.m[1]=s.m[2]=s.m[3]=0,s.m[5]=2/(r-n),s.m[4]=s.m[6]=s.m[7]=0,s.m[10]=1/(e-o),s.m[8]=s.m[9]=s.m[11]=0,s.m[12]=(t+i)/(t-i),s.m[13]=(r+n)/(n-r),s.m[14]=-o/(e-o),s.m[15]=1},t.OrthoOffCenterRH=function(i,n,r,o,e,s){var h=t.Zero();return t.OrthoOffCenterRHToRef(i,n,r,o,e,s,h),h},t.OrthoOffCenterRHToRef=function(i,n,r,o,e,s,h){t.OrthoOffCenterLHToRef(i,n,r,o,e,s,h),h.m[10]*=-1},t.PerspectiveLH=function(i,n,r,o){var e=t.Zero();return e.m[0]=2*r/i,e.m[1]=e.m[2]=e.m[3]=0,e.m[5]=2*r/n,e.m[4]=e.m[6]=e.m[7]=0,e.m[10]=-o/(r-o),e.m[8]=e.m[9]=0,e.m[11]=1,e.m[12]=e.m[13]=e.m[15]=0,e.m[14]=r*o/(r-o),e},t.PerspectiveFovLH=function(i,n,r,o){var e=t.Zero();return t.PerspectiveFovLHToRef(i,n,r,o,e),e},t.PerspectiveFovLHToRef=function(t,i,n,r,o,e){void 0===e&&(e=!0);var s=1/Math.tan(.5*t);e?o.m[0]=s/i:o.m[0]=s,o.m[1]=o.m[2]=o.m[3]=0,e?o.m[5]=s:o.m[5]=s*i,o.m[4]=o.m[6]=o.m[7]=0,o.m[8]=o.m[9]=0,o.m[10]=r/(r-n),o.m[11]=1,o.m[12]=o.m[13]=o.m[15]=0,o.m[14]=-(n*r)/(r-n)},t.PerspectiveFovRH=function(i,n,r,o){var e=t.Zero();return t.PerspectiveFovRHToRef(i,n,r,o,e),e},t.PerspectiveFovRHToRef=function(t,i,n,r,o,e){void 0===e&&(e=!0);var s=1/Math.tan(.5*t);e?o.m[0]=s/i:o.m[0]=s,o.m[1]=o.m[2]=o.m[3]=0,e?o.m[5]=s:o.m[5]=s*i,o.m[4]=o.m[6]=o.m[7]=0,o.m[8]=o.m[9]=0,o.m[10]=r/(n-r),o.m[11]=-1,o.m[12]=o.m[13]=o.m[15]=0,o.m[14]=n*r/(n-r)},t.PerspectiveFovWebVRToRef=function(t,i,n,r,o){void 0===o&&(o=!0);var e=Math.tan(t.upDegrees*Math.PI/180),s=Math.tan(t.downDegrees*Math.PI/180),h=Math.tan(t.leftDegrees*Math.PI/180),a=Math.tan(t.rightDegrees*Math.PI/180),u=2/(h+a),m=2/(e+s);r.m[0]=u,r.m[1]=r.m[2]=r.m[3]=r.m[4]=0,r.m[5]=m,r.m[6]=r.m[7]=0,r.m[8]=(h-a)*u*.5,r.m[9]=-((e-s)*m*.5),r.m[10]=-n/(i-n),r.m[11]=1,r.m[12]=r.m[13]=r.m[15]=0,r.m[14]=i*n/(i-n)},t.GetFinalMatrix=function(i,n,r,o,e,s){var h=i.width,a=i.height,u=i.x,m=i.y,y=t.FromValues(h/2,0,0,0,0,-a/2,0,0,0,0,s-e,0,u+h/2,a/2+m,e,1);return n.multiply(r).multiply(o).multiply(y)},t.GetAsMatrix2x2=function(t){return new Float32Array([t.m[0],t.m[1],t.m[4],t.m[5]])},t.GetAsMatrix3x3=function(t){return new Float32Array([t.m[0],t.m[1],t.m[2],t.m[4],t.m[5],t.m[6],t.m[8],t.m[9],t.m[10]])},t.Transpose=function(i){var n=new t;return n.m[0]=i.m[0],n.m[1]=i.m[4],n.m[2]=i.m[8],n.m[3]=i.m[12],n.m[4]=i.m[1],n.m[5]=i.m[5],n.m[6]=i.m[9],n.m[7]=i.m[13],n.m[8]=i.m[2],n.m[9]=i.m[6],n.m[10]=i.m[10],n.m[11]=i.m[14],n.m[12]=i.m[3],n.m[13]=i.m[7],n.m[14]=i.m[11],n.m[15]=i.m[15],n},t.Reflection=function(i){var n=new t;return t.ReflectionToRef(i,n),n},t.ReflectionToRef=function(t,i){t.normalize();var n=t.normal.x,r=t.normal.y,o=t.normal.z,e=-2*n,s=-2*r,h=-2*o;i.m[0]=e*n+1,i.m[1]=s*n,i.m[2]=h*n,i.m[3]=0,i.m[4]=e*r,i.m[5]=s*r+1,i.m[6]=h*r,i.m[7]=0,i.m[8]=e*o,i.m[9]=s*o,i.m[10]=h*o+1,i.m[11]=0,i.m[12]=e*t.d,i.m[13]=s*t.d,i.m[14]=h*t.d,i.m[15]=1},t.FromXYZAxesToRef=function(t,i,n,r){r.m[0]=t.x,r.m[1]=t.y,r.m[2]=t.z,r.m[3]=0,r.m[4]=i.x,r.m[5]=i.y,r.m[6]=i.z,r.m[7]=0,r.m[8]=n.x,r.m[9]=n.y,r.m[10]=n.z,r.m[11]=0,r.m[12]=0,r.m[13]=0,r.m[14]=0,r.m[15]=1},t.FromQuaternionToRef=function(t,i){var n=t.x*t.x,r=t.y*t.y,o=t.z*t.z,e=t.x*t.y,s=t.z*t.w,h=t.z*t.x,a=t.y*t.w,u=t.y*t.z,m=t.x*t.w;i.m[0]=1-2*(r+o),i.m[1]=2*(e+s),i.m[2]=2*(h-a),i.m[3]=0,i.m[4]=2*(e-s),i.m[5]=1-2*(o+n),i.m[6]=2*(u+m),i.m[7]=0,i.m[8]=2*(h+a),i.m[9]=2*(u-m),i.m[10]=1-2*(r+n),i.m[11]=0,i.m[12]=0,i.m[13]=0,i.m[14]=0,i.m[15]=1},t._tempQuaternion=new a,t._xAxis=e.Zero(),t._yAxis=e.Zero(),t._zAxis=e.Zero(),t}();t.Matrix=u;var m=function(){function t(t,i,n,r){this.normal=new e(t,i,n),this.d=r}return t.prototype.asArray=function(){return[this.normal.x,this.normal.y,this.normal.z,this.d]},t.prototype.clone=function(){return new t(this.normal.x,this.normal.y,this.normal.z,this.d)},t.prototype.getClassName=function(){return"Plane"},t.prototype.getHashCode=function(){var t=this.normal.getHashCode();return t=397*t^(this.d||0)},t.prototype.normalize=function(){var t=Math.sqrt(this.normal.x*this.normal.x+this.normal.y*this.normal.y+this.normal.z*this.normal.z),i=0;return 0!==t&&(i=1/t),this.normal.x*=i,this.normal.y*=i,this.normal.z*=i,this.d*=i,this},t.prototype.transform=function(i){var n=u.Transpose(i),r=this.normal.x,o=this.normal.y,e=this.normal.z,s=this.d,h=r*n.m[0]+o*n.m[1]+e*n.m[2]+s*n.m[3],a=r*n.m[4]+o*n.m[5]+e*n.m[6]+s*n.m[7],m=r*n.m[8]+o*n.m[9]+e*n.m[10]+s*n.m[11],y=r*n.m[12]+o*n.m[13]+e*n.m[14]+s*n.m[15];return new t(h,a,m,y)},t.prototype.dotCoordinate=function(t){return this.normal.x*t.x+this.normal.y*t.y+this.normal.z*t.z+this.d},t.prototype.copyFromPoints=function(t,i,n){var r,o=i.x-t.x,e=i.y-t.y,s=i.z-t.z,h=n.x-t.x,a=n.y-t.y,u=n.z-t.z,m=e*u-s*a,y=s*h-o*u,c=o*a-e*h,p=Math.sqrt(m*m+y*y+c*c);return r=0!==p?1/p:0,this.normal.x=m*r,this.normal.y=y*r,this.normal.z=c*r,this.d=-(this.normal.x*t.x+this.normal.y*t.y+this.normal.z*t.z),this},t.prototype.isFrontFacingTo=function(t,i){var n=e.Dot(this.normal,t);return n<=i},t.prototype.signedDistanceTo=function(t){return e.Dot(t,this.normal)+this.d},t.FromArray=function(i){return new t(i[0],i[1],i[2],i[3])},t.FromPoints=function(i,n,r){var o=new t(0,0,0,0);return o.copyFromPoints(i,n,r),o},t.FromPositionAndNormal=function(i,n){var r=new t(0,0,0,0);return n.normalize(),r.normal=n,r.d=-(n.x*i.x+n.y*i.y+n.z*i.z),r},t.SignedDistanceToPlaneFromPositionAndNormal=function(t,i,n){var r=-(i.x*t.x+i.y*t.y+i.z*t.z);return e.Dot(n,i)+r},t}();t.Plane=m;var y=function(){function t(t,i,n,r){this.x=t,this.y=i,this.width=n,this.height=r}return t.prototype.toGlobal=function(i,n){return new t(this.x*i,this.y*n,this.width*i,this.height*n)},t}();t.Viewport=y;var c=function(){function t(){}return t.GetPlanes=function(i){for(var n=[],r=0;r<6;r++)n.push(new m(0,0,0,0));return t.GetPlanesToRef(i,n),n},t.GetPlanesToRef=function(t,i){i[0].normal.x=t.m[3]+t.m[2],i[0].normal.y=t.m[7]+t.m[6],i[0].normal.z=t.m[11]+t.m[10],i[0].d=t.m[15]+t.m[14],i[0].normalize(),i[1].normal.x=t.m[3]-t.m[2],i[1].normal.y=t.m[7]-t.m[6],i[1].normal.z=t.m[11]-t.m[10],i[1].d=t.m[15]-t.m[14],i[1].normalize(),i[2].normal.x=t.m[3]+t.m[0],i[2].normal.y=t.m[7]+t.m[4],i[2].normal.z=t.m[11]+t.m[8],i[2].d=t.m[15]+t.m[12],i[2].normalize(),i[3].normal.x=t.m[3]-t.m[0],i[3].normal.y=t.m[7]-t.m[4],i[3].normal.z=t.m[11]-t.m[8],i[3].d=t.m[15]-t.m[12],i[3].normalize(),i[4].normal.x=t.m[3]-t.m[1],i[4].normal.y=t.m[7]-t.m[5],i[4].normal.z=t.m[11]-t.m[9],i[4].d=t.m[15]-t.m[13],i[4].normalize(),i[5].normal.x=t.m[3]+t.m[1],i[5].normal.y=t.m[7]+t.m[5],i[5].normal.z=t.m[11]+t.m[9],i[5].d=t.m[15]+t.m[13],i[5].normalize()},t}();t.Frustum=c,function(t){t[t.LOCAL=0]="LOCAL",t[t.WORLD=1]="WORLD"}(t.Space||(t.Space={}));var p=(t.Space,function(){function t(){}return t.X=new e(1,0,0),t.Y=new e(0,1,0),t.Z=new e(0,0,1),t}());t.Axis=p;var f=function(){function t(){}return t.interpolate=function(t,i,n,r,o){for(var e=1-3*r+3*i,s=3*r-6*i,h=3*i,a=t,u=0;u<5;u++){var m=a*a,y=m*a,c=e*y+s*m+h*a,p=1/(3*e*m+2*s*a+h);a-=(c-t)*p,a=Math.min(1,Math.max(0,a))}return 3*Math.pow(1-a,2)*a*n+3*(1-a)*Math.pow(a,2)*o+Math.pow(a,3)},t}();t.BezierCurve=f,function(t){t[t.CW=0]="CW",t[t.CCW=1]="CCW"}(t.Orientation||(t.Orientation={}));var x=t.Orientation,l=function(){function t(t){var i=this;this.degrees=function(){return 180*i._radians/Math.PI},this.radians=function(){return i._radians},this._radians=t,this._radians<0&&(this._radians+=2*Math.PI)}return t.BetweenTwoPoints=function(i,n){var r=n.subtract(i),o=Math.atan2(r.y,r.x);return new t(o)},t.FromRadians=function(i){return new t(i)},t.FromDegrees=function(i){return new t(i*Math.PI/180)},t}();t.Angle=l;var z=function(){function t(t,i,n){this.startPoint=t,this.midPoint=i,this.endPoint=n;var r=Math.pow(i.x,2)+Math.pow(i.y,2),e=(Math.pow(t.x,2)+Math.pow(t.y,2)-r)/2,s=(r-Math.pow(n.x,2)-Math.pow(n.y,2))/2,h=(t.x-i.x)*(i.y-n.y)-(i.x-n.x)*(t.y-i.y);this.centerPoint=new o((e*(i.y-n.y)-s*(t.y-i.y))/h,((t.x-i.x)*s-(i.x-n.x)*e)/h),this.radius=this.centerPoint.subtract(this.startPoint).length(),this.startAngle=l.BetweenTwoPoints(this.centerPoint,this.startPoint);var a=this.startAngle.degrees(),u=l.BetweenTwoPoints(this.centerPoint,this.midPoint).degrees(),m=l.BetweenTwoPoints(this.centerPoint,this.endPoint).degrees();u-a>180&&(u-=360),u-a<-180&&(u+=360),m-u>180&&(m-=360),m-u<-180&&(m+=360),this.orientation=u-a<0?x.CW:x.CCW,this.angle=l.FromDegrees(this.orientation===x.CW?a-m:m-a)}return t}();t.Arc2=z;var w=function(){function t(t,i){this._points=new Array,this._length=0,this.closed=!1,this._points.push(new o(t,i))}return t.prototype.addLineTo=function(t,i){if(closed)return this;var n=new o(t,i),r=this._points[this._points.length-1];return this._points.push(n),this._length+=n.subtract(r).length(),this},t.prototype.addArcTo=function(t,i,n,r,e){if(void 0===e&&(e=36),closed)return this;var s=this._points[this._points.length-1],h=new o(t,i),a=new o(n,r),u=new z(s,h,a),m=u.angle.radians()/e;u.orientation===x.CW&&(m*=-1);for(var y=u.startAngle.radians()+m,c=0;c<e;c++){var p=Math.cos(y)*u.radius+u.centerPoint.x,f=Math.sin(y)*u.radius+u.centerPoint.y;this.addLineTo(p,f),y+=m}return this},t.prototype.close=function(){return this.closed=!0,this},t.prototype.length=function(){var t=this._length;if(!this.closed){var i=this._points[this._points.length-1],n=this._points[0];t+=n.subtract(i).length()}return t},t.prototype.getPoints=function(){return this._points},t.prototype.getPointAtLengthPosition=function(t){if(t<0||t>1)return o.Zero();for(var i=t*this.length(),n=0,r=0;r<this._points.length;r++){var e=(r+1)%this._points.length,s=this._points[r],h=this._points[e],a=h.subtract(s),u=a.length()+n;if(i>=n&&i<=u){var m=a.normalize(),y=i-n;return new o(s.x+m.x*y,s.y+m.y*y)}n=u}return o.Zero()},t.StartingAt=function(i,n){return new t(i,n)},t}();t.Path2=w;var v=function(){function n(t,i,n){this.path=t,this._curve=new Array,this._distances=new Array,this._tangents=new Array,this._normals=new Array,this._binormals=new Array;for(var r=0;r<t.length;r++)this._curve[r]=t[r].clone();this._raw=n||!1,this._compute(i)}return n.prototype.getCurve=function(){return this._curve},n.prototype.getTangents=function(){return this._tangents},n.prototype.getNormals=function(){return this._normals},n.prototype.getBinormals=function(){return this._binormals},n.prototype.getDistances=function(){return this._distances},n.prototype.update=function(t,i){for(var n=0;n<t.length;n++)this._curve[n].x=t[n].x,this._curve[n].y=t[n].y,this._curve[n].z=t[n].z;return this._compute(i),this},n.prototype._compute=function(t){var i=this._curve.length;this._tangents[0]=this._getFirstNonNullVector(0),this._raw||this._tangents[0].normalize(),this._tangents[i-1]=this._curve[i-1].subtract(this._curve[i-2]),this._raw||this._tangents[i-1].normalize();var n=this._tangents[0],r=this._normalVector(this._curve[0],n,t);this._normals[0]=r,this._raw||this._normals[0].normalize(),this._binormals[0]=e.Cross(n,this._normals[0]),this._raw||this._binormals[0].normalize(),this._distances[0]=0;for(var o,s,h,a,u=1;u<i;u++)o=this._getLastNonNullVector(u),u<i-1&&(s=this._getFirstNonNullVector(u),this._tangents[u]=o.add(s),this._tangents[u].normalize()),this._distances[u]=this._distances[u-1]+o.length(),h=this._tangents[u],a=this._binormals[u-1],this._normals[u]=e.Cross(a,h),this._raw||this._normals[u].normalize(),this._binormals[u]=e.Cross(h,this._normals[u]),this._raw||this._binormals[u].normalize()},n.prototype._getFirstNonNullVector=function(t){for(var i=1,n=this._curve[t+i].subtract(this._curve[t]);0===n.length()&&t+i+1<this._curve.length;)i++,n=this._curve[t+i].subtract(this._curve[t]);return n},n.prototype._getLastNonNullVector=function(t){for(var i=1,n=this._curve[t].subtract(this._curve[t-i]);0===n.length()&&t>i+1;)i++,n=this._curve[t].subtract(this._curve[t-i]);return n},n.prototype._normalVector=function(n,r,o){var s,h=r.length();if(0===h&&(h=1),void 0===o||null===o){var a;i.WithinEpsilon(Math.abs(r.y)/h,1,t.Epsilon)?i.WithinEpsilon(Math.abs(r.x)/h,1,t.Epsilon)?i.WithinEpsilon(Math.abs(r.z)/h,1,t.Epsilon)||(a=new e(0,0,1)):a=new e(1,0,0):a=new e(0,(-1),0),s=e.Cross(r,a)}else s=e.Cross(r,o),e.CrossToRef(s,r,s);return s.normalize(),s},n}();t.Path3D=v;var d=function(){function t(t){this._length=0,this._points=t,this._length=this._computeLength(t)}return t.CreateQuadraticBezier=function(i,n,r,o){o=o>2?o:3;for(var s=new Array,h=function(t,i,n,r){var o=(1-t)*(1-t)*i+2*t*(1-t)*n+t*t*r;return o},a=0;a<=o;a++)s.push(new e(h(a/o,i.x,n.x,r.x),h(a/o,i.y,n.y,r.y),h(a/o,i.z,n.z,r.z)));return new t(s)},t.CreateCubicBezier=function(i,n,r,o,s){s=s>3?s:4;for(var h=new Array,a=function(t,i,n,r,o){var e=(1-t)*(1-t)*(1-t)*i+3*t*(1-t)*(1-t)*n+3*t*t*(1-t)*r+t*t*t*o;return e},u=0;u<=s;u++)h.push(new e(a(u/s,i.x,n.x,r.x,o.x),a(u/s,i.y,n.y,r.y,o.y),a(u/s,i.z,n.z,r.z,o.z)));return new t(h)},t.CreateHermiteSpline=function(i,n,r,o,s){for(var h=new Array,a=1/s,u=0;u<=s;u++)h.push(e.Hermite(i,n,r,o,u*a));return new t(h)},t.prototype.getPoints=function(){return this._points},t.prototype.length=function(){return this._length},t.prototype["continue"]=function(i){for(var n=this._points[this._points.length-1],r=this._points.slice(),o=i.getPoints(),e=1;e<o.length;e++)r.push(o[e].subtract(o[0]).add(n));var s=new t(r);return s},t.prototype._computeLength=function(t){for(var i=0,n=1;n<t.length;n++)i+=t[n].subtract(t[n-1]).length();return i},t}();t.Curve3=d;var g=function(){function t(){this.L00=e.Zero(),this.L1_1=e.Zero(),this.L10=e.Zero(),this.L11=e.Zero(),this.L2_2=e.Zero(),this.L2_1=e.Zero(),this.L20=e.Zero(),this.L21=e.Zero(),this.L22=e.Zero()}return t.prototype.addLight=function(t,i,n){var r=new e(i.r,i.g,i.b),o=r.scale(n);this.L00=this.L00.add(o.scale(.282095)),this.L1_1=this.L1_1.add(o.scale(.488603*t.y)),this.L10=this.L10.add(o.scale(.488603*t.z)),this.L11=this.L11.add(o.scale(.488603*t.x)),this.L2_2=this.L2_2.add(o.scale(1.092548*t.x*t.y)),this.L2_1=this.L2_1.add(o.scale(1.092548*t.y*t.z)),this.L21=this.L21.add(o.scale(1.092548*t.x*t.z)),this.L20=this.L20.add(o.scale(.315392*(3*t.z*t.z-1))),this.L22=this.L22.add(o.scale(.546274*(t.x*t.x-t.y*t.y)))},t.prototype.scale=function(t){this.L00=this.L00.scale(t),this.L1_1=this.L1_1.scale(t),this.L10=this.L10.scale(t),this.L11=this.L11.scale(t),this.L2_2=this.L2_2.scale(t),this.L2_1=this.L2_1.scale(t),this.L20=this.L20.scale(t),this.L21=this.L21.scale(t),this.L22=this.L22.scale(t)},t}();t.SphericalHarmonics=g;var R=function(){function t(){this.x=e.Zero(),this.y=e.Zero(),this.z=e.Zero(),this.xx=e.Zero(),this.yy=e.Zero(),this.zz=e.Zero(),this.xy=e.Zero(),this.yz=e.Zero(),this.zx=e.Zero()}return t.prototype.addAmbient=function(t){var i=new e(t.r,t.g,t.b);this.xx=this.xx.add(i),this.yy=this.yy.add(i),this.zz=this.zz.add(i)},t.getSphericalPolynomialFromHarmonics=function(i){var n=new t;return n.x=i.L11.scale(1.02333),n.y=i.L1_1.scale(1.02333),n.z=i.L10.scale(1.02333),n.xx=i.L00.scale(.886277).subtract(i.L20.scale(.247708)).add(i.L22.scale(.429043)),n.yy=i.L00.scale(.886277).subtract(i.L20.scale(.247708)).subtract(i.L22.scale(.429043)),n.zz=i.L00.scale(.886277).add(i.L20.scale(.495417)),n.yz=i.L2_1.scale(.858086),n.zx=i.L21.scale(.858086),n.xy=i.L2_2.scale(.858086),n},t}();t.SphericalPolynomial=R;var T=function(){function t(t,i){void 0===t&&(t=e.Zero()),void 0===i&&(i=e.Up()),this.position=t,this.normal=i}return t.prototype.clone=function(){return new t(this.position.clone(),this.normal.clone())},t}();t.PositionNormalVertex=T;var _=function(){function t(t,i,n){void 0===t&&(t=e.Zero()),void 0===i&&(i=e.Up()),void 0===n&&(n=o.Zero()),this.position=t,this.normal=i,this.uv=n}return t.prototype.clone=function(){return new t(this.position.clone(),this.normal.clone(),this.uv.clone())},t}();t.PositionNormalTextureVertex=_;var M=function(){function t(){}return t.Color3=[n.Black(),n.Black(),n.Black()],t.Vector2=[o.Zero(),o.Zero(),o.Zero()],t.Vector3=[e.Zero(),e.Zero(),e.Zero(),e.Zero(),e.Zero(),e.Zero(),e.Zero(),e.Zero(),e.Zero()],t.Vector4=[s.Zero(),s.Zero(),s.Zero()],t.Quaternion=[new a(0,0,0,0)],t.Matrix=[u.Zero(),u.Zero(),u.Zero(),u.Zero(),u.Zero(),u.Zero(),u.Zero(),u.Zero()],t}();t.Tmp=M}(BABYLON||(BABYLON={}));', 
 ("undefined" != typeof window && window.module || "undefined" != typeof module) && "undefined" != typeof module.exports && (module.exports = BABYLON);
 
+var MicroEvent = function() {};
+
+MicroEvent.prototype = {
+bind: function(event, fct) {
+this._events = this._events || {};
+this._events[event] = this._events[event] || [];
+this._events[event].push(fct);
+},
+unbind: function(event, fct) {
+this._events = this._events || {};
+if (event in this._events === false) return;
+this._events[event].splice(this._events[event].indexOf(fct), 1);
+},
+trigger: function(event) {
+this._events = this._events || {};
+if (event in this._events === false) return;
+for (var i = 0; i < this._events[event].length; i++) {
+this._events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
+}
+}
+};
+
+MicroEvent.mixin = function(destObject) {
+var props = [ "bind", "unbind", "trigger" ];
+for (var i = 0; i < props.length; i++) {
+if (typeof destObject === "function") {
+destObject.prototype[props[i]] = MicroEvent.prototype[props[i]];
+} else {
+destObject[props[i]] = MicroEvent.prototype[props[i]];
+}
+}
+return destObject;
+};
+
+if (typeof module !== "undefined" && "exports" in module) {
+module.exports = MicroEvent;
+}
+
 (function() {
 var undefined;
 var VERSION = "4.17.4";
@@ -33228,45 +33266,18 @@ return init(function() {});
 });
 
 (function() {
-var Events;
-window.MicroEvent = Events = function() {
-function Events() {
-this._events = {};
+window.MicroEvent.prototype.remove = function() {
+var ev, fn, _i, _len, _ref, _results;
+if (this._events) {
+_ref = this._events;
+_results = [];
+for (fn = _i = 0, _len = _ref.length; _i < _len; fn = ++_i) {
+ev = _ref[fn];
+_results.push(this.unbind(ev, fn));
 }
-Events.prototype.bind = function(event, fct) {
-this._events[event] = this._events[event] || [];
-return this._events[event].push(fct);
-};
-Events.prototype.unbind = function(event, fct) {
-if (!event) {
-return this._events = {};
+return _results;
 }
-if (!fct) {
-return delete this._events[event];
-}
-if (!this._events[event]) {
-return;
-}
-return this._events[event].splice(this._events[event].indexOf(fct), 1);
 };
-Events.prototype.trigger = function(event) {
-var args;
-if (!this._events[event]) {
-return;
-}
-args = Array.prototype.slice.call(arguments, 1);
-return this._events[event].forEach(function(_this) {
-return function(fn) {
-return fn.apply(_this, args);
-};
-}(this));
-};
-Events.prototype.remove = function() {
-this.trigger("remove");
-return this.unbind();
-};
-return Events;
-}();
 window._l = function(key, subparams) {
 var res;
 res = App.lang.strings[App.lang.active][key];
@@ -33339,7 +33350,13 @@ Continue: "Turpināt",
 "Choose stage": "Izvēlies līmeni",
 Quit: "Aizvērt",
 Menu: "Menu",
+Pause: "Pauze",
 Reset: "No jauna",
+"Next level": "Nākošais",
+Completed: "Atrisināji {minutes}:{seconds}<small>.{mls}</small><br />\nar {mirrors} spogulīšiem un {steps} gājieniem",
+Light: "Gaisma",
+Mirror: "Spogulis",
+"Rotate platform": "Rotē platformu",
 "Game free over description": "Apsveicam, Tu izgāji {levels} līmeņus.<br />\nMēs rūpīgi taisījām šo spēli un vēlamies kādu no šiem atalgojumiem:<br />\n(1) padalies ar spēli vai<br />\n(2) iegādājies pilnu versiju par vienas kafijas cenu.",
 "Buy game": "pilna versija ({price})",
 "Game shared over description": "Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />\nJāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,\nkura maksā mazāk kā viena krūzīte labas kafijas.<br />\nToties šajā spēlē nav reklāmu vai kādu citu slēptu maksājumu.<br />\nTikai nieka {price}",
@@ -33360,8 +33377,8 @@ normals: [ .3416, .3416, -.8756, -.3416, -.3416, -.8756, .3416, -.3416, -.8756, 
 indices: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 11, 16, 17, 9, 18, 10, 14, 6, 12, 19, 20, 4, 2, 7, 0, 21, 22, 13, 5, 8, 3, 23, 15, 10, 18, 16, 11, 1, 6, 9, 17, 14, 19, 12, 18, 13, 22, 8, 12, 6, 5, 23, 3, 22, 4, 20, 7, 3, 8, 2, 21, 0, 20, 1, 15, 17, 0, 7, 22, 15, 18, 0, 16, 1, 3, 21, 4, 6, 17, 7, 9, 19, 10, 12, 23, 13, 15, 11, 10, 16, 9, 11, 6, 19, 9, 14, 10, 19, 18, 14, 13, 8, 23, 12, 5, 13, 23, 22, 5, 4, 7, 21, 3, 2, 4, 21, 20, 2, 1, 17, 16, 0, 22, 20, 15 ]
 },
 connector: {
-positions: [ -.03, 1.3, -.03, -.3, 1, .1, -.3, 1, -.1, .03, 1.3, .03, .3, 1, .1, .3, 1, -.1, -.03, 1.3, .03, .03, 1.3, -.03 ],
-normals: [ -.3117, .7839, -.5369, -.7421, -.315, .5915, -.7421, -.315, -.5915, .3117, .7839, .5369, .7421, -.315, .5915, .7421, -.315, -.5915, -.3117, .7839, .5369, .3117, .7839, -.5369 ],
+positions: [ -.03, .1, -.03, -.2, -.05, .1, -.2, -.05, -.1, .03, .1, .03, .2, -.05, .1, .2, -.05, -.1, -.03, .1, .03, .03, .1, -.03 ],
+normals: [ -.2641, .8486, -.4584, -.743, -.257, .618, -.743, -.257, -.618, .2641, .8486, .4584, .743, -.257, .618, .743, -.257, -.618, -.2641, .8486, .4584, .2641, .8486, -.4584 ],
 indices: [ 0, 1, 2, 1, 3, 4, 3, 5, 4, 5, 0, 2, 4, 2, 1, 6, 7, 3, 0, 6, 1, 1, 6, 3, 3, 7, 5, 5, 7, 0, 4, 5, 2, 6, 0, 7 ]
 },
 mirror: {
@@ -33373,16 +33390,6 @@ mirrorTube: {
 positions: [ .1, .26, .1, -.08, .08, -.1, -.08, .08, .1, -.1, 1, -.1, -.1, .4, .1, -.1, .4, -.1, .1, 1, .1, .1, .26, -.1, .1, 1, -.1, -.25, .25, .1, -.1, 1, .1, -.25, .25, -.1 ],
 normals: [ .7173, -.2971, .6302, .5, -.5, -.7071, .5, -.5, .7071, -.5773, .5773, -.5773, -.5491, .2275, .8042, -.5491, .2275, -.8042, .5773, .5773, .5773, .7173, -.2971, -.6302, .5773, .5773, -.5773, -.5, .5, .7071, -.5773, .5773, .5773, -.5, .5, -.7071 ],
 indices: [ 0, 1, 2, 3, 4, 5, 4, 6, 0, 6, 7, 0, 8, 5, 7, 4, 2, 9, 10, 8, 6, 1, 5, 11, 5, 9, 11, 0, 7, 1, 3, 10, 4, 4, 10, 6, 6, 8, 7, 8, 3, 5, 4, 0, 2, 10, 3, 8, 1, 7, 5, 5, 4, 9 ]
-},
-mirrorTubeEmpty: {
-positions: [ -.1, 1, -.1, -.1, .25, .1, -.1, .25, -.1, -.1, 1, .1, .1, .25, .1, .1, 1, .1, .1, .25, -.1, .1, 1, -.1 ],
-normals: [ -.5773, .5773, -.5773, -.5773, -.5773, .5773, -.5773, -.5773, -.5773, -.5773, .5773, .5773, .5773, -.5773, .5773, .5773, .5773, .5773, .5773, -.5773, -.5773, .5773, .5773, -.5773 ],
-indices: [ 0, 1, 2, 3, 4, 1, 5, 6, 4, 7, 2, 6, 4, 2, 1, 3, 7, 5, 0, 3, 1, 3, 5, 4, 5, 7, 6, 7, 0, 2, 4, 6, 2, 3, 0, 7 ]
-},
-mirrorTubeStraight: {
-positions: [ -.1, 1, -.1, -.1, 0, .1, -.1, 0, -.1, -.1, 1, .1, .1, 0, .1, .1, 1, .1, .1, 0, -.1, .1, 1, -.1 ],
-normals: [ -.5773, .5773, -.5773, -.5773, -.5773, .5773, -.5773, -.5773, -.5773, -.5773, .5773, .5773, .5773, -.5773, .5773, .5773, .5773, .5773, .5773, -.5773, -.5773, .5773, .5773, -.5773 ],
-indices: [ 0, 1, 2, 3, 4, 1, 5, 6, 4, 7, 2, 6, 4, 2, 1, 3, 7, 5, 0, 3, 1, 3, 5, 4, 5, 7, 6, 7, 0, 2, 4, 6, 2, 3, 0, 7 ]
 }
 };
 }).call(this);
@@ -33430,20 +33437,18 @@ return _convertToFlat = true;
 });
 window.o.Object = Object = function(_super) {
 __extends(Object, _super);
-Object.prototype._color = [ 0, 0, 0 ];
 Object.prototype._default = {};
 function Object(options) {
-Object.__super__.constructor.apply(this, arguments);
 _object_id++;
 this._id = _object_id;
 this.options = _.extend({}, this._default, options);
+if (this.options.parent_class) {
+this.parent = this.options.parent_class;
+}
 this.mesh = this.mesh_build();
 this.mesh._type = this.name;
 if (this.options.parent) {
-this.parent = this.options.parent;
-if (this.parent.mesh) {
-this.mesh.parent = this.parent.mesh;
-}
+this.mesh.parent = this.options.parent;
 }
 if (this.options.position) {
 this.mesh.position = new BABYLON.Vector3(this.options.position[0], this.options.position[1] || 0, this.options.position[2] || 0);
@@ -33465,12 +33470,6 @@ if (action.mouseout) {
 return this.mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, action.mouseout));
 }
 };
-Object.prototype._action_remove = function() {
-if (!this.mesh.actionManager) {
-return;
-}
-return this.mesh.actionManager.actions = [];
-};
 Object.prototype.mesh_build = function() {
 var mesh;
 mesh = meshes[this.name].clone(meshes[this.name].name);
@@ -33478,27 +33477,18 @@ mesh.id = this._name();
 mesh.isVisible = true;
 return mesh;
 };
-Object.prototype.color = function(color, alpha) {
-if (color == null) {
-color = this._color;
-}
+Object.prototype.color = function(red, green, blue, alpha) {
 if (alpha == null) {
 alpha = 1;
 }
 if (!this.mesh.material) {
 this.mesh.material = new BABYLON.StandardMaterial("material_" + this._name(), this.scene());
 }
-this.mesh.material.diffuseColor = new BABYLON.Color3(color[0] / 255, color[1] / 255, color[2] / 255);
-return this.mesh.material.alpha = color[3] || alpha;
+this.mesh.material.diffuseColor = new BABYLON.Color3(red / 255, green / 255, blue / 255);
+return this.mesh.material.alpha = alpha;
 };
 Object.prototype.scene = function() {
 return _scene;
-};
-Object.prototype.hide = function() {
-return this.mesh.isVisible = false;
-};
-Object.prototype.show = function() {
-return this.mesh.isVisible = true;
 };
 Object.prototype.godrays = function() {
 return new BABYLON.VolumetricLightScatteringPostProcess("godrays_" + this._name(), 1, _camera, this.mesh, 50, BABYLON.Texture.BILINEAR_SAMPLINGMODE, _engine, false);
@@ -33516,6 +33506,7 @@ this.__name = name.join("_");
 return this.__name;
 };
 Object.prototype.remove = function() {
+this.trigger("remove");
 Object.__super__.remove.apply(this, arguments);
 return this.mesh.dispose();
 };
@@ -33551,7 +33542,7 @@ return ObjectSphere;
 }).call(this);
 
 (function() {
-var Blank, Connector, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Blank, Connector, ConnectorDown, ConnectorLeft, ConnectorRight, ConnectorUp, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -33568,50 +33559,63 @@ __extends(Connector, _super);
 Connector.prototype.name = "connector";
 function Connector() {
 Connector.__super__.constructor.apply(this, arguments);
-this.mesh.rotation.z = Math.PI;
-this.hide();
+this.mesh.scaling = new BABYLON.Vector3(2.5, 2.5, 1);
 }
-Connector.prototype.angle = function(angle) {
-var angle_diff, angle_start;
-this.show();
-angle = -Math.PI / 2 + angle;
-if (angle === this.mesh.rotation.z) {
-return;
-}
-angle_diff = angle - this.mesh.rotation.z;
-if (angle_diff > 0) {
-angle_diff = angle_diff - 2 * Math.PI;
-}
-angle_start = this.mesh.rotation.z;
-return window.App.events.trigger("map:animation", this._name(), function(_this) {
-return function(m, steps) {
-if (steps === 0) {
-return _this.mesh.rotation.z = angle;
-}
-return _this.mesh.rotation.z = angle_start + angle_diff * m;
-};
-}(this));
-};
 return Connector;
 }(window.o.Object);
+ConnectorUp = function(_super) {
+__extends(ConnectorUp, _super);
+function ConnectorUp() {
+ConnectorUp.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = 0;
+this.mesh.position = new BABYLON.Vector3(0, 1.1, 0);
+}
+return ConnectorUp;
+}(Connector);
+ConnectorDown = function(_super) {
+__extends(ConnectorDown, _super);
+function ConnectorDown() {
+ConnectorDown.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = Math.PI;
+this.mesh.position = new BABYLON.Vector3(0, -1.1, 0);
+}
+return ConnectorDown;
+}(Connector);
+ConnectorLeft = function(_super) {
+__extends(ConnectorLeft, _super);
+function ConnectorLeft() {
+ConnectorLeft.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = Math.PI / 2;
+this.mesh.position = new BABYLON.Vector3(-1.1, 0, 0);
+}
+return ConnectorLeft;
+}(Connector);
+ConnectorRight = function(_super) {
+__extends(ConnectorRight, _super);
+function ConnectorRight() {
+ConnectorRight.__super__.constructor.apply(this, arguments);
+this.mesh.rotation.z = -Math.PI / 2;
+this.mesh.position = new BABYLON.Vector3(1.1, 0, 0);
+}
+return ConnectorRight;
+}(Connector);
 window.o.ObjectBlank = Blank = function(_super) {
 __extends(Blank, _super);
-Blank.prototype._color = [ 151, 153, 156 ];
-Blank.prototype._color_active = [ 103, 181, 229 ];
 Blank.prototype.name = "blank";
 Blank.prototype._switch = true;
 Blank.prototype._step = 10;
+Blank.prototype.clear = function() {
+return this._connectors = [];
+};
 function Blank() {
 Blank.__super__.constructor.apply(this, arguments);
 this.position = {
-x: this.options.position[0],
-y: this.options.position[1]
+x: this.options.pos[0],
+y: this.options.pos[1]
 };
-this._connector = new Connector({
-parent: this
-});
+this.clear();
 this.mesh.scaling = new BABYLON.Vector3(4, 4, 4);
-this._update_position(true);
+this._update_position();
 this.out();
 this;
 }
@@ -33620,38 +33624,54 @@ this.position.x = this.position.x + position.x;
 this.position.y = this.position.y + position.y;
 return this._update_position();
 };
-Blank.prototype._update_position = function(without_animation) {
-var position, position_diff, position_new, position_set;
-if (without_animation == null) {
-without_animation = false;
-}
-position_new = [ this.position.x * this._step, this.position.y * this._step ];
-position_set = function(_this) {
-return function() {
-return _this.mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], 0);
+Blank.prototype._update_position = function() {
+return this.mesh.position = new BABYLON.Vector3(this.position.x * this._step, this.position.y * this._step, 0);
 };
-}(this);
-if (without_animation) {
-return position_set();
-}
-position = [ this.mesh.position.x, this.mesh.position.y ];
-position_diff = [ position_new[0] - position[0], position_new[1] - position[1] ];
-return window.App.events.trigger("map:animation", this._name(), function(_this) {
-return function(m, steps) {
-if (steps === 0) {
-return position_set();
-}
-return _this.mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, (_this._switch ? -1 : 1) * 5 * Math.sin(Math.PI * m));
+Blank.prototype._animate = function(part, position) {
+var axis, diff;
+axis = position.x ? "x" : "y";
+diff = position[axis] - this._position_prev[axis];
+return this.mesh.position[axis] = this._position_prev[axis] + diff * part;
 };
-}(this), 20, true);
+Blank.prototype.connector = function(position) {
+var c;
+while (this._connectors.length) {
+this._connectors.shift().remove();
+}
+if (position.x === 1) {
+c = new ConnectorRight({
+parent: this.mesh
+});
+}
+if (position.x === -1) {
+c = new ConnectorLeft({
+parent: this.mesh
+});
+}
+if (position.y === 1) {
+c = new ConnectorUp({
+parent: this.mesh
+});
+}
+if (position.y === -1) {
+c = new ConnectorDown({
+parent: this.mesh
+});
+}
+this._connectors.push(c);
+return this.out();
 };
 Blank.prototype.over = function() {
-this.color(this._color_active);
-return this._connector.color(this._color_active);
+this.color(103, 181, 229);
+return this._connectors.forEach(function(c) {
+return c.color(103, 181, 229);
+});
 };
 Blank.prototype.out = function() {
-this.color(this._color);
-return this._connector.color(this._color);
+this.color(151, 153, 156);
+return this._connectors.forEach(function(c) {
+return c.color(151, 153, 156);
+});
 };
 return Blank;
 }(window.o.Object);
@@ -33677,7 +33697,7 @@ Beam.prototype._color = [ 255, 243, 21 ];
 function Beam() {
 var end, start, width;
 Beam.__super__.constructor.apply(this, arguments);
-this.color(null, .5);
+this.color.apply(this, this._color.concat(.5));
 width = .25;
 start = this.options.start;
 end = this.options.end;
@@ -33705,18 +33725,18 @@ color: Beam.prototype._color
 };
 function BeamSphere() {
 BeamSphere.__super__.constructor.apply(this, arguments);
-this.color(this.options.color);
+this.color.apply(this, this.options.color);
 this.mesh.position = new BABYLON.Vector3(this.options.position[0], this.options.position[1], this.options.position[2]);
 this.sheath = new window.o.ObjectSphere({
 diameter: this.options.diameter + 1,
-parent: this
+parent: this.mesh
 });
-this.sheath.color(this.options.color.concat(.5));
+this.sheath.color.apply(this.sheath, this.options.color.concat(.5));
 this.sheath2 = new window.o.ObjectSphere({
 diameter: this.options.diameter + 2,
-parent: this
+parent: this.mesh
 });
-this.sheath2.color(this.options.color.concat(.2));
+this.sheath2.color.apply(this.sheath2, this.options.color.concat(.2));
 this;
 }
 return BeamSphere;
@@ -33734,7 +33754,7 @@ this._mirror = [];
 BeamSource.__super__.constructor.apply(this, arguments);
 }
 BeamSource.prototype.beam = function() {
-var direction, i, last_mirror, pick_info, points, tube_check, _i, _results;
+var direction, i, last_mirror, pick_info, points, _i, _results;
 this.beam_remove();
 this.solved = false;
 this._beam = [];
@@ -33742,17 +33762,14 @@ this._mirror = [];
 points = [ new BABYLON.Vector3(this.options.position[0], this.options.position[1], this.options.position[2]) ];
 last_mirror = null;
 direction = new BABYLON.Vector3(0, 1e3, 0);
-tube_check = function(_type) {
-return _type && _type.indexOf("mirrorTube") > -1;
-};
 _results = [];
 for (i = _i = 0; _i < 100; i = ++_i) {
 pick_info = this.scene().pickWithRay(new BABYLON.Ray(points[points.length - 1], direction, 100), function(i) {
 return function(m) {
-if (i === 0 && m._type === "source" || tube_check(m._type) && last_mirror === m._class.mirror_id()) {
+if (i === 0 && m._type === "source" || m._type === "mirrorTube" && last_mirror === m._class.mirror_id()) {
 return false;
 }
-return tube_check(m._type) || [ "target", "source" ].indexOf(m._type) > -1;
+return [ "mirrorTube", "target", "obstacle", "source" ].indexOf(m._type) > -1;
 };
 }(i));
 if (!pick_info.pickedPoint) {
@@ -33770,16 +33787,12 @@ break;
 if (pick_info.pickedMesh._type === "target") {
 this.solved = true;
 }
-if (tube_check(pick_info.pickedMesh._type)) {
+if (pick_info.pickedMesh._type !== "mirrorTube") {
+break;
+}
 direction = pick_info.pickedMesh._class.reflect(direction);
 last_mirror = pick_info.pickedMesh._class.mirror_id();
-this._mirror.push(pick_info.pickedMesh._class.parent);
-}
-if ([ "mirrorTubeStraight", "mirrorTube" ].indexOf(pick_info.pickedMesh._type) === -1) {
-break;
-} else {
-_results.push(void 0);
-}
+_results.push(this._mirror.push(pick_info.pickedMesh._class.parent));
 }
 return _results;
 };
@@ -33815,7 +33828,7 @@ return BeamTarget;
 }).call(this);
 
 (function() {
-var MirrorContainer, MirrorEmpty, MirrorNormal, MirrorReverse, MirrorStraight, MirrorTube, MirrorTubeConnect, MirrorTubeConnectOut, MirrorTubeEmpty, MirrorTubeStraight, MirrorTubeStraightOut, _move_positions, _move_positions_coors, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Mirror, MirrorContainer, MirrorTube, MirrorTubeIn, MirrorTubeOut, _move_positions, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -33827,199 +33840,135 @@ child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
 };
-MirrorTube = function(_super) {
-__extends(MirrorTube, _super);
-MirrorTube.prototype._color = [ 187, 230, 239 ];
-MirrorTube.prototype._color_active = window.o.ObjectBeam.prototype._color;
-function MirrorTube() {
-MirrorTube.__super__.constructor.apply(this, arguments);
+MirrorTubeIn = function(_super) {
+__extends(MirrorTubeIn, _super);
+MirrorTubeIn.prototype.name = "mirrorTube";
+function MirrorTubeIn() {
+MirrorTubeIn.__super__.constructor.apply(this, arguments);
 this.mesh.position = new BABYLON.Vector3(0, 0, -.55);
 this.mesh._class = this;
-this.deactive();
-this.mesh.rotate(new BABYLON.Vector3(0, 0, 1), this.options.rotation * Math.PI / 2, BABYLON.Space.WORLD);
-this;
+this._out = false;
 }
-MirrorTube.prototype.mirror_id = function() {
-return this.parent.options.parent._name();
+MirrorTubeIn.prototype.rotate = function(rotation) {
+return this.mesh.rotate(new BABYLON.Vector3(0, 0, 1), rotation * Math.PI / 2, BABYLON.Space.WORLD);
 };
-MirrorTube.prototype.active = function(silent) {
-if (silent == null) {
-silent = false;
+MirrorTubeIn.prototype.mirror_id = function() {
+return this.parent.options.parent_class._name();
+};
+MirrorTubeIn.prototype.position = function() {
+return this.options.parent.position;
+};
+MirrorTubeIn.prototype.reflect = function(v) {
+this.parent.activate();
+if (this._out) {
+return new BABYLON.Vector3(-v.y, v.x, v.z);
 }
-this.color(this._color_active);
-if (!silent) {
-return this.trigger("active");
-}
-};
-MirrorTube.prototype.deactive = function() {
-return this.color(this._color);
-};
-MirrorTube.prototype.reflect = function(v) {
-return this.active();
-};
-return MirrorTube;
-}(window.o.Object);
-MirrorTubeConnect = function(_super) {
-__extends(MirrorTubeConnect, _super);
-function MirrorTubeConnect() {
-return MirrorTubeConnect.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeConnect.prototype.name = "mirrorTube";
-MirrorTubeConnect.prototype.reflect = function(v) {
-MirrorTubeConnect.__super__.reflect.apply(this, arguments);
 return new BABYLON.Vector3(v.y, -v.x, v.z);
 };
-return MirrorTubeConnect;
-}(MirrorTube);
-MirrorTubeConnectOut = function(_super) {
-__extends(MirrorTubeConnectOut, _super);
-function MirrorTubeConnectOut() {
-return MirrorTubeConnectOut.__super__.constructor.apply(this, arguments);
+return MirrorTubeIn;
+}(window.o.Object);
+MirrorTubeOut = function(_super) {
+__extends(MirrorTubeOut, _super);
+function MirrorTubeOut() {
+MirrorTubeOut.__super__.constructor.apply(this, arguments);
+this.mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD);
+this.mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI / 2, BABYLON.Space.WORLD);
+this._out = true;
 }
-MirrorTubeConnectOut.prototype.name = "mirrorTube";
-MirrorTubeConnectOut.prototype.mesh_build = function() {
-var mesh;
-mesh = MirrorTubeConnectOut.__super__.mesh_build.apply(this, arguments);
-mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD);
-mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI / 2, BABYLON.Space.WORLD);
-return mesh;
+return MirrorTubeOut;
+}(MirrorTubeIn);
+MirrorTube = function() {
+MirrorTube.prototype._color_active = window.o.ObjectBeam.prototype._color;
+function MirrorTube(options) {
+var tube_options;
+this.options = options;
+tube_options = {
+parent_class: this,
+parent: this.options.parent_class.mesh
 };
-MirrorTubeConnectOut.prototype.reflect = function(v) {
-MirrorTubeConnectOut.__super__.reflect.apply(this, arguments);
-return new BABYLON.Vector3(-v.y, v.x, v.z);
-};
-return MirrorTubeConnectOut;
-}(MirrorTube);
-MirrorTubeEmpty = function(_super) {
-__extends(MirrorTubeEmpty, _super);
-function MirrorTubeEmpty() {
-return MirrorTubeEmpty.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeEmpty.prototype.name = "mirrorTubeEmpty";
-return MirrorTubeEmpty;
-}(MirrorTube);
-MirrorTubeStraight = function(_super) {
-__extends(MirrorTubeStraight, _super);
-function MirrorTubeStraight() {
-return MirrorTubeStraight.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeStraight.prototype.name = "mirrorTubeStraight";
-MirrorTubeStraight.prototype.reflect = function(v) {
-MirrorTubeStraight.__super__.reflect.apply(this, arguments);
-return new BABYLON.Vector3(v.x, v.y, v.z);
-};
-return MirrorTubeStraight;
-}(MirrorTube);
-MirrorTubeStraightOut = function(_super) {
-__extends(MirrorTubeStraightOut, _super);
-function MirrorTubeStraightOut() {
-return MirrorTubeStraightOut.__super__.constructor.apply(this, arguments);
-}
-MirrorTubeStraightOut.prototype.mesh_build = function() {
-var mesh;
-mesh = MirrorTubeStraightOut.__super__.mesh_build.apply(this, arguments);
-mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI, BABYLON.Space.WORLD);
-return mesh;
-};
-return MirrorTubeStraightOut;
-}(MirrorTubeStraight);
-MirrorNormal = function(_super) {
-__extends(MirrorNormal, _super);
-MirrorNormal.prototype.name = "mirror";
-MirrorNormal.prototype.connectors = [ [ MirrorTubeConnect, MirrorTubeConnectOut ], null, [ MirrorTubeConnect, MirrorTubeConnectOut ] ];
-function MirrorNormal() {
-MirrorNormal.__super__.constructor.apply(this, arguments);
-this.color(null, 0);
 this.tubes = [];
-this.connectors.forEach(function(_this) {
-return function(connectors, i) {
-var tubes;
-if (!connectors) {
-return;
-}
-tubes = (Array.isArray(connectors) ? connectors : [ connectors ]).map(function(connector) {
-return new connector({
-parent: _this,
-rotation: i
-});
-});
-tubes.forEach(function(t1, i) {
-return tubes.forEach(function(t2, j) {
-if (i === j) {
-return;
-}
-t1.bind("active", function() {
-return t2.active(true);
-});
-return t2.bind("active", function() {
-return t1.active(true);
-});
-});
-});
-return _this.tubes = _this.tubes.concat(tubes);
+this.tubes.push(new MirrorTubeIn(tube_options));
+this.tubes.push(new MirrorTubeOut(tube_options));
+this.tubes.forEach(function(_this) {
+return function(t) {
+return t.rotate(_this.options.rotation);
 };
 }(this));
+this._color = this.options.parent_class._color;
+this.color_default();
 }
-MirrorNormal.prototype.deactive = function() {
+MirrorTube.prototype.activate = function() {
+this.active = true;
+return this.tubes.forEach(function(_this) {
+return function(t) {
+return t.color.apply(t, _this._color_active.concat(.5));
+};
+}(this));
+};
+MirrorTube.prototype.color_default = function() {
+return this.tubes.forEach(function(_this) {
+return function(t) {
+return t.color.apply(t, _this._color.concat(.5));
+};
+}(this));
+};
+MirrorTube.prototype.deactive = function() {
+if (!this.active) {
+return;
+}
+return this.color_default();
+};
+return MirrorTube;
+}();
+Mirror = function(_super) {
+__extends(Mirror, _super);
+Mirror.prototype.name = "mirror";
+function Mirror() {
+var rotation, _i, _len, _ref;
+Mirror.__super__.constructor.apply(this, arguments);
+this._color = [ 187, 230, 239 ];
+this.color.apply(this, this._color.concat([ .4 ]));
+this.tubes = [];
+_ref = this.options.reverse ? [ 1, 3 ] : [ 0, 2 ];
+for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+rotation = _ref[_i];
+this.tubes.push(new MirrorTube({
+parent_class: this,
+rotation: rotation
+}));
+}
+}
+Mirror.prototype.deactive = function() {
 return this.tubes.forEach(function(t) {
 return t.deactive();
 });
 };
-return MirrorNormal;
+return Mirror;
 }(window.o.Object);
-MirrorReverse = function(_super) {
-__extends(MirrorReverse, _super);
-function MirrorReverse() {
-return MirrorReverse.__super__.constructor.apply(this, arguments);
-}
-MirrorReverse.prototype.connectors = [ null, [ MirrorTubeConnect, MirrorTubeConnectOut ], null, [ MirrorTubeConnect, MirrorTubeConnectOut ] ];
-return MirrorReverse;
-}(MirrorNormal);
-MirrorEmpty = function(_super) {
-__extends(MirrorEmpty, _super);
-function MirrorEmpty() {
-return MirrorEmpty.__super__.constructor.apply(this, arguments);
-}
-MirrorEmpty.prototype.connectors = [ MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty ];
-return MirrorEmpty;
-}(MirrorNormal);
-MirrorStraight = function(_super) {
-__extends(MirrorStraight, _super);
-function MirrorStraight() {
-return MirrorStraight.__super__.constructor.apply(this, arguments);
-}
-MirrorStraight.prototype.connectors = [ [ MirrorTubeStraight, MirrorTubeStraightOut ], MirrorTubeEmpty, null, MirrorTubeEmpty ];
-return MirrorStraight;
-}(MirrorNormal);
-_move_positions = [ Math.PI * 3 / 2, Math.PI, Math.PI / 2, 0 ];
-_move_positions_coors = _move_positions.map(function(angle) {
-return {
-y: Math.round(Math.sin(angle)),
-x: Math.round(Math.cos(angle))
-};
-});
+_move_positions = [ {
+y: -1,
+x: 0
+}, {
+y: 0,
+x: -1
+}, {
+y: 1,
+x: 0
+}, {
+y: 0,
+x: 1
+} ];
 window.o.ObjectMirror = MirrorContainer = function(_super) {
 __extends(MirrorContainer, _super);
 MirrorContainer.prototype._switch = false;
-MirrorContainer.prototype.classes = {
-normal: MirrorNormal,
-reverse: MirrorReverse,
-empty: MirrorEmpty,
-straight: MirrorStraight
-};
 function MirrorContainer() {
 MirrorContainer.__super__.constructor.apply(this, arguments);
-this.mirror = new this.classes[this.options.type]({
-parent: this
+this.mirror = new Mirror({
+parent: this.mesh,
+rotation: this.options.rotation
 });
 this._move_position = 0;
-}
-MirrorContainer.prototype._controls_add = function() {
-if (this._controls_added) {
-return;
-}
-this._controls_added = true;
-return this.mirror._action({
+this.mirror._action({
 mouseover: function(_this) {
 return function() {
 return _this.over();
@@ -34032,17 +33981,12 @@ return _this.out();
 }(this),
 click: function(_this) {
 return function() {
-return _this.trigger("move", _this.get_move_position());
+return _this.trigger("move", _this.get_position());
 };
 }(this)
 });
-};
-MirrorContainer.prototype._controls_remove = function() {
-this._controls_added = false;
-this.out();
-return this.mirror._action_remove();
-};
-MirrorContainer.prototype.get_move_position = function(n, full) {
+}
+MirrorContainer.prototype.get_position = function(n, full) {
 var p;
 if (n == null) {
 n = this._move_position;
@@ -34050,7 +33994,7 @@ n = this._move_position;
 if (full == null) {
 full = false;
 }
-p = _move_positions_coors[n];
+p = _move_positions[n];
 if (!full) {
 return p;
 }
@@ -34059,25 +34003,16 @@ x: p.x + this.position.x,
 y: p.y + this.position.y
 };
 };
-MirrorContainer.prototype.set_move_position = function(nr) {
-if (nr === null) {
-this._controls_remove();
-return this._connector.hide();
-}
-this._controls_add();
+MirrorContainer.prototype.set_position = function(nr) {
 this._move_position = nr;
-return this._connector.angle(_move_positions[nr]);
+return this.connector(this.get_position());
 };
 return MirrorContainer;
 }(window.o.ObjectBlank);
 }).call(this);
 
 (function() {
-window.o.GameMapData = [ "1\n09\n8-", "009\n0-\n0-\n18", "0000\n00-0\n0-009\n1-00\n---8", "139\n000\n-8", "10000\n01200\n00000\n809", "9122\n-210\n-8", "000\n029\n010\n-8", "2001\n0-00\n8--9", "---9\n0000\n0000\n1801", "00009\n3801", "2-0310\n000000\n0-0000\n8--90", "0000\n0120\n0000\n809", "000\n0-0\n200\n-01\n8-9", "001\n009\n3\n002\n8", "9000\n--0-\n0000-\n30-002\n00000\n-8", "9\n232\n303\n232\n--8", "0000\n9--0\n0100\n12-0\n-8", "1-0110\n0-0-009\n0-00-0\n0-0000\n8", "000\n9-0\n010\n120\n-8" ];
-}).call(this);
-
-(function() {
-var Map, MapAnimation, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Platform, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -34089,366 +34024,243 @@ child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
 };
-MapAnimation = function(_super) {
-__extends(MapAnimation, _super);
-function MapAnimation() {
-var fn, in_action_active, triggered_start;
-MapAnimation.__super__.constructor.apply(this, arguments);
+window.o.Platform = Platform = function(_super) {
+__extends(Platform, _super);
+Platform.prototype._step = 10;
+Platform.prototype.clear = function() {
+this._controls = [];
+this._blanks = {};
+return this._blanks_position = {
+l: [],
+r: [],
+t: [],
+b: []
+};
+};
+function Platform(options) {
+var s, size, width, _i, _ref, _ref1;
+width = options.size * 2 + this._step;
+Platform.__super__.constructor.call(this, _.extend({
+dimension: [ width, width, 0 ]
+}, options));
+this.color(0, 0, 0, 0);
+size = this.options.size;
+this._rotation_animations = [];
 this.clear();
-in_action_active = 0;
-triggered_start = false;
-fn = function(_this) {
-return function(animation, callback, steps, in_action) {
-if (steps == null) {
-steps = 30;
+this.blank_put(new window.o.ObjectBlank({
+pos: [ -size, size ],
+parent: this.mesh
+}), [ "l", "t" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ -size, -size ],
+parent: this.mesh
+}), [ "l", "b" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ size, size ],
+parent: this.mesh
+}), [ "r", "t" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ size, -size ],
+parent: this.mesh
+}), [ "r", "b" ]);
+for (s = _i = _ref = -size + this._step, _ref1 = this._step; _ref1 > 0 ? _i < size : _i > size; s = _i += _ref1) {
+this.blank_put(new window.o.ObjectBlank({
+pos: [ -size, s ],
+parent: this.mesh
+}), [ "l" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ size, s ],
+parent: this.mesh
+}), [ "r" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ s, -size ],
+parent: this.mesh
+}), [ "b" ]);
+this.blank_put(new window.o.ObjectBlank({
+pos: [ s, size ],
+parent: this.mesh
+}), [ "t" ]);
 }
-if (in_action == null) {
-in_action = false;
-}
-if (!_this._animations[animation]) {
-_this._animations[animation] = [];
-}
-if (in_action) {
-in_action_active++;
-if (!triggered_start) {
-_this.trigger("animation_start");
-triggered_start = true;
-}
-}
-return _this._animations[animation].push({
-callback: function(m, steps) {
-callback.apply(_this, arguments);
-if (steps !== 0) {
-return;
-}
-if (in_action) {
-in_action_active--;
-if (in_action_active === 0) {
-_this.trigger("animation_end");
-return triggered_start = false;
-}
-}
+[ {
+size: [ this._step, this._step ],
+position: [ -size, -size ],
+vector: new BABYLON.Vector3(-1, 1, 0)
+}, {
+size: [ this._step, this._step ],
+position: [ size, size ],
+vector: new BABYLON.Vector3(1, -1, 0)
+}, {
+size: [ this._step, this._step ],
+position: [ -size, size ],
+vector: new BABYLON.Vector3(1, 1, 0)
+}, {
+size: [ this._step, this._step ],
+position: [ size, -size ],
+vector: new BABYLON.Vector3(-1, -1, 0)
+}, {
+size: [ width - 2 * this._step, this._step ],
+position: [ 0, -size ],
+vector: new BABYLON.Vector3(-1, 0, 0)
+}, {
+size: [ width - 2 * this._step, this._step ],
+position: [ 0, size ],
+vector: new BABYLON.Vector3(1, 0, 0)
+}, {
+size: [ this._step, width - 2 * this._step ],
+position: [ size, 0 ],
+vector: new BABYLON.Vector3(0, -1, 0)
+}, {
+size: [ this._step, width - 2 * this._step ],
+position: [ -size, 0 ],
+vector: new BABYLON.Vector3(0, 1, 0)
+} ].forEach(function(_this) {
+return function(c) {
+var action;
+action = new window.o.ObjectBox({
+dimension: [ c.size[0], c.size[1], _this._step ],
+position: c.position,
+action: {
+mouseover: function() {
+c._mouseover = true;
+return _this.blank_change(c.vector, true);
 },
-steps: steps,
-steps_total: steps
+mouseout: function() {
+c._mouseover = false;
+return _this.blank_change(c.vector, false);
+},
+click: function() {
+return _this._rotate(c.vector, function() {
+_this.blank_change(c.vector, false);
+_this.blank_rotate(c.vector);
+if (c._mouseover) {
+return _this.blank_change(c.vector, true);
+}
+});
+}
+}
+});
+action.bind("remove", function() {
+if (c._mouseover) {
+return _this.blank_change(c.vector, false);
+}
+});
+_this._controls.push(action);
+return action.color(0, 0, 0, 0);
+};
+}(this));
+}
+Platform.prototype.blank_put = function(blank, positions) {
+this._blanks[blank._id] = blank;
+return positions.forEach(function(_this) {
+return function(p) {
+return _this._blanks_position[p].push(blank._id);
+};
+}(this));
+};
+Platform.prototype._blank_direction = function(v) {
+var d;
+d = [];
+if (v.x === 1) {
+d.push("t");
+}
+if (v.x === -1) {
+d.push("b");
+}
+if (v.y === -1) {
+d.push("r");
+}
+if (v.y === 1) {
+d.push("l");
+}
+return d;
+};
+Platform.prototype.blank_change = function(v, over) {
+var direction;
+direction = this._blank_direction(v);
+return direction.forEach(function(_this) {
+return function(d) {
+return _this._blanks_position[d].forEach(function(id) {
+return _this._blanks[id][over ? "over" : "out"]();
 });
 };
-}(this);
-window.App.events.bind("map:animation", fn);
-this.bind("remove", function() {
-return window.App.events.unbind("map:animation", fn);
-});
-}
-MapAnimation.prototype.clear = function() {
-this._before_render_fn = [];
-return this._animations = {};
+}(this));
 };
-MapAnimation.prototype._before_render = function(callback) {
-return this._before_render_fn.push(callback);
+Platform.prototype.blank_rotate = function(v) {
+var change, direction;
+direction = this._blank_direction(v);
+if (direction.length > 1) {
+if (v.x === v.y) {
+change = {
+t: "r",
+r: "t",
+l: "b",
+b: "l"
 };
-MapAnimation.prototype.render = function() {
-if (this._before_render_fn.length > 0) {
-this._before_render_fn.pop()();
-}
-return function(_this) {
-return function() {
-var name, params, _ref, _results;
-_ref = _this._animations;
-_results = [];
-for (name in _ref) {
-params = _ref[name];
-if (params.length === 0) {
-delete _this._animations[name];
-continue;
-}
-params[0].steps--;
-params[0].callback((params[0].steps_total - params[0].steps) / params[0].steps_total, params[0].steps);
-if (params[0].steps === 0) {
-_results.push(_this._animations[name].shift());
 } else {
-_results.push(void 0);
+change = {
+b: "r",
+r: "b",
+t: "l",
+l: "t"
+};
 }
+} else {
+change = {
+t: "b",
+b: "t",
+l: "r",
+r: "l"
+};
 }
-return _results;
-};
-}(this)();
-};
-return MapAnimation;
-}(MicroEvent);
-window.o.GameMap = Map = function(_super) {
-__extends(Map, _super);
-function Map() {
-Map.__super__.constructor.apply(this, arguments);
-this.bind("animation_start", function(_this) {
-return function() {
-return _this._source.beam_remove();
-};
-}(this));
-this.bind("animation_end", function(_this) {
-return function() {
-return _this._before_render(function() {
-_this.position_check();
-_this._source.beam();
-_this.solved = _this._source.solved;
-return _this.trigger("beam", _this._source._mirror.length);
-});
-};
-}(this));
-}
-Map.prototype.clear = function() {
-Map.__super__.clear.apply(this, arguments);
-this._blank = [];
-this._mirror = [];
-return this.solved = false;
-};
-Map.prototype.load = function(map_string) {
-var call, map, map_size, methods;
-methods = {
-"-": null,
-"0": "blank",
-"1": "mirror",
-"2": "mirror_reverse",
-"3": "mirror_empty",
-"4": "mirror_straight",
-"8": "beam_source",
-"9": "target"
-};
-call = function(_this) {
-return function(method, x, y) {
-if (x == null) {
-x = 0;
-}
-if (y == null) {
-y = 0;
-}
-if (methods[method]) {
-return _this[methods[method]]([ x, y ]);
-}
-};
-}(this);
-map = map_string.split("\n").map(function(s) {
-return s.trim().split("");
-});
-map_size = [ Math.floor(map.reduce(function(max, v) {
-return Math.max(max, v.length);
-}, 0) / 2), Math.floor(map.length / 2) ];
-this._map = {};
-map.forEach(function(_this) {
-return function(row, j) {
-return row.forEach(function(cell, i) {
-var x, y;
-y = -j + map_size[1];
-x = i - map_size[0];
-if (!_this._map[y]) {
-_this._map[y] = {};
-}
-return _this._map[y][x] = call(cell, x, y);
-});
-};
-}(this));
-setTimeout(function(_this) {
-return function() {
-return _this.trigger("animation_end");
-};
-}(this), 100);
-return map_size;
-};
-Map.prototype.remove_controls = function() {
-return this._mirror.forEach(function(m) {
-return m._controls_remove();
-});
-};
-Map.prototype.remove = function() {
-Map.__super__.remove.apply(this, arguments);
-if (this._source) {
-this._source.remove();
-}
-if (this._target) {
-this._target.remove();
-}
-this._blank.forEach(function(ob) {
-return ob.remove();
-});
-this._mirror.forEach(function(ob) {
-return ob.remove();
-});
-return this.clear();
-};
-Map.prototype.position_check = function() {
-return this._mirror.forEach(function(_this) {
-return function(m) {
-var i, nr, p, _i, _len, _ref;
-_ref = [ 0, 1, 2, 3 ];
-for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-i = _ref[_i];
-nr = (m._move_position + i) % 4;
-p = m.get_move_position(nr, true);
-if (_this._map[p.y] && _this._map[p.y][p.x] && _this._map[p.y][p.x]._switch) {
-m.set_move_position(nr);
-return;
-}
-}
-return m.set_move_position(null);
+return direction.forEach(function(_this) {
+return function(d) {
+var _ref;
+return _ref = [ _this._blanks_position[change[d]], _this._blanks_position[d] ], 
+_this._blanks_position[d] = _ref[0], _this._blanks_position[change[d]] = _ref[1], 
+_ref;
 };
 }(this));
 };
-Map.prototype.beam_source = function(coors) {
-this._source = new window.o.ObjectBeamSource({
-position: [ coors[0] * 10, coors[1] * 10, -.55 * 4 ]
+Platform.prototype.remove_controls = function() {
+this._controls.forEach(function(c) {
+return c.remove();
 });
-return this._source;
+return this._controls = [];
 };
-Map.prototype.target = function(coors) {
-this._target = new window.o.ObjectBeamTarget({
-position: [ coors[0] * 10, coors[1] * 10, -.55 * 4 ]
-});
-return this._target;
+Platform.prototype.remove = function() {
+this.remove_controls();
+this.clear();
+return Platform.__super__.remove.apply(this, arguments);
 };
-Map.prototype.blank = function(coors) {
-return new window.o.ObjectBlank({
-position: coors
-});
-};
-Map.prototype.mirror = function(coors, type) {
-var m;
-if (type == null) {
-type = "normal";
-}
-m = new window.o.ObjectMirror({
-position: coors,
-type: type
-});
-m.bind("move", function(_this) {
-return function(position) {
-var blank, i, x, y, _i;
-_this.trigger("rotate");
-for (i = _i = 1; _i <= 20; i = ++_i) {
-y = m.position.y + position.y * i;
-x = m.position.x + position.x * i;
-if (!(_this._map[y] && _this._map[y][x] && _this._map[y][x]._switch)) {
-i--;
-break;
-}
-blank = _this._map[y][x];
-}
-_this._map[m.position.y][m.position.x] = blank;
-_this._map[blank.position.y][blank.position.x] = m;
-blank.move({
-x: -position.x * i,
-y: -position.y * i
-});
-return m.move({
-x: position.x * i,
-y: position.y * i
+Platform.prototype._rotate = function(vector, callback) {
+var angle, steps;
+this.trigger("rotate");
+angle = Math.PI;
+steps = 30;
+return this._rotation_animations.push({
+vector: new BABYLON.Vector3(vector.x, vector.y, vector.z),
+steps: steps,
+step: angle / steps,
+callback: callback
 });
 };
-}(this));
-this._mirror.push(m);
-return m;
-};
-Map.prototype.mirror_reverse = function(coors) {
-return this.mirror(coors, "reverse");
-};
-Map.prototype.mirror_empty = function(coors) {
-return this.mirror(coors, "empty");
-};
-Map.prototype.mirror_straight = function(coors) {
-return this.mirror(coors, "straight");
-};
-return Map;
-}(MapAnimation);
-}).call(this);
-
-(function() {
-var Game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
-for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+Platform.prototype._rotation_check = function() {
+if (!this._rotation_animation) {
+if (this._rotation_animations.length === 0) {
+return false;
 }
-function ctor() {
-this.constructor = child;
+this._rotation_animation = this._rotation_animations.shift();
 }
-ctor.prototype = parent.prototype;
-child.prototype = new ctor();
-child.__super__ = parent.prototype;
-return child;
-};
-window.o.Game = Game = function(_super) {
-__extends(Game, _super);
-function Game() {
-Game.__super__.constructor.apply(this, arguments);
-this._rendered = false;
-this.canvas = document.createElement("canvas");
-this._engine = new BABYLON.Engine(this.canvas, true);
-window.addEventListener("resize", function(_this) {
-return function() {
-return _this._engine.resize();
-};
-}(this));
-this;
+this.mesh.rotate(this._rotation_animation.vector, this._rotation_animation.step, BABYLON.Space.WORLD);
+this._rotation_animation.steps--;
+if (this._rotation_animation.steps === 0) {
+this._rotation_animation.callback();
+this._rotation_animation = null;
 }
-Game.prototype._render_loop = function() {};
-Game.prototype._render_before_loop = function() {
-return this._map.render();
+return true;
 };
-Game.prototype.render = function(options) {
-var camera, map_size, max_size;
-options.container.append(this.canvas);
-this._engine.resize();
-this._engine.runRenderLoop(function(_this) {
-return function() {
-_this._render_loop();
-return _this._scene.render();
-};
-}(this));
-this._map = new window.o.GameMap();
-this._map.bind("beam", function(_this) {
-return function(mirrors) {
-if (!_this._map.solved) {
-return;
-}
-_this._map.remove_controls();
-return _this.trigger("solved", mirrors);
-};
-}(this));
-this._map.bind("rotate", function(_this) {
-return function() {
-return _this.trigger("rotate");
-};
-}(this));
-this._scene = new BABYLON.Scene(this._engine);
-this._scene.registerBeforeRender(this._render_before_loop.bind(this));
-this._scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), this._scene);
-this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
-this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-40, 60, -100), this._scene);
-window.App.events.trigger("game:init", this._scene, this._engine, this._light, this._camera);
-map_size = this._map.load(window.o.GameMapData[options.stage - 1]);
-max_size = Math.max(map_size[0], map_size[1]);
-window.App.events.trigger("map:animation", "camera_anime", function(_this) {
-return function(m, steps) {
-if (steps === 0) {
-return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -80 - 20 * max_size));
-}
-return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -200 * Math.sin((1 - m) * Math.PI / 2) - 80 - 20 * max_size));
-};
-}(this), 20);
-return this._rendered = true;
-};
-Game.prototype.clear = function() {
-this.unbind();
-if (!this._rendered) {
-return;
-}
-this._rendered = false;
-this._map.remove();
-this._camera.dispose();
-this._light.dispose();
-this._scene.dispose();
-this._engine.stopRenderLoop();
-return this.canvas.parentElement.removeChild(this.canvas);
-};
-return Game;
-}(MicroEvent);
+return Platform;
+}(window.o.ObjectBox);
 }).call(this);
 
 (function() {
@@ -34472,7 +34284,6 @@ View.prototype.el = "<div>";
 View.prototype.template = "";
 View.prototype.events = {};
 function View(options) {
-View.__super__.constructor.apply(this, arguments);
 this.options = _.extend(this.options || {}, options);
 view_id++;
 this._id = view_id;
@@ -34542,10 +34353,14 @@ Router.__super__.constructor.apply(this, arguments);
 this.$back = this.$(".back-link");
 this._active = null;
 this.game_stages = window.o.GameMapData.length;
-this.game_last = this.options.game_last > this.game_stages ? this.game_stages : this.options.game_last;
+this.game_last = this.options.game_last;
 }
 Router.prototype.run = function() {
+if (this.game_last === 1) {
 this.game();
+} else {
+this.start();
+}
 return this;
 };
 Router.prototype.start = function() {
@@ -34629,9 +34444,6 @@ return _this.start();
 return callback();
 };
 Router.prototype._game_completed = function() {
-this.game_last = 1;
-this.options.game_save(this.game_last);
-return this.game();
 return new window.o.ViewPopup({
 title: _l("Game over"),
 content: _l("Game over description"),
@@ -34668,7 +34480,7 @@ stage: id
 this._active.bind("solved", function(_this) {
 return function(data) {
 App.events.trigger("router:game-solved", id, data);
-if (id === _this.game_last && _this.game_last < _this.game_stages) {
+if (id === _this.game_last && _this.game_last !== _this.game_stages) {
 _this.game_last++;
 return _this.options.game_save(_this.game_last);
 }
@@ -34676,10 +34488,10 @@ return _this.options.game_save(_this.game_last);
 }(this));
 this._active.bind("next", function(_this) {
 return function() {
-if (id < _this.game_last) {
+if (id !== _this.game_last) {
 return _this.game(id + 1);
 }
-if (_this.game_last >= _this.game_stages) {
+if (_this.game_last === _this.game_stages) {
 return _this._game_completed();
 }
 return _this.game();
@@ -34726,7 +34538,7 @@ function start() {
 return start.__super__.constructor.apply(this, arguments);
 }
 start.prototype.className = "start";
-start.prototype.template = "<h1>Raccoobe</h1>\n    <nav>\n      <ul>\n       <li><button>" + _l("Continue") + "</button></li>\n       <!--<li><button>" + _l("Choose stage") + "</button></li>-->\n       <% if (close) { %>\n        <li><button>" + _l("Quit") + "</button></li>\n      <% } %>\n     </ul>\n    </nav>\n    <%= author_link ? \"<a class='start-author' target='_parent' href='http://raccoons.lv'>\" : \"<span class='start-author'>\" %>\n    " + _l("Credits") + "\n    <%= author_link ? \"</a>\" : '<span>' %>";
+start.prototype.template = "<h1>Raccoobe</h1>\n    <nav>\n      <ul>\n       <li><button>" + _l("Continue") + "</button></li>\n       <li><button>" + _l("Choose stage") + "</button></li>\n       <% if (close) { %>\n        <li><button>" + _l("Quit") + "</button></li>\n      <% } %>\n     </ul>\n    </nav>\n    <%= author_link ? \"<a class='start-author' target='_parent' href='http://raccoons.lv'>\" : \"<span class='start-author'>\" %>\n    " + _l("Credits") + "\n    <%= author_link ? \"</a>\" : '<span>' %>";
 start.prototype.events = {
 "click li:nth-child(1) button": function() {
 return this.trigger("continue");
@@ -34792,7 +34604,7 @@ return Stages;
 }).call(this);
 
 (function() {
-var Game, game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
 for (var key in parent) {
 if (__hasProp.call(parent, key)) child[key] = parent[key];
 }
@@ -34804,59 +34616,525 @@ child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
 };
-game = new window.o.Game();
 window.o.ViewGame = Game = function(_super) {
 __extends(Game, _super);
 Game.prototype.className = "game";
-Game.prototype.template = "<div class='game-container'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>";
+Game.prototype.template = "<div class='game-container'></div>\n<span class='game-timer'></span>\n<span class='game-step'></span>\n<div class='game-controls'>\n  <button class='game-controls-pause'>" + _l("Pause") + "</button>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>\n<div class='game-curtain'></div>";
 Game.prototype.events = {
+"click .game-controls-pause": function() {
+this.$el.toggleClass("game-paused");
+return this._timer_stop();
+},
+"click .game-curtain": function() {
+this._timer_start();
+return this.$el.toggleClass("game-paused");
+},
+"click .game-controls-next": function() {
+return this.trigger("next");
+},
 "click .game-controls-reset": function() {
 return this.trigger("reset", {
-seconds_total: this._time()
+seconds_total: this._time().seconds_total
 });
 }
 };
 function Game() {
 Game.__super__.constructor.apply(this, arguments);
-this._timeouts = [];
+this.$timer = this.$(".game-timer");
+this.$step = this.$(".game-step");
+this.$game_controls = this.$(".game-controls");
+this.$game_controls_reset = this.$(".game-controls-reset");
+this._steps = 0;
+this.timer_diff = 0;
 this.load();
 }
 Game.prototype.load = function() {
-this._timeouts.forEach(function(t) {
-return clearTimeout(t);
+if (this.game) {
+this._timer_stop();
+this.game.remove();
+}
+this.game = new window.o.Game({
+container: this.$(".game-container")
 });
-this._timeouts = [];
-this.$el.removeClass("" + this.className + "-level-hide");
-this.$el.attr("data-level", this.options.stage);
-return this._timeouts.push(setTimeout(function(_this) {
+this.game.bind("rotate", function(_this) {
 return function() {
-_this.$el.addClass("" + _this.className + "-level-hide");
-game.clear();
-game.bind("solved", function() {
-_this.trigger("solved", {
-seconds_total: _this._time()
-});
-return _this._timeouts.push(setTimeout(function() {
-return _this.trigger("next");
-}, 2e3));
-});
-game.render({
-stage: _this.options.stage,
-container: _this.$(".game-container")
-});
-return _this._timer_start = new Date().getTime();
+return _this.step();
 };
-}(this), 800));
+}(this));
+this.game.bind("solved", function(_this) {
+return function(mirrors) {
+var t;
+_this._timer_stop();
+t = _this._time();
+t["steps"] = _this._steps;
+t["mirrors"] = mirrors;
+_this._completed(t);
+return _this.trigger("solved", t);
+};
+}(this));
+this.game.render();
+return this.game.load_map(this.options.stage, function(_this) {
+return function() {
+return _this._timer_reset();
+};
+}(this));
+};
+Game.prototype._digit = function(t, hu) {
+t = t + "";
+if (hu) {
+if (t.length === 1) {
+return t + "00";
+}
+if (t.length === 2) {
+return t + "0";
+}
+return t;
+}
+if (t.length === 1) {
+return "0" + t;
+}
+return t;
+};
+Game.prototype._timer_start = function() {
+this._timer_count = true;
+this.timer_start = new Date().getTime();
+return this._timer_fn = setInterval(function(_this) {
+return function() {
+var t;
+t = _this._time();
+return _this.$timer.html([ _this._digit(t.minutes), _this._digit(t.seconds) ].join(":"));
+};
+}(this), 1e3);
+};
+Game.prototype._timer_stop = function() {
+this._timer_count = false;
+this.timer_diff = new Date().getTime() - this.timer_start + this.timer_diff;
+return clearTimeout(this._timer_fn);
 };
 Game.prototype._time = function() {
-return Math.round((new Date().getTime() - this._timer_start) / 1e3);
+var data, diff;
+diff = this._timer_count ? new Date().getTime() - this.timer_start + this.timer_diff : this.timer_diff;
+data = {};
+data["mls"] = diff % 1e3;
+diff = (diff - data["mls"]) / 1e3;
+data["seconds"] = diff % 60;
+diff = diff - data["seconds"];
+data["minutes"] = diff / 60;
+data["seconds_total"] = data["minutes"] * 60 + data["seconds"];
+return data;
+};
+Game.prototype._timer_reset = function() {
+this._steps = -1;
+this.step();
+this._timer_stop();
+this.timer_diff = 0;
+this.$timer.html("00:00");
+return this._timer_start();
+};
+Game.prototype._completed = function(t) {
+return this.$game_controls.html("<button class='game-controls-next'>" + _l("Next level") + "</button>" + _l("Completed", _.extend(t, {
+minutes: this._digit(t["minutes"]),
+seconds: this._digit(t["seconds"]),
+mls: this._digit(t["mls"], 3)
+})));
+};
+Game.prototype.step = function() {
+this._steps++;
+return this.$step.html(this._steps);
 };
 Game.prototype.remove = function() {
-game.clear();
+this._timer_stop();
+this.game.remove();
 return Game.__super__.remove.apply(this, arguments);
 };
 return Game;
 }(window.o.View);
+}).call(this);
+
+(function() {
+var Game, GameHelp, className, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+for (var key in parent) {
+if (__hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+};
+Game = window.o.ViewGame;
+className = "game-help";
+window.o.ViewGameHelp = GameHelp = function(_super) {
+__extends(GameHelp, _super);
+GameHelp.prototype.className = [ Game.prototype.className, className ].join(" ");
+function GameHelp() {
+this._timeouts = [];
+GameHelp.__super__.constructor.apply(this, arguments);
+}
+GameHelp.prototype._tooltip = function(txt, mesh, reverse, correction) {
+var el, position;
+if (reverse == null) {
+reverse = false;
+}
+if (correction == null) {
+correction = 30;
+}
+position = BABYLON.Vector3.Project(mesh.position, BABYLON.Matrix.Identity(), this.game._scene.getTransformMatrix(), this.game._camera.viewport.toGlobal(this.$el.width(), this.$el.height()));
+position.x = Math.round(position.x);
+position.y = Math.round(position.y);
+el = $("<span class='" + (reverse ? "game-tooltip-reverse" : "game-tooltip") + "'>" + txt);
+this.$el.append(el);
+el.css("top", position.y);
+return this._t(function(_this) {
+return function() {
+return el.css(reverse ? "left" : "right", reverse ? position.x + correction : _this.$el.width() - position.x + correction);
+};
+}(this), 10);
+};
+GameHelp.prototype._t = function(fn, timeout) {
+return this._timeouts.push(setTimeout(fn, timeout));
+};
+GameHelp.prototype._t_clear = function() {
+return this._timeouts.forEach(function(t) {
+return clearTimeout(t);
+});
+};
+GameHelp.prototype._timer_start = function() {
+var i, mirror, platform, source, vector, _i;
+source = this.game._map._source.mesh;
+mirror = this.game._map._mirror[0].mesh;
+window.platform = platform = this.game._map._platform[0];
+vector = new BABYLON.Vector3(0, 1, 0);
+for (i = _i = 0; _i <= 6; i = ++_i) {
+platform._controls[i].mesh.actionManager.actions.splice(0, 3);
+}
+this._t(function(_this) {
+return function() {
+return _this._tooltip(_l("Light"), source, false);
+};
+}(this), 1e3);
+this._t(function(_this) {
+return function() {
+return _this._tooltip(_l("Mirror"), mirror, true);
+};
+}(this), 2e3);
+this._t(function(_this) {
+return function() {
+var blink;
+_this._tooltip(_l("Rotate platform"), platform._controls[7].mesh, false);
+blink = setInterval(function() {
+platform.blank_change(vector, true);
+return _this._t(function() {
+return platform.blank_change(vector, false);
+}, 500);
+}, 1e3);
+_this._timeouts.push(blink);
+return _this._t(function() {
+clearTimeout(blink);
+return platform.blank_change(vector, false);
+}, 4e3);
+};
+}(this), 3e3);
+return GameHelp.__super__._timer_start.apply(this, arguments);
+};
+GameHelp.prototype._completed = function() {
+this._t_clear();
+this.$el.removeClass(className);
+return GameHelp.__super__._completed.apply(this, arguments);
+};
+GameHelp.prototype.remove = function() {
+this._t_clear();
+return GameHelp.__super__.remove.apply(this, arguments);
+};
+return GameHelp;
+}(Game);
+}).call(this);
+
+(function() {
+window.o.GameMapData = [ "00000\n00002\n00901\n02000\n00--0\n-8---" ];
+}).call(this);
+
+(function() {
+var Map, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+for (var key in parent) {
+if (__hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+};
+window.o.GameMap = Map = function(_super) {
+__extends(Map, _super);
+Map.prototype._step_animation = 30;
+function Map() {
+this.clear();
+this._before_render_fn = [];
+Map.__super__.constructor.apply(this, arguments);
+}
+Map.prototype.clear = function() {
+this._blank = [];
+this._mirror = [];
+this._platform = [];
+this._rotation = null;
+this._rotation_animation = [];
+return this.solved = false;
+};
+Map.prototype.load = function(map_string) {
+var call, map, methods, middle;
+methods = {
+"-": null,
+"0": "blank",
+"1": "mirror",
+"2": "mirror_reverse",
+"8": "beam_source",
+"9": "target"
+};
+call = function(_this) {
+return function(method, x, y) {
+if (x == null) {
+x = 0;
+}
+if (y == null) {
+y = 0;
+}
+if (methods[method]) {
+return _this[methods[method]]([ x, y ]);
+}
+};
+}(this);
+map = map_string.split("\n").map(function(s) {
+return s.trim().split("");
+});
+middle = Math.floor(map[0].length / 2);
+this._map = {};
+return map.forEach(function(_this) {
+return function(row, j) {
+return row.forEach(function(cell, i) {
+var x, y;
+y = -j + middle;
+x = i - middle;
+if (!_this._map[y]) {
+_this._map[y] = {};
+}
+return _this._map[y][x] = call(cell, x, y);
+});
+};
+}(this));
+};
+Map.prototype.remove_controls = function() {};
+Map.prototype.remove = function() {
+Map.__super__.remove.apply(this, arguments);
+if (this._source) {
+this._source.remove();
+}
+if (this._target) {
+this._target.remove();
+}
+this._blank.forEach(function(ob) {
+return ob.remove();
+});
+this._mirror.forEach(function(ob) {
+return ob.remove();
+});
+this._platform.forEach(function(ob) {
+return ob.remove();
+});
+return this.clear();
+};
+Map.prototype._animation = function() {
+if (this._rotation_animation.length === 0) {
+return false;
+}
+if (this._rotation_animation[0].steps === 0) {
+this._rotation_animation.shift();
+}
+return true;
+};
+Map.prototype.render = function() {
+var changes;
+if (this._before_render_fn.length > 0) {
+this._before_render_fn.pop()();
+}
+if (this._mirror.length === 0) {
+return;
+}
+changes = this._animation();
+if (this._rotation === changes) {
+return;
+}
+this._rotation = changes;
+if (changes) {
+return this._source.beam_remove();
+}
+return this._before_render_fn.push(function(_this) {
+return function() {
+return _this.position_check();
+};
+}(this));
+};
+Map.prototype.position_check = function() {
+this._mirror.forEach(function(_this) {
+return function(m) {
+var i, nr, p, _i;
+for (i = _i = 0; _i <= 3; i = ++_i) {
+nr = (m._move_position + i) % 4;
+p = m.get_position(nr, true);
+if (_this._map[p.y] && _this._map[p.y][p.x] && _this._map[p.y][p.x]._switch) {
+m.set_position(nr);
+return;
+}
+}
+};
+}(this));
+this._source.beam_remove();
+return setTimeout(function(_this) {
+return function() {
+_this._source.beam();
+_this.solved = _this._source.solved;
+return _this.trigger("beam", _this._source._mirror.length);
+};
+}(this), 10);
+};
+Map.prototype.beam_source = function(coors) {
+this._source = new window.o.ObjectBeamSource({
+position: [ coors[0] * 10, coors[1] * 10, -.55 * 4.2 ]
+});
+return this._source;
+};
+Map.prototype.target = function(coors) {
+this._target = new window.o.ObjectBeamTarget({
+position: [ coors[0] * 10, coors[1] * 10, -.55 * 4.2 ]
+});
+return this._target;
+};
+Map.prototype.blank = function(coors) {
+return new window.o.ObjectBlank({
+pos: coors
+});
+};
+Map.prototype.mirror_reverse = function(coors) {
+return this.mirror(coors, true);
+};
+Map.prototype.mirror = function(coors, reverse) {
+var m, position;
+if (reverse == null) {
+reverse = false;
+}
+m = new window.o.ObjectMirror({
+pos: [ coors[0], coors[1] ],
+reverse: reverse
+});
+position = [ m.mesh.position.x, m.mesh.position.y ];
+m.bind("move", function(_this) {
+return function(position) {
+var blank;
+blank = _this._map[m.position.y + position.y][m.position.x + position.x];
+_this._map[m.position.y][m.position.x] = blank;
+_this._map[m.position.y + position.y][m.position.x + position.x] = m;
+blank.move({
+x: -position.x,
+y: -position.y
+});
+m.move(position);
+return _this.position_check();
+};
+}(this));
+this._mirror.push(m);
+return m;
+};
+return Map;
+}(MicroEvent);
+}).call(this);
+
+(function() {
+var Game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+for (var key in parent) {
+if (__hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+};
+window.o.Game = Game = function(_super) {
+__extends(Game, _super);
+function Game(options) {
+this.options = options;
+this._before_render_fn = [];
+this._map = new window.o.GameMap();
+this._map.bind("beam", function(_this) {
+return function(mirrors) {
+if (_this._map.solved) {
+_this._map.remove_controls();
+return _this.trigger("solved", mirrors);
+}
+};
+}(this));
+this._map.bind("rotate", function(_this) {
+return function() {
+return _this.trigger("rotate");
+};
+}(this));
+}
+Game.prototype._render_loop = function() {};
+Game.prototype._render_before_loop = function() {
+return this._map.render();
+};
+Game.prototype.render = function() {
+var camera, engine, scene;
+this.canvas = document.createElement("canvas");
+this.options.container.append(this.canvas);
+engine = this._engine = new BABYLON.Engine(this.canvas, true);
+engine.runRenderLoop(function(_this) {
+return function() {
+_this._render_loop();
+return scene.render();
+};
+}(this));
+window.addEventListener("resize", function() {
+return engine.resize();
+});
+scene = this._scene = new BABYLON.Scene(engine);
+scene.registerBeforeRender(this._render_before_loop.bind(this));
+scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), this._scene);
+this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
+this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-40, 60, -100), this._scene);
+return window.App.events.trigger("game:init", scene, engine, this._light, this._camera);
+};
+Game.prototype.load_map = function(id, callback) {
+return setTimeout(function(_this) {
+return function() {
+if (window.o.GameMapData[id - 1].length < 20) {
+_this._camera.setPosition(new BABYLON.Vector3(0, 0, -100));
+} else if (window.o.GameMapData[id - 1].length < 50) {
+_this._camera.setPosition(new BABYLON.Vector3(0, 0, -120));
+}
+_this._map.load(window.o.GameMapData[id - 1]);
+return callback();
+};
+}(this), 1e3);
+};
+Game.prototype.remove = function() {
+this._map.remove();
+this._camera.dispose();
+this._light.dispose();
+this._scene.dispose();
+this._engine.stopRenderLoop();
+this._engine.dispose();
+return this.canvas.parentElement.removeChild(this.canvas);
+};
+return Game;
+}(MicroEvent);
 }).call(this);
 
 (function() {
@@ -34980,8 +35258,8 @@ App.router = new window.o.ViewRouter({
 user: App.user.data("type") || "free",
 author_link: false,
 user_types: {
-free: 130,
-shared: 140
+free: 30,
+shared: 40
 },
 game_last: parseInt(App.user.data("game_last") || 1),
 game_save: function(stage) {

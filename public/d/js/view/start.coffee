@@ -5,7 +5,7 @@ window.o.ViewStart = class start extends window.o.View
         <nav>
           <ul>
            <li><button>#{_l('Continue')}</button></li>
-           <li><button>#{_l('Choose stage')}</button></li>
+           <!--<li><button>#{_l('Choose stage')}</button></li>-->
            <% if (close) { %>
             <li><button>#{_l('Quit')}</button></li>
           <% } %>

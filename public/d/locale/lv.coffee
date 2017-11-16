@@ -5,15 +5,7 @@ App.lang.strings.lv =
   'Quit': 'Aizvērt'
   'Menu': 'Menu'
 
-  'Pause': 'Pauze'
   'Reset': 'No jauna'
-  'Next level': 'Nākošais'
-  'Completed': """Atrisināji {minutes}:{seconds}<small>.{mls}</small><br />
-    ar {mirrors} spogulīšiem un {steps} gājieniem"""
-
-  'Light': "Gaisma"
-  'Mirror': 'Spogulis'
-  'Rotate platform': 'Rotē platformu'
 
   'Game free over description': """
     Apsveicam, Tu izgāji {levels} līmeņus.<br />

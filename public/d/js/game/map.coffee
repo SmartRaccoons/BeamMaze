@@ -1,55 +1,105 @@
-window.o.GameMap = class Map extends MicroEvent
+class MapAnimation extends MicroEvent
   constructor: ->
-    @clear()
-    @_before_render_fn = []
     super
+    @clear()
+    in_action_active = 0
+    triggered_start = false
+    fn = (animation, callback, steps = 30, in_action=false)=>
+      if !@_animations[animation]
+        @_animations[animation] = []
+      if in_action
+        in_action_active++
+        if not triggered_start
+          @trigger 'animation_start'
+          triggered_start = true
+      @_animations[animation].push {
+        callback: (m, steps)=>
+          callback.apply(@, arguments)
+          if steps isnt 0
+            return
+          if in_action
+            in_action_active--
+            if in_action_active is 0
+              @trigger 'animation_end'
+              triggered_start = false
+        steps: steps
+        steps_total: steps
+      }
+
+    window.App.events.bind 'map:animation', fn
+    @bind 'remove', -> window.App.events.unbind 'map:animation', fn
 
   clear: ->
+    @_before_render_fn = []
+    @_animations = {}
+
+  _before_render: (callback)-> @_before_render_fn.push callback
+
+  render: ->
+    if @_before_render_fn.length > 0
+      @_before_render_fn.pop()()
+    (=>
+      for name, params of @_animations
+        if params.length is 0
+          delete @_animations[name]
+          continue
+        params[0].steps--
+        params[0].callback((params[0].steps_total - params[0].steps)/params[0].steps_total, params[0].steps)
+        if params[0].steps is 0
+          @_animations[name].shift()
+    )()
+
+
+window.o.GameMap = class Map extends MapAnimation
+  constructor: ->
+    super
+    @bind 'animation_start', =>
+      @_source.beam_remove()
+    @bind 'animation_end', =>
+      @_before_render =>
+        @position_check()
+        @_source.beam()
+        @solved = @_source.solved
+        @trigger 'beam', @_source._mirror.length
+
+  clear: ->
+    super
+    @_blank = []
     @_mirror = []
-    @_platform = []
-    @_rotations = null
     @solved = false
 
   load: (map_string)->
     methods = {
       '-': null
-      '0': null
+      '0': 'blank'
       '1': 'mirror'
       '2': 'mirror_reverse'
+      '3': 'mirror_empty'
+      '4': 'mirror_straight'
       '8': 'beam_source'
       '9': 'target'
     }
+    call = (method, x=0, y=0)=>
+      if methods[method]
+        @[methods[method]]([x, y])
 
-    map = map_string.split("\n").map (s)->
-      s.trim().split('').map (ob)-> ob
-    @_map_size = size = map[0].length
-    middle = Math.floor(size/2)
-    for fn in Object.keys(methods)
-      methods[fn] = ((name, fn)=>
-        (parent=null, x=0, y=0)=>
-          if fn
-            params = [[x*10, y*10, 0]]
-            if parent
-              params.unshift(parent)
-            @[fn].apply(@, params)
-      )(fn, methods[fn])
-
-    methods[map[middle][middle]]()
-    map.reverse()
-    for m in [0...size]
-      methods[map[0][m]](null, m - middle, -middle - 1)
-    map.shift()
-    for m in [1..middle]
-      parent = @platform(m * 10)
-      for y in [-m..m]
-        methods[map[(y + middle)][m + middle]](parent.mesh, m, y)
-        methods[map[(y + middle)][-m + middle]](parent.mesh, -m, y)
-      for x in [(-m+1)...m]
-        methods[map[m + middle][x + middle]](parent.mesh, x, m)
-        methods[map[-m + middle][x + middle]](parent.mesh, x, -m)
+    map = map_string.split("\n").map (s)-> s.trim().split('')
+    map_size = [Math.floor(map.reduce( ((max, v)-> Math.max(max, v.length)), 0)/2), Math.floor(map.length/2)]
+    @_map = {}
+    map.forEach (row, j)=>
+      row.forEach (cell, i)=>
+        y = -j + map_size[1]
+        x = i - map_size[0]
+        if not @_map[y]
+          @_map[y] = {}
+        @_map[y][x] = call(cell, x, y)
+    setTimeout =>
+      @trigger 'animation_end'
+    , 100
+    return map_size
 
   remove_controls: ->
-    @_platform.forEach (ob)-> ob.remove_controls()
+    @_mirror.forEach (m)-> m._controls_remove()
 
   remove: ->
     super
@@ -57,38 +107,50 @@ window.o.GameMap = class Map extends MicroEvent
       @_source.remove()
     if @_target
       @_target.remove()
+    @_blank.forEach (ob)-> ob.remove()
     @_mirror.forEach (ob)-> ob.remove()
-    @_platform.forEach (ob)-> ob.remove()
     @clear()
 
-  render: ->
-    if @_before_render_fn.length > 0
-      @_before_render_fn.pop()()
-    if @_platform.length is 0
-      return
-    changes = @_platform.map( (ob)-> ob._rotation_check()).some (res)-> res
-    if @_rotations isnt changes
-      @_rotations = changes
-      if changes
-        @_source.beam_remove()
-      else
-        @_before_render_fn.push =>
-          @_source.beam()
-          @solved = @_source.solved
-          @trigger 'beam', @_source._mirror.length
+  position_check: ->
+    @_mirror.forEach (m)=>
+      for i in [0, 1, 2, 3]
+        nr = (m._move_position + i) % 4
+        p = m.get_move_position(nr, true)
+        if @_map[p.y] and @_map[p.y][p.x] and @_map[p.y][p.x]._switch
+          m.set_move_position(nr)
+          return
+      m.set_move_position(null)
 
-  beam_source: (coors)-> @_source = new window.o.ObjectBeamSource({position: [coors[0], coors[1], -0.55 * 4.2]})
+  beam_source: (coors)->
+    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    @_source
 
-  target: -> @_target = new window.o.ObjectBeamTarget({position: [0, 0, -0.55 * 4.2]})
+  target: (coors)->
+    @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    @_target
 
-  platform: (size)->
-    ob = new window.o.Platform({size: size})
-    ob.bind 'rotate', => @trigger 'rotate'
-    @_platform.push ob
-    return ob
+  blank: (coors)-> new window.o.ObjectBlank({position: coors})
 
-  mirror_reverse: (parent, coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], parent: parent, reverse: true})
+  mirror: (coors, type='normal')->
+    m = new window.o.ObjectMirror({position: coors, type: type})
+    m.bind 'move', (position)=>
+      @trigger 'rotate'
+      for i in [1..20]
+        y = m.position.y + position.y * i
+        x = m.position.x + position.x * i
+        if !(@_map[y] and @_map[y][x] and @_map[y][x]._switch)
+          i--
+          break
+        blank = @_map[y][x]
+      @_map[m.position.y][m.position.x] = blank
+      @_map[blank.position.y][blank.position.x] = m
+      blank.move({x: -position.x * i, y: -position.y * i})
+      m.move({x: position.x * i, y: position.y * i})
+    @_mirror.push m
+    m
 
-  mirror: (parent, coors)-> @_mirror.push new window.o.ObjectMirror({pos: [coors[0], coors[1]], parent: parent})
+  mirror_reverse: (coors)-> @mirror(coors, 'reverse')
 
-  obstacle: (parent, coors)->
+  mirror_empty: (coors)-> @mirror(coors, 'empty')
+
+  mirror_straight: (coors)-> @mirror(coors, 'straight')

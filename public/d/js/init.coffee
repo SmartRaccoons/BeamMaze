@@ -1,8 +1,30 @@
+window.MicroEvent = class Events
+  constructor: ->
+    @_events = {}
 
-window.MicroEvent.prototype.remove = ->
-  if this._events
-    for ev, fn in this._events
-      @unbind(ev, fn)
+  bind: (event, fct) ->
+    @_events[event] = @_events[event] or []
+    @_events[event].push fct
+
+  unbind: (event, fct) ->
+    if not event
+      return @_events = {}
+    if not fct
+      return delete @_events[event]
+    if not @_events[event]
+      return
+    @_events[event].splice @_events[event].indexOf(fct), 1
+
+  trigger: (event) ->
+    if not @_events[event]
+      return
+    args = Array::slice.call(arguments, 1)
+    @_events[event].forEach (fn)=> fn.apply @, args
+
+  remove: ->
+    @trigger 'remove'
+    @unbind()
+
 
 window._l = (key, subparams) ->
   res = App.lang.strings[App.lang.active][key]

@@ -205,39 +205,6 @@ canvas
     width: 100%
     height: 100%
     // background: rgba(0, 0, 0, 0.2)
-  .game-timer, .game-step
-    position: absolute
-    top: 1em
-    transition: top 1s
-    font-size: 2em
-    background: $color202
-    border-radius: 1.5em
-    width: 4.5em
-    height: 1.6em
-    line-height: 1.5em
-    white-space: nowrap
-    &::before
-      display: inline-block
-      content: ''
-      vertical-align: middle
-      margin: 0 0.3em
-  &.game-help
-    .game-timer, .game-step
-      top: -3em
-    .game-controls
-      display: none
-  .game-timer
-    left: 1em
-    &::before
-      +icon-sprite(timer)
-      width: 32px
-      height: 37px
-  .game-step
-    right: 1em
-    &::before
-      +icon-sprite(step)
-      width: 37px
-      height: 27px
   .game-controls
     position: absolute
     left: 10%
@@ -248,61 +215,21 @@ canvas
       margin: 0 1em
     small
       font-size: 0.7em
-  .game-controls-next
-    float: right
-  .game-curtain
-    +layer-over
-    display: none
-    &::after
-      content: ''
-      position: absolute
-      top: 50%
-      left: 50%
-      margin: -10em 0 0 -5em
-      border: 10em solid transparent
-      border-left-color: white
-  &.game-paused .game-curtain
-    display: block
-
-  &[data-type='help']
-    .game-controls, .game-timer, .game-step
-      display: none
-  .game-tooltip, .game-tooltip-reverse
-    display: block
+  &::before
+    content: attr(data-level)
     position: absolute
-    background: $color202
-    height: 40px
-    margin-top: -20px
-    line-height: 38px
-    white-space: nowrap
-    font-size: 1.5em
-    &::after
-      content: ''
-      display: block
-      position: absolute
-      top: 0
-      height: 100%
-      width: 24px
-  .game-tooltip
-    right: 100%
-    transition: right 0.3s
-    padding-left: 0.5em
-    margin-right: 24px
-    border-radius: 1em 0 0 1em
-    &::after
-      right: 0
-      margin-right: -24px
-      +icon-sprite(game-help)
-  .game-tooltip-reverse
-    left: 100%
-    transition: left 0.3s
-    padding-right: 0.5em
-    margin-left: 24px
-    border-radius: 0 1em 1em 0
-    &::after
-      left: 0
-      margin-left: -24px
-      +icon-sprite(game-help-reverse)
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    text-align: center
+    font-size: 10em
+    z-index: 10
+    background: #2b272b
+  &.game-level-hide::before
+    background: none
+    opacity: 0
+    z-index: auto
 .popup
   position: absolute
   top: 0
