@@ -119,7 +119,7 @@ window.o.GameMap = class Map extends MapAnimation
       @trigger 'beam', @_source._mirror.length
 
   beam_source: (coors)->
-    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4], target: @_target})
     @_source
 
   target: (coors)->
