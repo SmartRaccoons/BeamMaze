@@ -54,7 +54,6 @@ class MapAnimation extends MicroEvent
 window.o.GameMap = class Map extends MapAnimation
   clear: ->
     super
-    @_blank = []
     @_mirror = []
     @solved = false
 
@@ -83,23 +82,11 @@ window.o.GameMap = class Map extends MapAnimation
         if not @_map[y]
           @_map[y] = {}
         @_map[y][x] = call(cell, x, y)
+    @_source.options.target = @_target
     setTimeout =>
       @beam_show()
     , 100
     return map_size
-
-  remove_controls: ->
-    @_mirror.forEach (m)-> m._controls_remove()
-
-  remove: ->
-    super
-    if @_source
-      @_source.remove()
-    if @_target
-      @_target.remove()
-    @_blank.forEach (ob)-> ob.remove()
-    @_mirror.forEach (ob)-> ob.remove()
-    @clear()
 
   position_check: ->
     @_mirror.forEach (m)=>
@@ -119,7 +106,7 @@ window.o.GameMap = class Map extends MapAnimation
       @trigger 'beam', @_source._mirror.length
 
   beam_source: (coors)->
-    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4], target: @_target})
+    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
     @_source
 
   target: (coors)->
@@ -154,3 +141,14 @@ window.o.GameMap = class Map extends MapAnimation
   mirror_empty: (coors)-> @mirror(coors, 'empty')
 
   mirror_straight: (coors)-> @mirror(coors, 'straight')
+
+  remove_controls: ->
+    @_mirror.forEach (m)-> m._controls_remove()
+
+  remove: ->
+    super
+    for y, row of @_map
+      for x, ob of row
+        if ob
+          ob.remove()
+    @clear()
