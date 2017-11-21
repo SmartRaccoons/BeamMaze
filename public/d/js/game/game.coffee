@@ -11,17 +11,13 @@ window.o.Game = class Game extends MicroEvent
     window.addEventListener 'resize', => @_engine.resize()
     @
 
-  _render_loop: ->
-
-  _render_before_loop: ->
-    @_map.render()
-
   render: (options)->
     options.container.append(@canvas)
     @_engine.resize()
     @_engine.runRenderLoop =>
-      @_render_loop()
+      @_map.render_before()
       @_scene.render()
+      @_map.render_after()
     @_map = new window.o.GameMap()
     @_map.bind 'beam', (mirrors)=>
       if not @_map.solved
@@ -31,7 +27,6 @@ window.o.Game = class Game extends MicroEvent
     @_map.bind 'rotate', => @trigger 'rotate'
 
     @_scene = new BABYLON.Scene(@_engine)
-    @_scene.registerBeforeRender @_render_before_loop.bind(@)
     @_scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
     @_camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), @_scene)
     @_camera.setPosition(new BABYLON.Vector3(0, 0, -150))

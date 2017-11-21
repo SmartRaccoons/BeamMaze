@@ -1,5 +1,9 @@
+class ObjectAnime extends window.o.Object
+  _animation: (fn, fr=30)=>
+    window.App.events.trigger 'map:animation', @_name(), fn, fr
 
-class Connector extends window.o.Object
+
+class Connector extends ObjectAnime
   name: 'connector'
   constructor: ->
     super
@@ -15,13 +19,14 @@ class Connector extends window.o.Object
     if angle_diff > 0
       angle_diff = angle_diff - 2 * Math.PI
     angle_start = @mesh.rotation.z
-    window.App.events.trigger 'map:animation', @_name(), (m, steps)=>
+    @_animation (m, steps)=>
       if steps is 0
         return @mesh.rotation.z = angle
       @mesh.rotation.z = angle_start + angle_diff * m
 
 
-window.o.ObjectBlank = class Blank extends window.o.Object
+window.o.ObjectBlank = class Blank extends ObjectAnime
+  _connector: Connector
   _color: [151, 153, 156]
   _color_active: [103, 181, 229]
   name: 'blank'
@@ -31,7 +36,7 @@ window.o.ObjectBlank = class Blank extends window.o.Object
   constructor: ->
     super
     @position = {x: @options.position[0], y: @options.position[1]}
-    @_connector = new Connector({parent: @})
+    @_connector = new @_connector({parent: @})
     @mesh.scaling = new BABYLON.Vector3(4, 4, 4)
     @_update_position(true)
     @out()
@@ -49,11 +54,13 @@ window.o.ObjectBlank = class Blank extends window.o.Object
       return position_set()
     position = [@mesh.position.x, @mesh.position.y]
     position_diff = [position_new[0] - position[0], position_new[1] - position[1]]
-    window.App.events.trigger 'map:animation', @_name(), (m, steps)=>
+    @_animation (m, steps)=>
       if steps is 0
-        return position_set()
+        position_set()
+        @trigger 'move_end'
+        return
       @mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, (if @_switch then -1 else 1) * 5 * Math.sin(Math.PI * m))
-    , 20, true
+    , 20
 
   over: ->
     @color(@_color_active)
