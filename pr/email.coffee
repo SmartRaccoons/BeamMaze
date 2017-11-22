@@ -1,12 +1,12 @@
 config = require '../config.js'
-pjson = require('./package.json')
+pjson = require('../package.json')
 
 mailgun = require('mailgun-js')({apiKey: config.key, domain: config.domain})
 
 
 data =
   from: 'Smart Raccoons <smart@raccoons.lv>'
-  # to: "raccoobe@#{config.domain}"
+#  to: "smart1@#{config.domain}"
   to: 'v@raccoons.lv'
   subject: 'Raccoobe - spēlīte'
   html: """Sveiks!
@@ -16,7 +16,7 @@ Mēs esam Smart Raccoons — tie, kas uztaisīja Zolīti ( <a href='http://zole.
 <br />
 <br />
 Mēs taisām jaunu spēli — Raccoobe.<br />
-Izmēģini svaigāko versiju adresē: <a href='http://raccoobe.raccoons.lv/?utm_source=email&utm_campaign=v.0.1.2'>raccoobe.raccoons.lv</a>
+Izmēģini svaigāko versiju adresē: <a href='http://raccoobe.raccoons.lv/?utm_source=email&utm_campaign=v.#{pjson.version}'>raccoobe.raccoons.lv</a>
 <br />
 Šī spēle vēl nav gatavs variants, tikai prototips.
 <br />
