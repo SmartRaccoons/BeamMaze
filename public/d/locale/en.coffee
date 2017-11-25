@@ -6,7 +6,7 @@ App.lang.strings.en =
   'Menu': 'Menu'
 
   'Pause': 'Pause'
-  'Reset': 'Restart'
+  'Reset': 'Restart level'
   'Next level': 'Next'
   'Completed': """Completed in {minutes}:{seconds}<small>.{mls}</small><br />
     with {mirrors} mirrors and {steps} steps"""

@@ -5,7 +5,7 @@ App.lang.strings.lv =
   'Quit': 'Aizvērt'
   'Menu': 'Menu'
 
-  'Reset': 'No jauna'
+  'Reset': 'Atsākt līmeni'
 
   'Game free over description': """
     Apsveicam, Tu izgāji {levels} līmeņus.<br />

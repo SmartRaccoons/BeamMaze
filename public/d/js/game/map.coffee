@@ -65,6 +65,7 @@ window.o.GameMap = class Map extends MapAnimation
       '2': 'mirror_reverse'
       '3': 'mirror_empty'
       '4': 'mirror_straight'
+      '5': 'mirror_cross'
       '8': 'beam_source'
       '9': 'target'
     }
@@ -141,6 +142,8 @@ window.o.GameMap = class Map extends MapAnimation
   mirror_empty: (coors)-> @mirror(coors, 'empty')
 
   mirror_straight: (coors)-> @mirror(coors, 'straight')
+
+  mirror_cross: (coors)-> @mirror(coors, 'cross')
 
   remove_controls: ->
     @_mirror.forEach (m)-> m._controls_remove()

@@ -4,6 +4,7 @@
 # '2': 'mirror_reverse'
 # '3': 'mirror_empty'
 # '4': 'mirror_straight'
+# '5': 'mirror_cross'
 # '8': 'beam_source'
 # '9': 'target'
 window.o.GameMapData = [

@@ -96,6 +96,10 @@ class MirrorStraight extends MirrorNormal
   connectors: [[MirrorTubeStraight, MirrorTubeStraightOut], MirrorTubeEmpty, null, MirrorTubeEmpty]
 
 
+class MirrorCross extends MirrorNormal
+  connectors: [MirrorTubeEmpty, [MirrorTubeStraight, MirrorTubeStraightOut], MirrorTubeEmpty]
+
+
 _move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
 _move_positions_coors = _move_positions.map (angle)-> {y: Math.round(Math.sin(angle)), x: Math.round(Math.cos(angle))}
 
@@ -106,6 +110,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'reverse': MirrorReverse
     'empty': MirrorEmpty
     'straight': MirrorStraight
+    'cross': MirrorCross
   constructor: ->
     super
     @mirror = new @classes[@options.type]({parent: @})
