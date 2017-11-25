@@ -70,36 +70,20 @@ window.o.GameMap = class GameMap extends window.o.GameMap
   remove_controls: ->
 
 
-# window.o.ViewGame = class Game extends window.o.ViewGame
-#   template: window.o.ViewGame::template + """
-#     <div class='game-debug'>
-#       <button data-action='solve'>Solve</button>
-#       <textarea data-result-solve></textarea>
-#     </div>
-#   """
-#   events: _.extend {}, window.o.ViewGame::events, {
-#     'click button[data-action]': (e)->
-#       @["action_#{$(e.target).attr('data-action')}"]()
-#   }
-#
-#   action_solve: ->
-#     console.info 'solve'
-#
-#   render: ->
-#     super
-#     @$('.game-debug').css({
-#       position: 'absolute'
-#       top: 0
-#       right: 0
-#     })
+window.o.ViewGame = class ViewGame extends window.o.ViewGame
+  _solved: ->
+    if not ('map' of GET)
+      super
 
 
 window.o.ViewRouter = class Router extends window.o.ViewRouter
   constructor: ->
+    if 'map' of GET
+      map = GET['map'].split("|").join("\n")
+      window.o.GameMapData = [map]
+      GET['stage'] = 1
+      $('<div>').append("<textarea>#{map}</textarea><button>")
     super
-    # if 'map' in GET_hash
-    #   window.o.GameMapData[0] = GET_hash['map'].split("|").join("\n")
-    # $('<div>').append('<textarea></textarea><button>')
 
   run: ->
     if 'stage' of GET

@@ -26,14 +26,16 @@ window.o.ViewGame = class Game extends window.o.View
     @_timeouts.push setTimeout =>
       @$el.addClass("#{@className}-level-hide")
       game.clear()
-      game.bind 'solved', =>
-        @trigger 'solved', {seconds_total: @_time()}
-        @_timeouts.push setTimeout =>
-          @trigger 'next'
-        , 2000
+      game.bind 'solved', => @_solved()
       game.render({stage: @options.stage, container: @$('.game-container')})
       @_timer_start = new Date().getTime()
     , 800
+
+  _solved: ->
+    @trigger 'solved', {seconds_total: @_time()}
+    @_timeouts.push setTimeout =>
+      @trigger 'next'
+    , 2000
 
   _time: -> Math.round((new Date().getTime() - @_timer_start) / 1000)
 
