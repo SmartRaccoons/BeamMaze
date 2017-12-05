@@ -104,6 +104,7 @@ _move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
 _move_positions_coors = _move_positions.map (angle)-> {y: Math.round(Math.sin(angle)), x: Math.round(Math.cos(angle))}
 
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
+  _color: [103, 181, 229, 0.3]
   _switch: false
   classes:
     'normal': MirrorNormal
@@ -123,7 +124,9 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @mirror._action
       mouseover: => @over()
       mouseout: => @out()
-      click: => @trigger 'move', @get_move_position()
+      click: =>
+        @out()
+        @trigger 'move', @get_move_position()
 
   _controls_remove: ->
     @_controls_added = false

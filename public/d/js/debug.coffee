@@ -61,9 +61,11 @@ window.o.Game = class Game extends window.o.Game
     zChar = makeTextPlane('Z', 'blue', size / 10)
     zChar.position = new (BABYLON.Vector3)(0, 0.05 * size, 0.9 * size)
 
-window.o.ObjectBlank::_animation = (fn)-> fn(1, 0)
-window.o.ObjectMirror::_animation = (fn)-> fn(1, 0)
-window.o.ObjectBlank::_connector::_animation = (fn)-> fn(1, 0)
+
+if not ('anime' of GET)
+  window.o.ObjectBlank::_animation = (fn)-> fn(1, 0)
+  window.o.ObjectMirror::_animation = (fn)-> fn(1, 0)
+  window.o.ObjectBlank::_connector::_animation = (fn)-> fn(1, 0)
 
 
 window.o.GameMap = class GameMap extends window.o.GameMap
@@ -79,10 +81,8 @@ window.o.ViewGame = class ViewGame extends window.o.ViewGame
 window.o.ViewRouter = class Router extends window.o.ViewRouter
   constructor: ->
     if 'map' of GET
-      map = GET['map'].split("|").join("\n")
-      window.o.GameMapData = [map]
+      window.o.GameMapData = [GET['map']]
       GET['stage'] = 1
-      $('<div>').append("<textarea>#{map}</textarea><button>")
     super
 
   run: ->

@@ -48,8 +48,8 @@ window.o.ObjectBlank = class Blank extends ObjectAnime
     @_update_position()
 
   _update_position: (without_animation = false)->
-    position_new = [@position.x * @_step, @position.y * @_step]
-    position_set = => @mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], 0)
+    position_new = [@position.x * @_step, @position.y * @_step, 0]
+    position_set = => @mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], position_new[2])
     if without_animation
       return position_set()
     position = [@mesh.position.x, @mesh.position.y]
@@ -59,7 +59,7 @@ window.o.ObjectBlank = class Blank extends ObjectAnime
         position_set()
         @trigger 'move_end'
         return
-      @mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, (if @_switch then -1 else 1) * 5 * Math.sin(Math.PI * m))
+      @mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, position_new[2])
     , 20
 
   over: ->
@@ -68,4 +68,4 @@ window.o.ObjectBlank = class Blank extends ObjectAnime
 
   out: ->
     @color(@_color)
-    @_connector.color(@_color)
+    @_connector.color(@_color.slice(0, 3))

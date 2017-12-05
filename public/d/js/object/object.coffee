@@ -70,7 +70,7 @@ window.o.Object = class Object extends MicroEvent
     if !@mesh.material
       @mesh.material = new BABYLON.StandardMaterial("material_#{@_name()}", @scene())
     @mesh.material.diffuseColor = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255)
-    @mesh.material.alpha = color[3] or alpha
+    @mesh.material.alpha = if color[3]? then color[3] else alpha
 
   scene: -> _scene
 
