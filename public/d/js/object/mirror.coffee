@@ -103,6 +103,7 @@ class MirrorCross extends MirrorNormal
 _move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
 _move_positions_coors = _move_positions.map (angle)-> {y: Math.round(Math.sin(angle)), x: Math.round(Math.cos(angle))}
 
+
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _color: [103, 181, 229, 0.3]
   _switch: false
@@ -114,9 +115,11 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'cross': MirrorCross
   constructor: ->
     super
-    @_connector = new @_connector_class({parent: @})
     @mirror = new @classes[@options.type]({parent: @})
     @_move_position = 0
+    @_static = 's' in @options.params
+    if !@_static
+      @_connector = new @_connector_class({parent: @})
     @out()
 
   _controls_add: ->
@@ -174,5 +177,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @_connector.color(@_color_active)
 
   out: ->
+    if @_static
+      return @color(window.o.ObjectBlank::_color, 0)
     @color(@_color)
     @_connector.color(window.o.ObjectBlank::_color)

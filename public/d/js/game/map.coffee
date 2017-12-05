@@ -64,7 +64,7 @@ window.o.GameMap = class Map extends MapAnimation
     methods = {
       '-': null
       '0': 'blank'
-      '1': 'mirror'
+      '1': 'mirror_normal'
       '2': 'mirror_reverse'
       '3': 'mirror_empty'
       '4': 'mirror_straight'
@@ -72,20 +72,28 @@ window.o.GameMap = class Map extends MapAnimation
       '8': 'beam_source'
       '9': 'target'
     }
-    call = (method, x=0, y=0)=>
+    call = (method, x=0, y=0, params = [])=>
       if methods[method]
-        @[methods[method]]([x, y])
+        @[methods[method]]([x, y], params)
 
     map = map_string.split('|').map (s)-> s.trim().split('')
-    map_size = [Math.floor(map.reduce( ((max, v)-> Math.max(max, v.length)), 0)/2), Math.floor(map.length/2)]
+    params = ['s']
+    map_size = [Math.floor(map.reduce( ((max, v)-> Math.max(max, v.filter( (v)-> !(params in v)).length)), 0)/2), Math.floor(map.length/2)]
     @_map = {}
     map.forEach (row, j)=>
+      found = 0
+      params_found = []
       row.forEach (cell, i)=>
         y = -j + map_size[1]
-        x = i - map_size[0]
+        x = i - map_size[0] - found
+        if cell in params
+          params_found.push cell
+          found += 1
+          return
         if not @_map[y]
           @_map[y] = {}
-        call(cell, x, y)
+        call(cell, x, y, params_found)
+        params_found = []
         @_map[y][x] = cell
     setTimeout =>
       @beam_show()
@@ -124,9 +132,11 @@ window.o.GameMap = class Map extends MapAnimation
     coors[2] = 0.01
     @_blank.push new window.o.ObjectBlank({position: coors})
 
-  mirror: (coors, type='normal')->
+  mirror: (coors, type, params)->
     @blank(coors)
-    m = new window.o.ObjectMirror({position: coors, type: type})
+    m = new window.o.ObjectMirror({position: coors, type: type, params: params})
+    if m._static
+      return
     m.bind 'move', (position)=>
       @trigger 'rotate'
       @beam_remove()
@@ -144,13 +154,11 @@ window.o.GameMap = class Map extends MapAnimation
     m.bind 'move_end', => @beam_show()
     @_mirror.push m
 
-  mirror_reverse: (coors)-> @mirror(coors, 'reverse')
-
-  mirror_empty: (coors)-> @mirror(coors, 'empty')
-
-  mirror_straight: (coors)-> @mirror(coors, 'straight')
-
-  mirror_cross: (coors)-> @mirror(coors, 'cross')
+  mirror_normal: (coors, p)-> @mirror(coors, 'normal', p)
+  mirror_reverse: (coors, p)-> @mirror(coors, 'reverse', p)
+  mirror_empty: (coors, p)-> @mirror(coors, 'empty', p)
+  mirror_straight: (coors, p)-> @mirror(coors, 'straight', p)
+  mirror_cross: (coors, p)-> @mirror(coors, 'cross', p)
 
   remove_controls: ->
     @_mirror.forEach (m)-> m._controls_remove()
