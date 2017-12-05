@@ -114,7 +114,10 @@ window.o.GameMap = class Map extends MapAnimation
   target: (coors)->
     @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
 
-  blank: (coors)-> @_blank.push new window.o.ObjectBlank({position: coors})
+  blank: (coors)->
+    coors = coors.slice()
+    coors[2] = 0.01
+    @_blank.push new window.o.ObjectBlank({position: coors})
 
   mirror: (coors, type='normal')->
     @blank(coors)

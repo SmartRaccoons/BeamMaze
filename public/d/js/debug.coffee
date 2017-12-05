@@ -10,11 +10,12 @@ _split_params = (a)->
 GET = window.GET = _split_params(window.location.search.substr(1).split('&'))
 GET_hash = window.GET_hash = _split_params(window.location.hash.substr(1).split('&'))
 
+
 window.o.Game = class Game extends window.o.Game
   render: ->
     super
     @_camera.attachControl(document.body, true)
-    if 'axis' in GET
+    if 'axis' of GET
       @show_axis(30)
 
   show_axis: (size = 10)->

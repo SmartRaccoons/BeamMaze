@@ -26,29 +26,22 @@ class Connector extends ObjectAnime
 
 
 window.o.ObjectBlank = class Blank extends ObjectAnime
-  _connector: Connector
+  _connector_class: Connector
   _color: [151, 153, 156]
   _color_active: [103, 181, 229]
   name: 'blank'
-  _switch: true
   _step: 10
 
   constructor: ->
     super
-    @position = {x: @options.position[0], y: @options.position[1]}
-    @_connector = new @_connector({parent: @})
+    @position = {x: @options.position[0], y: @options.position[1], z: @options.position[2] or 0}
     @mesh.scaling = new BABYLON.Vector3(4, 4, 4)
     @_update_position(true)
-    @out()
+    @color(@_color)
     @
 
-  move: (position)->
-    @position.x = @position.x + position.x
-    @position.y = @position.y + position.y
-    @_update_position()
-
   _update_position: (without_animation = false)->
-    position_new = [@position.x * @_step, @position.y * @_step, 0]
+    position_new = [@position.x * @_step, @position.y * @_step, @position.z]
     position_set = => @mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], position_new[2])
     if without_animation
       return position_set()
@@ -61,11 +54,3 @@ window.o.ObjectBlank = class Blank extends ObjectAnime
         return
       @mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, position_new[2])
     , 20
-
-  over: ->
-    @color(@_color_active)
-    @_connector.color(@_color_active)
-
-  out: ->
-    @color(@_color)
-    @_connector.color(@_color.slice(0, 3))

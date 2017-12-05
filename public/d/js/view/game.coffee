@@ -1,4 +1,4 @@
-game = new window.o.Game()
+game = null
 
 window.o.ViewGame = class Game extends window.o.View
   className: 'game'
@@ -15,6 +15,8 @@ window.o.ViewGame = class Game extends window.o.View
 
   constructor: ->
     super
+    if !game
+      game = new window.o.Game()
     @_timeouts = []
     @load()
 

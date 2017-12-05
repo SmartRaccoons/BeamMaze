@@ -114,8 +114,10 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'cross': MirrorCross
   constructor: ->
     super
+    @_connector = new @_connector_class({parent: @})
     @mirror = new @classes[@options.type]({parent: @})
     @_move_position = 0
+    @out()
 
   _controls_add: ->
     if @_controls_added
@@ -146,3 +148,31 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @_controls_add()
     @_move_position = nr
     @_connector.angle(_move_positions[nr])
+
+  move: (position)->
+    @position.x = @position.x + position.x
+    @position.y = @position.y + position.y
+    @_update_position()
+
+  _update_position: (without_animation = false)->
+    position_new = [@position.x * @_step, @position.y * @_step, 0]
+    position_set = => @mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], position_new[2])
+    if without_animation
+      return position_set()
+    position = [@mesh.position.x, @mesh.position.y]
+    position_diff = [position_new[0] - position[0], position_new[1] - position[1]]
+    @_animation (m, steps)=>
+      if steps is 0
+        position_set()
+        @trigger 'move_end'
+        return
+      @mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, position_new[2])
+    , 20
+
+  over: ->
+    @color(@_color_active)
+    @_connector.color(@_color_active)
+
+  out: ->
+    @color(@_color)
+    @_connector.color(window.o.ObjectBlank::_color)
