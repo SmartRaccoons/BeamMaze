@@ -49,9 +49,6 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
 
   beam: ->
     @beam_remove()
-    @solved = false
-    @_beam = []
-    @_mirror = []
     points = [new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])]
     last_mirror = null
     direction = new BABYLON.Vector3(0, 1000, 0)
@@ -71,8 +68,7 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
       if not pick_info.hit
         break
       if pick_info.pickedMesh._type is 'target'
-        @options.target.trigger 'solved'
-        @solved = true
+        pick_info.pickedMesh._class._solved()
       if tube_check(pick_info.pickedMesh._type)
         direction = pick_info.pickedMesh._class.reflect(direction)
         last_mirror = pick_info.pickedMesh._class.mirror_id()
@@ -83,6 +79,8 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
   beam_remove: ->
     @_mirror.forEach (m)-> m.deactive()
     @_beam.forEach (b)-> b.remove()
+    @_mirror = []
+    @_beam = []
 
   remove: ->
     @beam_remove()
@@ -97,15 +95,23 @@ window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
   }
   constructor: ->
     super
-    @bind 'solved', =>
-      c1 = @options.color
-      c2 = Beam::_color
-      color_diff = [c2[0]-c1[0],c2[1]-c1[1],c2[2]-c1[2]]
-      window.App.events.trigger 'map:animation', 'camera_anime', (m, steps)=>
-        color = [m * color_diff[0] + c1[0], m * color_diff[1] + c1[1], m * color_diff[2] + c1[2]]
-        @color(color)
-        @sheath.color(color.concat(0.5))
-        @sheath2.color(color.concat(0.3))
+    @mesh._class = @
+    @reset()
+    @
+
+  reset: ->
+    @solved = false
     @sheath.mesh.material.alpha = 0
     @sheath2.mesh.material.alpha = 0
-    @
+    @color(@options.color)
+
+  _solved: ->
+    @solved = true
+    c1 = @options.color
+    c2 = Beam::_color
+    color_diff = [c2[0]-c1[0],c2[1]-c1[1],c2[2]-c1[2]]
+    @_animation (m, steps)=>
+      color = [m * color_diff[0] + c1[0], m * color_diff[1] + c1[1], m * color_diff[2] + c1[2]]
+      @color(color)
+      @sheath.color(color.concat(0.5))
+      @sheath2.color(color.concat(0.3))

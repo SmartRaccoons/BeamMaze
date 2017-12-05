@@ -1,9 +1,4 @@
-class ObjectAnime extends window.o.Object
-  _animation: (fn, fr=30)=>
-    window.App.events.trigger 'map:animation', @_name(), fn, fr
-
-
-class Connector extends ObjectAnime
+class Connector extends window.o.Object
   name: 'connector'
   constructor: ->
     super
@@ -25,7 +20,7 @@ class Connector extends ObjectAnime
       @mesh.rotation.z = angle_start + angle_diff * m
 
 
-window.o.ObjectBlank = class Blank extends ObjectAnime
+window.o.ObjectBlank = class Blank extends window.o.Object
   _connector_class: Connector
   _color: [151, 153, 156]
   _color_active: [103, 181, 229]

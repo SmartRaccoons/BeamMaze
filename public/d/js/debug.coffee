@@ -66,12 +66,13 @@ window.o.Game = class Game extends window.o.Game
 if not ('anime' of GET)
   window.o.ObjectBlank::_animation = (fn)-> fn(1, 0)
   window.o.ObjectMirror::_animation = (fn)-> fn(1, 0)
-  window.o.ObjectBlank::_connector::_animation = (fn)-> fn(1, 0)
+  window.o.ObjectBlank::_connector_class::_animation = (fn)-> fn(1, 0)
 
 
 window.o.GameMap = class GameMap extends window.o.GameMap
   remove_controls: ->
-
+    if not ('map' of GET)
+      super
 
 window.o.ViewGame = class ViewGame extends window.o.ViewGame
   _solved: ->

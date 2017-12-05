@@ -51,11 +51,13 @@ class MapAnimation extends MicroEvent
     if @_render_after_fn.length > 0
       @_render_after_fn.pop()()
 
+
 window.o.GameMap = class Map extends MapAnimation
+  _clear_ob: ['_mirror', '_blank', '_target', '_source']
+
   clear: ->
     super
-    @_mirror = []
-    @_blank = []
+    @_clear_ob.forEach (n)=> @[n] = []
     @solved = false
 
   load: (map_string)->
@@ -85,7 +87,6 @@ window.o.GameMap = class Map extends MapAnimation
           @_map[y] = {}
         call(cell, x, y)
         @_map[y][x] = cell
-    @_source.options.target = @_target
     setTimeout =>
       @beam_show()
     , 100
@@ -104,15 +105,19 @@ window.o.GameMap = class Map extends MapAnimation
   beam_show: ->
     @_render_after_cl =>
       @position_check()
-      @_source.beam()
-      @solved = @_source.solved
-      @trigger 'beam', @_source._mirror.length
+      @_source.forEach (s)-> s.beam()
+      @solved = @_target.length is @_target.filter( (t)-> t.solved).length
+      @trigger 'beam'
+
+  beam_remove: ->
+    @_target.forEach (t)-> t.reset()
+    @_source.forEach (s)-> s.beam_remove()
 
   beam_source: (coors)->
-    @_source = new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    @_source.push new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
 
   target: (coors)->
-    @_target = new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    @_target.push new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
 
   blank: (coors)->
     coors = coors.slice()
@@ -124,7 +129,7 @@ window.o.GameMap = class Map extends MapAnimation
     m = new window.o.ObjectMirror({position: coors, type: type})
     m.bind 'move', (position)=>
       @trigger 'rotate'
-      @_source.beam_remove()
+      @beam_remove()
       for i in [1..20]
         y = m.position.y + position.y * i
         x = m.position.x + position.x * i
@@ -152,8 +157,7 @@ window.o.GameMap = class Map extends MapAnimation
 
   remove: ->
     super
-    @_mirror.forEach (ob)-> ob.remove()
-    @_blank.forEach (ob)-> ob.remove()
-    @_target.remove()
-    @_source.remove()
+    @_clear_ob.forEach (n)=>
+      while a = @[n].shift()
+        a.remove()
     @clear()

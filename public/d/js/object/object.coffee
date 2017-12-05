@@ -90,6 +90,9 @@ window.o.Object = class Object extends MicroEvent
       @__name = name.join('_')
     return @__name
 
+  _animation: (fn, fr=30)->
+    window.App.events.trigger 'map:animation', @_name(), fn, fr
+
   remove: ->
     super
     @mesh.dispose()
