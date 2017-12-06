@@ -1,29 +1,4 @@
-class Connector extends window.o.Object
-  name: 'connector'
-  constructor: ->
-    super
-    @mesh.rotation.z = Math.PI
-    @hide()
-
-  angle: (angle, reverse)->
-    @show()
-    angle = -Math.PI/2 + angle
-    if angle is @mesh.rotation.z
-      return
-    angle_diff = angle - @mesh.rotation.z
-    if angle_diff > 0 and !reverse
-      angle_diff = angle_diff - 2 * Math.PI
-    if angle_diff < 0 and reverse
-      angle_diff = angle_diff + 2 * Math.PI
-    angle_start = @mesh.rotation.z
-    @_animation (m, steps)=>
-      if steps is 0
-        return @mesh.rotation.z = angle
-      @mesh.rotation.z = angle_start + angle_diff * m
-
-
 window.o.ObjectBlank = class Blank extends window.o.Object
-  _connector_class: Connector
   _default: {
     color: [151, 153, 156]
   }

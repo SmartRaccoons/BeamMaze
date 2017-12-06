@@ -1,3 +1,28 @@
+class Connector extends window.o.Object
+  name: 'connector'
+  constructor: ->
+    super
+    @mesh.rotation.z = Math.PI
+    @color()
+    @hide()
+
+  angle: (angle, reverse)->
+    @show()
+    angle = -Math.PI/2 + angle
+    if angle is @mesh.rotation.z
+      return
+    angle_diff = angle - @mesh.rotation.z
+    if angle_diff > 0 and !reverse
+      angle_diff = angle_diff - 2 * Math.PI
+    if angle_diff < 0 and reverse
+      angle_diff = angle_diff + 2 * Math.PI
+    angle_start = @mesh.rotation.z
+    @_animation (m, steps)=>
+      if steps is 0
+        return @mesh.rotation.z = angle
+      @mesh.rotation.z = angle_start + angle_diff * m
+
+
 class MirrorTube extends window.o.Object
   _default: {
     color: [187, 230, 239]
@@ -69,12 +94,12 @@ class MirrorNormal extends window.o.Object
   connectors: [[MirrorTubeConnect, MirrorTubeConnectOut], null, [MirrorTubeConnect, MirrorTubeConnectOut]]
   constructor: ->
     super
-    @color(null, 0)
+    @color()
     @tubes = []
     @connectors.forEach (connectors, i)=>
       if !connectors
         return
-      tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=> new connector({parent: @, rotation: i})
+      tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=> new connector({parent: @, color: @options.color_tube, rotation: i})
       tubes.forEach (t1, i)->
         tubes.forEach (t2, j)->
           if i is j
@@ -107,8 +132,9 @@ _move_positions_coors = _move_positions.map _angle_to_xy
 
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _default: {
-    color: [103, 181, 229, 0.4]
-    color_active: [103, 181, 229]
+    color: [0, 0, 0, 0]
+    color_mirror: [103, 181, 229, 0.4]
+    color_tube: [255, 255, 255, 0.6]
   }
   _move_reverse: false
   _move_positions: _move_positions
@@ -121,27 +147,27 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'cross': MirrorCross
   constructor: ->
     super
-    @mirror = new @classes[@options.type]({parent: @})
     @_move_position = 0
     @_static = 's' in @options.params
+    @mirror = new @classes[@options.type]({
+      parent: @
+      color: if @_static then @options.color else @options.color_mirror
+      color_tube: @options.color_tube
+    })
     if !@_static
-      @_connector = new @_connector_class({parent: @})
-    @out()
+      @_connector = new Connector({parent: @, color: @options.color_mirror.slice(0, 3)})
 
   _controls_add: ->
     if @_controls_added
       return
     @_controls_added = true
     @mirror._action
-      mouseover: => @over()
-      mouseout: => @out()
-      click: =>
-        @out()
-        @trigger 'move', @get_move_position()
+      mouseover: =>
+      mouseout: =>
+      click: => @trigger 'move', @get_move_position()
 
   _controls_remove: ->
     @_controls_added = false
-    @out()
     @mirror._action_remove()
 
   get_move_position: (n = @_move_position, full = false)->
@@ -163,40 +189,14 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @position.y = @position.y + position.y
     @_update_position()
 
-  _update_position: (without_animation = false)->
-    position_new = [@position.x * @_step, @position.y * @_step, 0]
-    position_set = => @mesh.position = new BABYLON.Vector3(position_new[0], position_new[1], position_new[2])
-    if without_animation
-      return position_set()
-    position = [@mesh.position.x, @mesh.position.y]
-    position_diff = [position_new[0] - position[0], position_new[1] - position[1]]
-    @_animation (m, steps)=>
-      if steps is 0
-        position_set()
-        @trigger 'move_end'
-        return
-      @mesh.position = new BABYLON.Vector3(position[0] + position_diff[0] * m, position[1] + position_diff[1] * m, position_new[2])
-    , 20
-
-  over: ->
-    @color(@options.color_active)
-    @_connector.color(@options.color_active)
-
-  out: ->
-    if @_static
-      return @color(window.o.ObjectBlank::_default.color, 0)
-    @color()
-    @_connector.color(window.o.ObjectBlank::_default.color)
-
 
 _move_positions_reverse = [_move_positions[0], _move_positions[3], _move_positions[2], _move_positions[1]]
 _move_positions_coors_reverse = _move_positions_reverse.map _angle_to_xy
 
 window.o.ObjectMirrorReverse = class MirrorContainerReverse extends MirrorContainer
   _move_reverse: true
-  _default: {
-    color: [188, 105, 43, 0.4]
-    color_active: [188, 105, 43]
-  }
+  _default: _.extend({}, MirrorContainer::_default, {
+    color_mirror: [188, 105, 43, 0.4]
+  })
   _move_positions: _move_positions_reverse
   _move_positions_coors: _move_positions_coors_reverse
