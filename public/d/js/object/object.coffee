@@ -27,8 +27,9 @@ window.App.events.bind 'game:init', (scene, engine, light, camera)->
 
 
 window.o.Object = class Object extends MicroEvent
-  _color: [0, 0, 0]
-  _default: {}
+  _default: {
+    color: [0, 0, 0]
+  }
   constructor: (options)->
     super
     _object_id++
@@ -66,7 +67,7 @@ window.o.Object = class Object extends MicroEvent
     mesh.isVisible = true
     mesh
 
-  color: (color = @_color, alpha = 1)->
+  color: (color = @options.color, alpha = 1)->
     if !@mesh.material
       @mesh.material = new BABYLON.StandardMaterial("material_#{@_name()}", @scene())
     @mesh.material.diffuseColor = new BABYLON.Color3(color[0]/255, color[1]/255, color[2]/255)

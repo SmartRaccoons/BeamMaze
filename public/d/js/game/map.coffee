@@ -77,7 +77,7 @@ window.o.GameMap = class Map extends MapAnimation
         @[methods[method]]([x, y], params)
 
     map = map_string.split('|').map (s)-> s.trim().split('')
-    params = ['s']
+    params = ['s', 'r']
     map_size = [Math.floor(map.reduce( ((max, v)-> Math.max(max, v.filter( (v)-> !(params in v)).length)), 0)/2), Math.floor(map.length/2)]
     @_map = {}
     map.forEach (row, j)=>
@@ -134,7 +134,7 @@ window.o.GameMap = class Map extends MapAnimation
 
   mirror: (coors, type, params)->
     @blank(coors)
-    m = new window.o.ObjectMirror({position: coors, type: type, params: params})
+    m = new window.o[if 'r' in params then 'ObjectMirrorReverse' else 'ObjectMirror']({position: coors, type: type, params: params})
     if m._static
       return
     m.bind 'move', (position)=>

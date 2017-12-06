@@ -1,7 +1,9 @@
 Object = window.o.Object
 
 window.o.ObjectBeam = class Beam extends Object
-  _color: [255, 243, 21]
+  _default: {
+    color: [255, 243, 21]
+  }
   constructor: ->
     super
     @color(null, 0.5)
@@ -23,11 +25,11 @@ window.o.ObjectBeam = class Beam extends Object
 class BeamSphere extends window.o.ObjectSphere
   _default: {
     diameter: 4
-    color: Beam::_color
+    color: Beam::_default.color
   }
   constructor: ->
     super
-    @color(@options.color)
+    @color()
     @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])
     @sheath = new window.o.ObjectSphere({diameter: @options.diameter + 1, parent: @})
     @sheath.color(@options.color.concat(0.5))
@@ -40,7 +42,7 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
   name: 'source'
   _default: {
     diameter: 4
-    color: Beam::_color
+    color: Beam::_default.color
   }
   constructor: ->
     @_beam = []
@@ -103,12 +105,12 @@ window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
     @solved = false
     @sheath.mesh.material.alpha = 0
     @sheath2.mesh.material.alpha = 0
-    @color(@options.color)
+    @color()
 
   _solved: ->
     @solved = true
     c1 = @options.color
-    c2 = Beam::_color
+    c2 = Beam::_default.color
     color_diff = [c2[0]-c1[0],c2[1]-c1[1],c2[2]-c1[2]]
     @_animation (m, steps)=>
       color = [m * color_diff[0] + c1[0], m * color_diff[1] + c1[1], m * color_diff[2] + c1[2]]

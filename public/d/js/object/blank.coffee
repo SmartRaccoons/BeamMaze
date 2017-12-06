@@ -5,14 +5,16 @@ class Connector extends window.o.Object
     @mesh.rotation.z = Math.PI
     @hide()
 
-  angle: (angle)->
+  angle: (angle, reverse)->
     @show()
     angle = -Math.PI/2 + angle
     if angle is @mesh.rotation.z
       return
     angle_diff = angle - @mesh.rotation.z
-    if angle_diff > 0
+    if angle_diff > 0 and !reverse
       angle_diff = angle_diff - 2 * Math.PI
+    if angle_diff < 0 and reverse
+      angle_diff = angle_diff + 2 * Math.PI
     angle_start = @mesh.rotation.z
     @_animation (m, steps)=>
       if steps is 0
@@ -22,8 +24,9 @@ class Connector extends window.o.Object
 
 window.o.ObjectBlank = class Blank extends window.o.Object
   _connector_class: Connector
-  _color: [151, 153, 156]
-  _color_active: [103, 181, 229]
+  _default: {
+    color: [151, 153, 156]
+  }
   name: 'blank'
   _step: 10
 
@@ -32,7 +35,7 @@ window.o.ObjectBlank = class Blank extends window.o.Object
     @position = {x: @options.position[0], y: @options.position[1], z: @options.position[2] or 0}
     @mesh.scaling = new BABYLON.Vector3(4, 4, 4)
     @_update_position(true)
-    @color(@_color)
+    @color()
     @
 
   _update_position: (without_animation = false)->
