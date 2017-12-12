@@ -1,4 +1,11 @@
 App.lang.strings.lv =
+  'stage_desc': {
+    1: """Zils klucītis"""
+    2: """līdz pašam galam"""
+    3: """pulksteņrādītāja
+     virzienā"""
+    4: """palīgklucīši"""
+  }
   'Credits': 'Sakapāja'
   'Continue': 'Turpināt'
   'Choose stage': 'Izvēlies līmeni'

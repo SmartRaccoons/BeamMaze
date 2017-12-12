@@ -53,14 +53,14 @@ class MapAnimation extends MicroEvent
 
 
 window.o.GameMap = class Map extends MapAnimation
-  _clear_ob: ['_mirror', '_blank', '_target', '_source']
+  _clear_ob: ['_mirror', '_blank', '_target', '_source', '_text']
 
   clear: ->
     super
     @_clear_ob.forEach (n)=> @[n] = []
     @solved = false
 
-  load: (map_string)->
+  load: (map_string, text)->
     methods = {
       '-': null
       '0': 'blank'
@@ -98,6 +98,8 @@ window.o.GameMap = class Map extends MapAnimation
     setTimeout =>
       @beam_show()
     , 100
+    if text
+      @_text.push new window.o.ObjectText({text: text, position: [0, map_size[1] * 10 + 10, -2.5]})
     return map_size
 
   position_check: ->

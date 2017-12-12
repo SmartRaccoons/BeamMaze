@@ -12,7 +12,7 @@ App.user.authorize (user)->
     })
   Cookies.set('session', App.user.session())
   App.router = new window.o.ViewRouter({
-    user: App.user.data('type') or 'free' #free, shared, full
+    user: 'full' #App.user.data('type') or 'free' #free, shared, full
     # close: -> alert('close')
     author_link: false
     user_types: {free: 130, shared: 140}

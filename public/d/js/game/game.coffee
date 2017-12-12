@@ -33,7 +33,7 @@ window.o.Game = class Game extends MicroEvent
     @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-30, 30, -50), @_scene)
     window.App.events.trigger('game:init', @_scene, @_engine, @_light, @_camera)
 
-    map_size = @_map.load(window.o.GameMapData[options.stage - 1])
+    map_size = @_map.load(window.o.GameMapData[options.stage - 1], _l('stage_desc')[options.stage])
     max_size = Math.max(map_size[0], map_size[1])
     window.App.events.trigger 'map:animation', 'camera_anime', (m, steps)=>
       if steps is 0

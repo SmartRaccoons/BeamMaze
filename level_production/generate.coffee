@@ -1,5 +1,5 @@
-map = '920|-019|-1|-0|-88'
-solution = '902|-119|-0|-0|-88'
+map = '-102|91-22|-0008'
+solution = '-102|91-22|-0008'
 # '-': null
 # '0': 'blank'
 # '1': 'mirror'
@@ -49,8 +49,12 @@ class Solve
       if !(str in maps) and o.map isnt str
         maps.push str
     solve = null
-    maps.forEach (m)=>
-      combination = @_solve m, o.solution, 8
+    notify_number = Math.round(maps.length/100)
+    console.info "#{maps.length} maps"
+    maps.forEach (m, i)=>
+      if i % notify_number is 0
+        console.info "#{Math.round(i*100/maps.length)}%"
+      combination = @_solve m, o.solution, 5
       if combination and (!solve or (solve[0].length < combination.length))
         solve = [combination, m]
     console.info solve
