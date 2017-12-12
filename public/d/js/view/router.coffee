@@ -13,20 +13,32 @@ window.o.ViewRouter = class Router extends window.o.View
     @game_stages = window.o.GameMapData.length
     @game_last = if @options.game_last > @game_stages then @game_stages else @options.game_last
 
+  _new_levels: ->
+    if @options.game_completed < @game_stages and @options.game_completed isnt @game_last
+      return @game_stages - @options.game_completed
+    return false
+
   run: ->
+    if @_new_levels()
+      return @start()
     @game()
     @
 
   start: ->
     App.events.trigger 'router:start'
-    @_load('start', {close: @options.close, author_link: @options.author_link})
+    @_load('start', {
+      close: @options.close
+      author_link: @options.author_link
+      new_levels: @_new_levels()
+    })
     @_active.bind 'continue', => @game()
-    @_active.bind 'stages', => @stages()
+    @_active.bind 'new_levels', => @game(@options.game_completed)
+    # @_active.bind 'stages', => @stages()
 
-  stages: ->
-    App.events.trigger 'router:stages'
-    @_load('stages', {stages: @game_stages, last: @game_last})
-    @_active.bind 'stage', (id)=> @game(id)
+  # stages: ->
+  #   App.events.trigger 'router:stages'
+  #   @_load('stages', {stages: @game_stages, last: @game_last})
+  #   @_active.bind 'stage', (id)=> @game(id)
 
   _game_stage_available: (stage, callback)->
     if @options.user is 'full'

@@ -4,10 +4,13 @@ window.o.ViewStart = class start extends window.o.View
     <h1>Raccoobe</h1>
         <nav>
           <ul>
-           <li><button>#{_l('Continue')}</button></li>
-           <!--<li><button>#{_l('Choose stage')}</button></li>-->
+           <li><button data-action='continue'>#{_l('Continue')}</button></li>
+           <% if(new_levels) {%>
+            <li><button data-action='new_levels' data-count="<%= new_levels %>">#{_l('New levels')}</button></li>
+            <% } %>
+           <!--<li><button data-action='stages'>#{_l('Choose stage')}</button></li>-->
            <% if (close) { %>
-            <li><button>#{_l('Quit')}</button></li>
+            <li><button data-action='close'>#{_l('Quit')}</button></li>
           <% } %>
          </ul>
         </nav>
@@ -17,6 +20,8 @@ window.o.ViewStart = class start extends window.o.View
   """
 
   events:
-    'click li:nth-child(1) button': -> @trigger 'continue'
-    'click li:nth-child(2) button': -> @trigger 'stages'
-    'click li:nth-child(3) button': -> @options.close()
+    'click li button': (e)->
+      action = e.target.getAttribute('data-action')
+      if action is 'close'
+        return @options.close()
+      @trigger action
