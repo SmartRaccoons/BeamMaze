@@ -23,6 +23,7 @@ production :
 	public/d/locale/lv.js \
 	public/d/js/object/data.js \
 	public/d/js/object/object.js \
+	public/d/js/object/text.js \
 	public/d/js/object/blank.js \
 	public/d/js/object/beam.js \
 	public/d/js/object/mirror.js \
@@ -32,7 +33,6 @@ production :
 	public/d/js/view/view.js \
 	public/d/js/view/router.js \
 	public/d/js/view/start.js \
-	public/d/js/view/stages.js \
 	public/d/js/view/game.js \
 	public/d/js/view/popup.js \
 	public/d/js/analytics.js \

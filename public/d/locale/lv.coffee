@@ -1,7 +1,7 @@
 App.lang.strings.lv =
   'stage_desc': {
     1: """Zils klucītis"""
-    2: """līdz pašam galam"""
+    2: """kustās\nlīdz pašam galam"""
     3: """pulksteņrādītāja
      virzienā"""
     4: """palīgklucīši"""
@@ -9,32 +9,24 @@ App.lang.strings.lv =
   'New levels': 'Jauni līmeņi'
   'Credits': 'Sakapāja'
   'Continue': 'Turpināt'
-  'Choose stage': 'Izvēlies līmeni'
   'Quit': 'Aizvērt'
   'Menu': 'Menu'
 
   'Reset': 'Atsākt līmeni'
 
-  'Game free over description': """
-    Apsveicam, Tu izgāji {levels} līmeņus.<br />
-    Mēs rūpīgi taisījām šo spēli un vēlamies kādu no šiem atalgojumiem:<br />
-    (1) padalies ar spēli vai<br />
-    (2) iegādājies pilnu versiju par vienas kafijas cenu.
+  'Credits description': """
+    Raccoobe piedāvā Smart Raccoons www.raccoons.lv
+    <br />
+    Mēs esam maziņa spēļu kompānija. Tik maziņa, ka tajā pastāvīgi strādā viens cilvēks.
+    <br />
+    Tāpēc tieši šobrīd ir tik svarīgs tavs atbalsts.
+    <br />
+    Nekas daudz — paņem un pastāsti par šo spēli
   """
-  'Buy game': 'pilna versija ({price})'
-
-  'Game shared over description': """
-    Ļoti labi, Tu tiki līdz {levels}. līmeņam.<br />
-    Jāatzīst, ka parējie līmeņi pieejami tikai pilnā versijā,
-    kura maksā mazāk kā viena krūzīte labas kafijas.<br />
-    Toties šajā spēlē nav reklāmu vai kādu citu slēptu maksājumu.<br />
-    Tikai nieka {price}
-  """
-  'Buy game shared': 'pilna versija par {price}'
 
   'Game over': 'Spēles beigas'
   'Game over description': """
-      Diemžēl, visam kaut kad pienāk gals.
+      Par laimi, visam kaut kad pienāk gals.
       Arī šī spēlīte nav izņēmums un Tu esi pieveicis pēdējo līmeņi.
     <br />
       Ja tik tālu esi ticis, tad pieņemam, ka spēle Tev patika.

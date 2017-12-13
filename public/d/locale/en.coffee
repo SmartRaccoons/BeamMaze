@@ -1,40 +1,32 @@
 App.lang.strings.en =
-  'Credits': 'Made'
+  'stage_desc': {
+    1: """Blue box"""
+    2: """moves\nto the end"""
+    3: """clockwise
+     direction"""
+    4: """helpbox"""
+  }
+  'New levels': 'New levels'
+  'Credits': 'Production'
   'Continue': 'Continue'
-  'Choose stage': 'Choose level'
   'Quit': 'Close'
   'Menu': 'Menu'
 
-  'Pause': 'Pause'
   'Reset': 'Restart level'
-  'Next level': 'Next'
-  'Completed': """Completed in {minutes}:{seconds}<small>.{mls}</small><br />
-    with {mirrors} mirrors and {steps} steps"""
 
-  'Light': "Light"
-  'Mirror': 'Mirror'
-  'Rotate platform': 'Rotate platform'
-
-  'Game free over description': """
-    Congratulations, Your completed {levels} levels.<br />
-    We carefully have been developing this game and want one of this rewards:<br />
-    (1) share this game or<br />
-    (2) buy full version for the price of less then one cup of good coffee.
+  'Credits description': """
+    Raccoobe is represented by Smart Raccoons www.raccoons.lv
+    <br />
+    We are tiny game company. So tiny that we have one dedicated employee.
+    <br />
+    So You help today is so irreplaceable.
+    <br />
+    Nothing much — tell others about the game
   """
-  'Buy game': 'full version ({price})'
-
-  'Game shared over description': """
-    Very good, Your got to the {levels} level.<br />
-    To be honest other levels available only in the full version
-    and You can get this version for price of less then one cup of good coffee.<br />
-    whilst this game do not have any kind of advertisment or any other hidden payment.<br />
-    Only scanty {price}
-  """
-  'Buy game shared': 'full version for {price}'
 
   'Game over': 'Game over'
   'Game over description': """
-      Unfortunately nothing lasts forever and this game is not exception.
+      Fortunately nothing lasts forever and this game is not exception.
       You have accomplished last level.
     <br />
       If you get so far then we think You like the game.

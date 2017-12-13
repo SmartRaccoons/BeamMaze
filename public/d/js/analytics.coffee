@@ -29,12 +29,12 @@ App.events.bind 'router:init', ->
 
   App.events.bind 'router:start', ->
     ga_wrap -> ga('send', 'pageview', 'start')
-  App.events.bind 'router:stages', ->
-    ga_wrap -> ga('send', 'pageview', 'stages')
+  App.events.bind 'router:credits', ->
+    ga_wrap -> ga('send', 'pageview', 'credits')
 
-  App.events.bind 'router:buy', (from, type)->
-    GameAnalytics("addBusinessEvent", "EUR", 99, "game", "full", "#{from}:#{type}")
-    ga_wrap -> ga('send', 'pageview', ['buy', from, type].join('/'))
+  # App.events.bind 'router:buy', (from, type)->
+  #   GameAnalytics("addBusinessEvent", "EUR", 99, "game", "full", "#{from}:#{type}")
+  #   ga_wrap -> ga('send', 'pageview', ['buy', from, type].join('/'))
 
   App.events.bind 'router:share', (from)->
     GameAnalytics("addDesignEvent", "share:#{from}")

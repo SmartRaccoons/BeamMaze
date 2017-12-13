@@ -13,10 +13,6 @@ App.user.authorize (user)->
   Cookies.set('session', App.user.session())
   game_completed = parseInt(App.user.data('game_completed') or 1)
   App.router = new window.o.ViewRouter({
-    user: 'full' #App.user.data('type') or 'free' #free, shared, full
-    # close: -> alert('close')
-    author_link: false
-    user_types: {free: 130, shared: 140}
     game_last: parseInt(App.user.data('game_last') or 1)
     game_completed: game_completed
     game_save: (stage)->
@@ -26,19 +22,9 @@ App.user.authorize (user)->
       App.user.data('game_last', stage)
   })
 
-  App.router.bind 'share-last', ->
-    alert 'share last'
-    App.events.trigger 'router:share', 'last'
-  App.router.bind 'share-user', (from)->
-    App.user.data('type', 'shared')
-    App.router.options.user = 'shared'
-    App.router.game()
+  App.router.bind 'share', (from)->
+    alert "share #{from}"
     App.events.trigger 'router:share', from
-  App.router.bind 'buy', (from, popup_type)->
-    App.user.data('type', 'full')
-    App.router.options.user = 'full'
-    App.router.game()
-    App.events.trigger 'router:buy', from, popup_type
 
   App.events.trigger 'router:init'
 
