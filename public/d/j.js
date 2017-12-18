@@ -34890,6 +34890,7 @@ return clearTimeout(t);
 this._timeouts = [];
 this.$el.removeClass("" + this.className + "-level-hide");
 this.$el.attr("data-level", this.options.stage);
+this.$(".game-controls-reset").attr("data-level", this.options.stage);
 return this._timeouts.push(setTimeout(function(_this) {
 return function() {
 _this.$el.addClass("" + _this.className + "-level-hide");

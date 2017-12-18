@@ -25,6 +25,7 @@ window.o.ViewGame = class Game extends window.o.View
     @_timeouts = []
     @$el.removeClass("#{@className}-level-hide")
     @$el.attr('data-level', @options.stage)
+    @$('.game-controls-reset').attr('data-level', @options.stage)
     @_timeouts.push setTimeout =>
       @$el.addClass("#{@className}-level-hide")
       game.clear()
