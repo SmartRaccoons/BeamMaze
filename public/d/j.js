@@ -35066,6 +35066,21 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 }).call(this);
 
 (function() {
+var loading;
+loading = function() {
+var el, text;
+el = document.getElementById("loading");
+text = document.getElementById("loading-text");
+return {
+remove: function() {
+return el.parentNode.removeChild(el);
+},
+done: function(p) {
+return text.innerText = "" + p + "%";
+}
+};
+}();
+loading.done(55);
 App.user = new UniversalApi({
 session: Cookies.get("session"),
 app_id: 1,
@@ -35073,6 +35088,8 @@ url: "http://uniapi.raccoons.lv/user.json"
 });
 App.user.authorize(function(user) {
 var game_completed;
+loading.done(95);
+loading.remove();
 if (!user.session) {
 return new window.o.ViewPopup({
 content: _l("Authorize error"),
@@ -35096,7 +35113,7 @@ App.router.bind("share", function(from) {
 App.user.share({
 title: "Spēlīte",
 text: "Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!",
-url: "//draugiem.lv/raccoobe"
+url: "https://draugiem.lv/raccoobe"
 });
 return App.events.trigger("router:share", from);
 });
