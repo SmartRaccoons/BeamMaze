@@ -35066,7 +35066,7 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 }).call(this);
 
 (function() {
-window.loading.done(85);
+window.loading.done(95);
 App.user = new UniversalApi({
 session: Cookies.get("session"),
 app_id: 1,
@@ -35074,7 +35074,7 @@ url: "http://uniapi.raccoons.lv/user.json"
 });
 App.user.authorize(function(user) {
 var game_completed;
-window.loading.done(95);
+window.loading.done(98);
 window.loading.remove();
 if (!user.session) {
 return new window.o.ViewPopup({
