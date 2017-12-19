@@ -1,5 +1,5 @@
 
-window.loading.done(85)
+window.loading.done(95)
 App.user = new UniversalApi({
   session: Cookies.get('session')
   app_id: 1
@@ -7,7 +7,7 @@ App.user = new UniversalApi({
 })
 
 App.user.authorize (user)->
-  window.loading.done(95)
+  window.loading.done(98)
   window.loading.remove()
   if !user.session
     return new window.o.ViewPopup({
