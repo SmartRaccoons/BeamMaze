@@ -1,11 +1,5 @@
-loading = do ->
-  el = document.getElementById('loading')
-  text = document.getElementById('loading-text')
-  {
-    remove: -> el.parentNode.removeChild(el)
-    done: (p)-> text.innerText = "#{p}%"
-  }
-loading.done(55)
+
+window.loading.done(85)
 App.user = new UniversalApi({
   session: Cookies.get('session')
   app_id: 1
@@ -13,8 +7,8 @@ App.user = new UniversalApi({
 })
 
 App.user.authorize (user)->
-  loading.done(95)
-  loading.remove()
+  window.loading.done(95)
+  window.loading.remove()
   if !user.session
     return new window.o.ViewPopup({
       content: _l('Authorize error')

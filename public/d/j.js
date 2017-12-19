@@ -35066,21 +35066,7 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 }).call(this);
 
 (function() {
-var loading;
-loading = function() {
-var el, text;
-el = document.getElementById("loading");
-text = document.getElementById("loading-text");
-return {
-remove: function() {
-return el.parentNode.removeChild(el);
-},
-done: function(p) {
-return text.innerText = "" + p + "%";
-}
-};
-}();
-loading.done(55);
+window.loading.done(85);
 App.user = new UniversalApi({
 session: Cookies.get("session"),
 app_id: 1,
@@ -35088,8 +35074,8 @@ url: "http://uniapi.raccoons.lv/user.json"
 });
 App.user.authorize(function(user) {
 var game_completed;
-loading.done(95);
-loading.remove();
+window.loading.done(95);
+window.loading.remove();
 if (!user.session) {
 return new window.o.ViewPopup({
 content: _l("Authorize error"),
