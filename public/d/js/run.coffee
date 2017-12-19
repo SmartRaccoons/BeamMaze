@@ -2,6 +2,7 @@
 App.user = new UniversalApi({
   session: Cookies.get('session')
   app_id: 1
+  url: 'http://uniapi.raccoons.lv/user.json'
 })
 
 App.user.authorize (user)->
@@ -23,7 +24,11 @@ App.user.authorize (user)->
   })
 
   App.router.bind 'share', (from)->
-    alert "share #{from}"
+    App.user.share({
+      title: 'Spēlīte'
+      text: 'Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!'
+      url: '//draugiem.lv/raccoobe'
+    })
     App.events.trigger 'router:share', from
 
   App.events.trigger 'router:init'

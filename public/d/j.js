@@ -33009,7 +33009,7 @@ return Zepto;
 });
 
 (function() {
-var GET, UniversalApi, _GET;
+var GET, UniversalApi, add_script, loadJSONP, _GET;
 GET = function(a) {
 var b, p, pr, _i, _len;
 b = {};
@@ -33025,6 +33025,40 @@ b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
 }
 return b;
 }(window.location.search.substr(1).split("&"));
+add_script = function(url, callback) {
+var script;
+if (callback == null) {
+callback = function() {};
+}
+script = document.createElement("script");
+script.type = "text/javascript";
+script.src = url;
+callback(script);
+return document.getElementsByTagName("head")[0].appendChild(script);
+};
+loadJSONP = function() {
+var unique;
+unique = 0;
+return function(url, callback, context) {
+var name;
+name = "_jsonp_" + unique++;
+if (url.match(/\?/)) {
+url += "&callback=" + name;
+} else {
+url += "?callback=" + name;
+}
+return add_script(url, function(_this) {
+return function(script) {
+return window[name] = function(data) {
+callback.call(context || window, data);
+document.getElementsByTagName("head")[0].removeChild(script);
+script = null;
+return delete window[name];
+};
+};
+}(this));
+};
+}();
 _GET = function(p) {
 if (p in GET) {
 return GET[p];
@@ -33032,10 +33066,15 @@ return GET[p];
 return false;
 };
 window.UniversalApi = UniversalApi = function() {
-UniversalApi.prototype.url = "http://uniapi.raccoons.lv/user.json";
 function UniversalApi(params) {
 this._url_params = params;
+this.options = {
+url: params.url
+};
+delete params.url;
 if (_GET("dr_auth_code")) {
+add_script("//ifrype.com/applications/external/draugiem.js");
+this._media = "draugiem";
 this._url_params["dr_auth_code"] = _GET("dr_auth_code");
 }
 }
@@ -33062,6 +33101,14 @@ return this._request(callback);
 UniversalApi.prototype.session = function() {
 return this._url_params.session;
 };
+UniversalApi.prototype.share = function(options, callback) {
+if (callback == null) {
+callback = function() {};
+}
+if (this._media === "draugiem") {
+return draugiemSay(options.title, options.url, "", options.text, callback);
+}
+};
 UniversalApi.prototype.data = function(k, v) {
 var additional;
 if (v == null) {
@@ -33081,10 +33128,7 @@ UniversalApi.prototype._request = function(callback, additional) {
 if (additional == null) {
 additional = {};
 }
-return $.ajax({
-url: "" + this.url + "?" + this._url(additional),
-dataType: "jsonp",
-success: function(_this) {
+return loadJSONP("" + this.options.url + "?" + this._url(additional), function(_this) {
 return function(data) {
 if (data.session) {
 _this._url_params["session"] = data.session;
@@ -33092,11 +33136,7 @@ _this.user = data;
 }
 return callback(data);
 };
-}(this),
-error: function() {
-return callback({});
-}
-});
+}(this));
 };
 return UniversalApi;
 }();
@@ -33184,7 +33224,7 @@ var i = 0;
 for (;i < cookies.length; i++) {
 var parts = cookies[i].split("=");
 var cookie = parts.slice(1).join("=");
-if (cookie.charAt(0) === '"') {
+if (!this.json && cookie.charAt(0) === '"') {
 cookie = cookie.slice(1, -1);
 }
 try {
@@ -35028,7 +35068,8 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 (function() {
 App.user = new UniversalApi({
 session: Cookies.get("session"),
-app_id: 1
+app_id: 1,
+url: "http://uniapi.raccoons.lv/user.json"
 });
 App.user.authorize(function(user) {
 var game_completed;
@@ -35052,7 +35093,11 @@ return App.user.data("game_last", stage);
 }
 });
 App.router.bind("share", function(from) {
-alert("share " + from);
+App.user.share({
+title: "Spēlīte",
+text: "Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!",
+url: "//draugiem.lv/raccoobe"
+});
 return App.events.trigger("router:share", from);
 });
 App.events.trigger("router:init");
