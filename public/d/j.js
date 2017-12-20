@@ -35097,7 +35097,7 @@ return App.user.data("game_last", stage);
 });
 App.router.bind("share", function(from) {
 App.user.share({
-title: "Spēlīte",
+title: "Raccoobe",
 text: "Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!",
 url: "https://draugiem.lv/raccoobe"
 });
