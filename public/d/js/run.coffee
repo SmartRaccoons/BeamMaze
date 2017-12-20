@@ -3,7 +3,7 @@ window.loading.done(95)
 App.user = new UniversalApi({
   session: Cookies.get('session')
   app_id: 1
-  url: 'http://uniapi.raccoons.lv/user.json'
+  url: 'https://uniapi.raccoons.lv/user.json'
 })
 
 App.user.authorize (user)->
