@@ -138,7 +138,6 @@ window.o.GameMap = class Map extends MapAnimation
     if m._static
       return
     m.bind 'move', (position)=>
-      @trigger 'rotate'
       @beam_remove()
       for i in [1..20]
         y = m.position.y + position.y * i

@@ -19,12 +19,14 @@ window.o.Game = class Game extends MicroEvent
       @_scene.render()
       @_map.render_after()
     @_map = new window.o.GameMap()
+    moves = 0
     @_map.bind 'beam', (mirrors)=>
-      if not @_map.solved
+      if @_map.solved
+        @_map.remove_controls()
+        @trigger 'solved', mirrors
         return
-      @_map.remove_controls()
-      @trigger 'solved', mirrors
-    @_map.bind 'rotate', => @trigger 'rotate'
+      @trigger 'move', moves++
+
 
     @_scene = new BABYLON.Scene(@_engine)
     @_scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
