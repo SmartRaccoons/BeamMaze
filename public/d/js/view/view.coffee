@@ -15,7 +15,7 @@ window.o.View = class View extends MicroEvent
     @
 
   render: (data = {})->
-    @$el = $(@el).appendTo(@options.parent or document.body)
+    @$el = $(@el).prependTo(@options.parent or document.body)
     if @className
       @$el.addClass(@className)
     if @template
