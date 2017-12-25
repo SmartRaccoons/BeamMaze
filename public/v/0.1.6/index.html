@@ -7,89 +7,93 @@
 </head>
 <body data-version='0.1.6'>
 
+<div id='loading' class=container><div class=start>
+  <style>
+  .spinner {
+    margin: 2em auto;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    line-height: 2em;
+    position: relative;
+  }
+  .spinner::before, .spinner::after {
+    content: '';
+    display: block;
+    background: #fff;
+    width: 1.5em;
+    height: 1.5em;
+    position: absolute;
+    top: -1.5em;
+    left: -1.5em;
+    animation: sk-cubemove 1.8s infinite ease-in-out;
+  }
+  .spinner::after {
+    animation-delay: -0.9s;
+  }
+  @keyframes sk-cubemove {
+    25% {
+      transform: translateX(4em) rotate(-90deg) scale(0.2);
+    } 50% {
+      transform: translateX(4em) translateY(4em) rotate(-179deg);
+    } 50.1% {
+      transform: translateX(4em) translateY(4em) rotate(-180deg);
+    } 75% {
+      transform: translateX(0) translateY(4em) rotate(-270deg) scale(0.2);
+    } 100% {
+      transform: rotate(-360deg);
+    }
+  }
+  </style>
+  <h1>Raccoobe</h1>
+  <div id='loading-text' class=spinner>0%</div></div>
+  <script type='text/javascript'>
 
-  <div id='loading' class=container><div class=start>
-    <style>
-    .spinner {
-      margin: 2em auto;
-      width: 2em;
-      height: 2em;
-      text-align: center;
-      line-height: 2em;
-      position: relative;
-    }
-    .spinner::before, .spinner::after {
-      content: '';
-      display: block;
-      background: #fff;
-      width: 1.5em;
-      height: 1.5em;
-      position: absolute;
-      top: -1.5em;
-      left: -1.5em;
-      animation: sk-cubemove 1.8s infinite ease-in-out;
-    }
-    .spinner::after {
-      animation-delay: -0.9s;
-    }
-    @keyframes sk-cubemove {
-      25% {
-        transform: translateX(4em) rotate(-90deg) scale(0.2);
-      } 50% {
-        transform: translateX(4em) translateY(4em) rotate(-179deg);
-      } 50.1% {
-        transform: translateX(4em) translateY(4em) rotate(-180deg);
-      } 75% {
-        transform: translateX(0) translateY(4em) rotate(-270deg) scale(0.2);
-      } 100% {
-        transform: rotate(-360deg);
-      }
-    }
-    </style>
-    <h1>Raccoobe</h1>
-    <div id='loading-text' class=spinner>0%</div></div>
-    <script type='text/javascript'>
-
-      window.loading = (function() {
-        var el, percent, percent_loaded, percent_timer, percent_update, text;
-        el = document.getElementById('loading');
-        text = document.getElementById('loading-text');
-        percent = 0;
-        percent_loaded = 0;
-        percent_timer = null;
-        percent_update = function() {
-          clearTimeout(percent_timer);
-          return percent_timer = setTimeout((function() {
-            percent = percent + 3;
-            text.innerText = "" + percent + "%";
-            if (percent < percent_loaded) {
-              return percent_update();
-            }
-          }), 200);
-        };
-        return {
-          remove: function() {
-            clearTimeout(percent_timer);
-            return el.parentNode.removeChild(el);
-          },
-          done: function(p) {
-            percent_loaded = p;
+    window.loading = (function() {
+      var el, percent, percent_loaded, percent_timer, percent_update, text;
+      el = document.getElementById('loading');
+      text = document.getElementById('loading-text');
+      percent = 0;
+      percent_loaded = 0;
+      percent_timer = null;
+      percent_update = function() {
+        clearTimeout(percent_timer);
+        return percent_timer = setTimeout((function() {
+          percent = percent + 3;
+          text.innerText = "" + percent + "%";
+          if (percent < percent_loaded) {
             return percent_update();
           }
-        };
-      })();
-      window.loading.done(85);
+        }), 200);
+      };
+      return {
+        remove: function() {
+          clearTimeout(percent_timer);
+          return el.parentNode.removeChild(el);
+        },
+        done: function(p) {
+          percent_loaded = p;
+          return percent_update();
+        }
+      };
+    })();
+    window.loading.done(85);
 
-    </script>
-  </div></div>
+  </script>
+</div></div>
 
 
-<script type="text/javascript" src="d/j.js?0.1.6"></script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-</script>
+
+
+  <script type="text/javascript" src="d/j.js?0.1.6"></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  </script>
+
+
+
 </body>
 </html>
