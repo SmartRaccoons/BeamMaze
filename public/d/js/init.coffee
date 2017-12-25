@@ -42,11 +42,15 @@ window.App =
   version: $('body').attr('data-version')
   version_dev: $('body').attr('data-version') is 'dev'
   events: new MicroEvent()
+  session: {
+    get: -> Cookies.get('session')
+    set: -> Cookies.set('session', App.user.session())
+  }
   classes: {}
+  platform_router_param: {}
   lang:
     strings:
       'en': {}
       'lv': {}
-    active: (->
-      return if window.location.href.indexOf('lang=en')>-1 then 'en' else 'lv'
-    )()
+    active: do ->
+      return if window.location.href.indexOf('lang=lv')>-1 then 'lv' else 'en'

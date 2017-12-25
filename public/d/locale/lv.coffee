@@ -13,6 +13,7 @@ App.lang.strings.lv =
   'Menu': 'Menu'
 
   'Reset': 'Atsākt līmeni'
+  'Close': 'Aizvērt'
 
   'Credits description': """
     Raccoobe piedāvā Smart Raccoons www.raccoons.lv

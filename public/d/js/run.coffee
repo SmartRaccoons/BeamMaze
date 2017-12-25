@@ -1,7 +1,7 @@
 
 window.loading.done(95)
 App.user = new UniversalApi({
-  session: Cookies.get('session')
+  session: App.session.get()
   app_id: 1
   url: 'https://uniapi.raccoons.lv/user.json'
 })
@@ -14,9 +14,9 @@ App.user.authorize (user)->
       content: _l('Authorize error')
       close: false
     })
-  Cookies.set('session', App.user.session())
+  App.session.set(App.user.session())
   game_completed = parseInt(App.user.data('game_completed') or 1)
-  App.router = new window.o.ViewRouter({
+  App.router = new window.o.ViewRouter(_.extend({
     game_last: parseInt(App.user.data('game_last') or 1)
     game_completed: game_completed
     game_save: (stage)->
@@ -24,14 +24,9 @@ App.user.authorize (user)->
         game_completed = stage
         App.user.data('game_completed', stage)
       App.user.data('game_last', stage)
-  })
+  }, App.platform_router_param))
 
   App.router.bind 'share', (from)->
-    App.user.share({
-      title: 'Raccoobe'
-      text: 'Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!'
-      url: 'https://draugiem.lv/raccoobe'
-    })
     App.events.trigger 'router:share', from
 
   App.events.trigger 'router:init'

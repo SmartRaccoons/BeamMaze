@@ -13,6 +13,7 @@ App.lang.strings.en =
   'Menu': 'Menu'
 
   'Reset': 'Restart level'
+  'Close': 'Close'
 
   'Credits description': """
     Raccoobe is represented by Smart Raccoons www.raccoons.lv

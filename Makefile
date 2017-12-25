@@ -36,10 +36,19 @@ production :
 	public/d/js/view/game.js \
 	public/d/js/view/popup.js \
 	public/d/js/analytics.js \
+> public/d/all-before.js
+	cat public/d/all-before.js \
 	public/d/js/run.js \
 > public/d/all.js
 	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j.js
-	uglifycss public/d/css/screen.css > public/d/css/c.css
 	rm public/d/all.js
+	cat public/d/all-before.js \
+	public/d/js/platform/draugiem.js \
+	public/d/js/run.js \
+> public/d/all-draugiem.js
+	uglifyjs --beautify "indent-level=0" public/d/all-draugiem.js -o public/d/j-draugiem.js
+	rm public/d/all-draugiem.js
+	rm public/d/all-before.js
+	uglifycss public/d/css/screen.css > public/d/css/c.css
 
 	# convert ../download.png -crop 400x400+200+50 -resize 200x200 public/stage/l-3.png

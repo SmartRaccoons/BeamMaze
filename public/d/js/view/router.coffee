@@ -37,7 +37,7 @@ window.o.ViewRouter = class Router extends window.o.View
       new window.o.ViewPopup({
         title: _l('Credits')
         content: _l('Credits description')
-        actions: [
+        actions: if !@options.share then [_l('Close')] else [
           [_l('Share'), => @trigger 'share', 'credits']
           _l('Share close')
         ]
@@ -50,7 +50,7 @@ window.o.ViewRouter = class Router extends window.o.View
     new window.o.ViewPopup({
       title: _l('Game over')
       content: _l('Game over description')
-      actions: [
+      actions: if !@options.share then [_l('Close')] else [
         [_l('Share'), => @trigger 'share', 'last']
         _l('Share close')
       ]

@@ -33329,17 +33329,26 @@ window.App = {
 version: $("body").attr("data-version"),
 version_dev: $("body").attr("data-version") === "dev",
 events: new MicroEvent(),
+session: {
+get: function() {
+return Cookies.get("session");
+},
+set: function() {
+return Cookies.set("session", App.user.session());
+}
+},
 classes: {},
+platform_router_param: {},
 lang: {
 strings: {
 en: {},
 lv: {}
 },
 active: function() {
-if (window.location.href.indexOf("lang=en") > -1) {
-return "en";
-} else {
+if (window.location.href.indexOf("lang=lv") > -1) {
 return "lv";
+} else {
+return "en";
 }
 }()
 }
@@ -33360,6 +33369,7 @@ Continue: "Continue",
 Quit: "Close",
 Menu: "Menu",
 Reset: "Restart level",
+Close: "Close",
 "Credits description": "Raccoobe is represented by Smart Raccoons www.raccoons.lv\n<br />\nWe are tiny game company. So tiny that we have one dedicated employee.\n<br />\nSo You help today is so irreplaceable.\n<br />\nNothing much — tell others about the game",
 "Game over": "Game over",
 "Game over description": "  Fortunately nothing lasts forever and this game is not exception.\n  You have accomplished last level.\n<br />\n  If you get so far then we think You like the game.\n  And this is the best satisfaction for us.\n<br />\n  Help this game to get in other hands and share it.\n  Thank You, and see You in our next games!",
@@ -33383,6 +33393,7 @@ Continue: "Turpināt",
 Quit: "Aizvērt",
 Menu: "Menu",
 Reset: "Atsākt līmeni",
+Close: "Aizvērt",
 "Credits description": "Raccoobe piedāvā Smart Raccoons www.raccoons.lv\n<br />\nMēs esam maziņa spēļu kompānija. Tik maziņa, ka tajā pastāvīgi strādā viens cilvēks.\n<br />\nTāpēc tieši šobrīd ir tik svarīgs tavs atbalsts.\n<br />\nNekas daudz — paņem un pastāsti par šo spēli",
 "Game over": "Spēles beigas",
 "Game over description": "  Par laimi, visam kaut kad pienāk gals.\n  Arī šī spēlīte nav izņēmums un Tu esi pieveicis pēdējo līmeņi.\n<br />\n  Ja tik tālu esi ticis, tad pieņemam, ka spēle Tev patika.\n  Un mums ir liels gandarījums par to.\n<br />\n  Palīdzi šai spelei nonākt pie citiem un padalies.\n  Paldies Tev, un uz redzēšanos citās spēlēs!",
@@ -34773,7 +34784,7 @@ _this.trigger("router:credits");
 return new window.o.ViewPopup({
 title: _l("Credits"),
 content: _l("Credits description"),
-actions: [ [ _l("Share"), function() {
+actions: !_this.options.share ? [ _l("Close") ] : [ [ _l("Share"), function() {
 return _this.trigger("share", "credits");
 } ], _l("Share close") ],
 close: false
@@ -34787,7 +34798,7 @@ this.options.game_save(this.game_last);
 return new window.o.ViewPopup({
 title: _l("Game over"),
 content: _l("Game over description"),
-actions: [ [ _l("Share"), function(_this) {
+actions: !this.options.share ? [ _l("Close") ] : [ [ _l("Share"), function(_this) {
 return function() {
 return _this.trigger("share", "last");
 };
@@ -35069,7 +35080,7 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 (function() {
 window.loading.done(95);
 App.user = new UniversalApi({
-session: Cookies.get("session"),
+session: App.session.get(),
 app_id: 1,
 url: "https://uniapi.raccoons.lv/user.json"
 });
@@ -35083,9 +35094,9 @@ content: _l("Authorize error"),
 close: false
 });
 }
-Cookies.set("session", App.user.session());
+App.session.set(App.user.session());
 game_completed = parseInt(App.user.data("game_completed") || 1);
-App.router = new window.o.ViewRouter({
+App.router = new window.o.ViewRouter(_.extend({
 game_last: parseInt(App.user.data("game_last") || 1),
 game_completed: game_completed,
 game_save: function(stage) {
@@ -35095,13 +35106,8 @@ App.user.data("game_completed", stage);
 }
 return App.user.data("game_last", stage);
 }
-});
+}, App.platform_router_param));
 App.router.bind("share", function(from) {
-App.user.share({
-title: "Raccoobe",
-text: "Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!",
-url: "https://draugiem.lv/raccoobe"
-});
 return App.events.trigger("router:share", from);
 });
 App.events.trigger("router:init");

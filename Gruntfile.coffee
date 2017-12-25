@@ -1,6 +1,7 @@
 fs = require('fs')
 pjson = require('./package.json')
 exec = require('child_process').exec
+_ = require('lodash')
 
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-watch')
@@ -15,13 +16,14 @@ module.exports = (grunt) ->
       console.log('exec error: ' + error)
 
   grunt.registerTask 'compile', ->
-    html = fs.readFileSync(__dirname + '/public/index.html', 'utf8')
-    [
-      [/(\d+\.\d+\.\d+)/g, pjson.version]
-      [/<title>(.+)<\/title>/, "<title>#{pjson.name}</title>"]
-    ].forEach (params)->
-      html = html.replace(params[0], params[1])
-    fs.writeFileSync(__dirname + '/public/index.html', html)
+    rf = (name)-> fs.readFileSync("#{__dirname}/template/#{name}.html", 'utf8')
+    wf = (name, html)-> fs.writeFileSync("#{__dirname}/public/#{name}.html", html)
+    template = _.template rf('index'), {imports: {
+      loading: rf('loading')
+      version: pjson.version
+      name: pjson.name
+    }}
+    ['dev', 'index', 'draugiem'].forEach (f)-> wf(f, template({platform: f}))
 
     for file in coffee
       exec("#{coffee_command} #{file}", exec_callback)
