@@ -37,17 +37,27 @@ production :
 	public/d/js/view/popup.js \
 	public/d/js/analytics.js \
 > public/d/all-before.js
+
 	cat public/d/all-before.js \
 	public/d/js/run.js \
 > public/d/all.js
 	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j.js
 	rm public/d/all.js
+
 	cat public/d/all-before.js \
 	public/d/js/platform/draugiem.js \
 	public/d/js/run.js \
 > public/d/all-draugiem.js
 	uglifyjs --beautify "indent-level=0" public/d/all-draugiem.js -o public/d/j-draugiem.js
 	rm public/d/all-draugiem.js
+
+	cat public/d/all-before.js \
+	public/d/js/platform/offline.js \
+	public/d/js/run.js \
+> public/d/all-offline.js
+	uglifyjs --beautify "indent-level=0" public/d/all-offline.js -o public/d/j-offline.js
+	rm public/d/all-offline.js
+
 	rm public/d/all-before.js
 	uglifycss public/d/css/screen.css > public/d/css/c.css
 

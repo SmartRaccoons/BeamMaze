@@ -23,7 +23,7 @@ module.exports = (grunt) ->
       version: pjson.version
       name: pjson.name
     }}
-    ['dev', 'index', 'draugiem'].forEach (f)-> wf(f, template({platform: f}))
+    ['dev', 'index', 'draugiem', 'offline'].forEach (f)-> wf(f, template({platform: f}))
 
     for file in coffee
       exec("#{coffee_command} #{file}", exec_callback)
@@ -39,7 +39,9 @@ module.exports = (grunt) ->
     exec "find public/d/images -maxdepth 1 -type f -exec cp {} #{dir}/d/images/ \\;"
     exec "cp -r public/stage/ #{dir}/stage/"
     ['index.html',
+      'offline.html',
       'd/j.js',
+      'd/j-offline.js',
       'd/css/c.css'
     ].forEach (f)->
       exec "cp public/#{f} #{dir}/#{f}"

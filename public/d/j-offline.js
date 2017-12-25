@@ -45166,6 +45166,53 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 }).call(this);
 
 (function() {
+var UniversalApiOffline, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+for (var key in parent) {
+if (__hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+};
+App.session.get = function() {};
+App.session.set = function() {};
+window.UniversalApi = UniversalApiOffline = function(_super) {
+__extends(UniversalApiOffline, _super);
+function UniversalApiOffline() {
+return UniversalApiOffline.__super__.constructor.apply(this, arguments);
+}
+UniversalApiOffline.prototype.authorize = function(callback) {
+return callback({
+session: "dummy-data"
+});
+};
+UniversalApiOffline.prototype.session = function() {
+return false;
+};
+UniversalApiOffline.prototype.get = function(v) {
+return Cookies.get("data." + v);
+};
+UniversalApiOffline.prototype.save = function(ob, callback) {
+var k, v, _results;
+if (callback == null) {
+callback = function() {};
+}
+_results = [];
+for (k in ob) {
+v = ob[k];
+_results.push(Cookies.set("data." + k, v));
+}
+return _results;
+};
+return UniversalApiOffline;
+}(UniversalApi);
+}).call(this);
+
+(function() {
 window.loading.done(95);
 App.user = new UniversalApi({
 session: App.session.get(),

@@ -4,6 +4,8 @@ node_modules/
 *.js
 *.js.map
 !public/d/j.js
+!public/d/j-draugiem.js
+!public/d/j-offline.js
 !public/v/**/*.js
 public/d/.sass-cache/
 public/d/css/*

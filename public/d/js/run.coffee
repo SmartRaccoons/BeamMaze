@@ -15,15 +15,14 @@ App.user.authorize (user)->
       close: false
     })
   App.session.set(App.user.session())
-  game_completed = parseInt(App.user.data('game_completed') or 1)
+  game_completed = parseInt(App.user.get('game_completed') or 1)
   App.router = new window.o.ViewRouter(_.extend({
-    game_last: parseInt(App.user.data('game_last') or 1)
+    game_last: parseInt(App.user.get('game_last') or 1)
     game_completed: game_completed
     game_save: (stage)->
       if stage > game_completed
         game_completed = stage
-        App.user.data('game_completed', stage)
-      App.user.data('game_last', stage)
+      App.user.save({game_last: stage, game_completed: game_completed})
   }, App.platform_router_param))
 
   App.router.bind 'share', (from)->

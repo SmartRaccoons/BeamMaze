@@ -2,10 +2,10 @@
   "name": "bm.raccoons.lv",
   "private": true,
   "dependencies": {
-    "babylonjs": "^2.5.0",
     "lodash": "^4.17.4",
     "zepto": "^1.2.0",
+    "js-cookie": "^2.2.0",
     "universalapi": "https://github.com/SmartRaccoons/universalapijs.git",
-    "js-cookie": "^2.1.4"
+    "babylonjs": "^3.1.0"
   }
 }

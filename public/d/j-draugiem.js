@@ -45166,6 +45166,24 @@ return ga("send", "pageview", [ "share", from ].join("/"));
 }).call(this);
 
 (function() {
+App.lang.active = "lv";
+App.session.get = function() {};
+App.session.set = function() {};
+App.platform_router_param = {
+share: true
+};
+App.events.bind("router:init", function() {
+return App.router.bind("share", function(from) {
+return App.user.share({
+title: "Raccoobe",
+text: "Atjautības spēlīte no Smart Raccoons. Nāc izmēģināt!",
+url: "https://draugiem.lv/raccoobe"
+});
+});
+});
+}).call(this);
+
+(function() {
 window.loading.done(95);
 App.user = new UniversalApi({
 session: App.session.get(),
