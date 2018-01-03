@@ -44775,7 +44775,7 @@ var k, m, v, _ref;
 if (data == null) {
 data = {};
 }
-this.$el = $(this.el).prependTo(this.options.parent || document.body);
+this.$el = $(this.el).appendTo(this.options.parent || document.body);
 if (this.className) {
 this.$el.addClass(this.className);
 }

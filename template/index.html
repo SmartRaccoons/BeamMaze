@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title><%= name %></title>
-    <link rel='stylesheet' href='d/css/c.css?<%= version %>' />
+    <link rel='stylesheet' href='d/css/<%= "dev" === platform ? "screen" : "c" %>.css?<%= version %>' />
 </head>
 <body data-version='<%= ("dev" === platform ? "dev" : version) %>'>
 
