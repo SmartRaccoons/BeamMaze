@@ -1,77 +1,45 @@
-AudioContext = window.AudioContext or window.webkitAudioContext
-
 random = (min, max, round = false)->
   r = Math.random() * (max - min) + min
   if !round
     return r
   Math.floor(r)
 
-load = (src, callback)->
-  request = new XMLHttpRequest
-  request.open 'GET', src, true
-  request.responseType = 'arraybuffer'
-  request.onload = -> callback request.response
-  request.send()
-
-load_buffer = (url, context, callback)->
-  load url, (response)=>
-    context.decodeAudioData response, (buffer)->
-      if !buffer
-        return
-      callback(buffer)
-
-
-class Sound
-  constructor: (@options=options)->
-    @gain = @options.context.createGain()
-    @gain.gain.setTargetAtTime(0, 0, 0)
-    @gain.connect(@options.context.destination)
-
-    @source = @options.context.createBufferSource()
-    @source.buffer = @options.buffer
-    if @options.speed
-      @source.playbackRate.value = @options.speed
-    @source.connect(@gain)
-    # @source.connect(@options.context.destination)
-
-    @source.onended = => @options.end()
-
-  start: ->
-    console.info @options.buffer.duration / @options.speed
-    console.info @options.offset
-    @source.start(0)#@options.offset or 0)
-
-  stop: ->
-    @source.stop(0)
-
-  volume: (v, time = 5)->
-    console.info "time: ", @options.context.currentTime
-    @gain.gain.setTargetAtTime(v, @options.context.currentTime, time)
-
-  remove: (callback)->
-    if @gain
-      @gain.disconnect(@options.context.destination)
-      @source.disconnect(@gain)
-    @source.disconnect(@options.context.destination)
-
-
-context = new AudioContext()
-
-load_buffer 'source/z.mp3', context, (buffer)->
-  sound = ->
-    # s = new Sound({context: context, buffer: buffer, speed: random(0.2, 0.7), offset: random(0, 20)})
-    # s.start()
+sound = new Howl({
+  # src: ['source/z.webm', 'source/z.mp3']
+  src: ['source/z-long.wav']
+})
+play = (callback=->)->
+  duration = sound.duration()
+  ratio = random(0.5, 4)
+  duration_total = duration / ratio
+  in_out = duration_total / 10
+  length = random(in_out * 2, duration_total / 2)
+  start = random(0, duration_total - length - in_out * 2)
+  console.info length, start, ratio
+  s = sound.play()
+  sound.seek start * ratio, s
+  sound.rate(ratio, s)
+  sound.fade 0, 1, in_out * 1000, s
+  setTimeout ->
+    sound.fade 1, 0, in_out * 1000, s
     setTimeout ->
-      s = new Sound({context: context, buffer: buffer, speed: random(0.2, 0.7), offset: random(10, 20)})
-      s.start()
-      s.volume(1, 10)
-      # s.gain.gain.value = 0
-      # s.volume(1)
-      # setInterval =>
-      #   console.info s.gain.gain.value
-      # , 1000
-      setTimeout ->
-        s.remove()
-      , 50000
-    , 40
-  sound()
+      sound.stop(s)
+      callback()
+    , in_out * 1000
+  , (start + length - in_out) * 1000
+
+background = (callback=->)->
+  duration = sound.duration()
+  ratio = random(0.5, 1)
+  s = sound.play()
+  sound.rate ratio, s
+  sound.once 'end', callback, s
+
+
+sound.once 'load', ->
+  background_music = -> background(background_music)
+  background_music()
+  main_play = ->
+    setTimeout (-> play(main_play)), random(1, 20) * 1000
+  main_play()
+  # play()
