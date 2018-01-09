@@ -46800,7 +46800,7 @@ stage: _this.options.stage,
 container: _this.$(".game-container")
 });
 game.bind("move", function(move) {
-if (move === 1) {
+if (move === 1 && _this.options.stage !== 1) {
 _this.$(".game-controls-reset").css("display", "");
 }
 return _this.trigger("move", move);
