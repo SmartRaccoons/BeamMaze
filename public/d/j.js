@@ -46875,8 +46875,7 @@ return Popup;
 }).call(this);
 
 (function() {
-App.events.bind("router:init", function() {
-var ga_track_view, ga_wrap, progression;
+var ga_wrap;
 ga_wrap = function(f) {
 var e;
 try {
@@ -46885,6 +46884,8 @@ return f.apply(this, arguments);
 e = _error;
 }
 };
+App.events.bind("router:init", function() {
+var progression, track_design, track_view;
 ga_wrap(function() {
 ga("create", "UA-24527026-16", "auto");
 if (App.user.user && App.user.user.id) {
@@ -46900,14 +46901,22 @@ if (App.user.user && App.user.user.id) {
 GameAnalytics("configureUserId", "" + App.user.user.id);
 }
 GameAnalytics("initialize", "6cbc7e51b3786c24cc780fcd1fe367a2", "697a173d885cd4063e50a81f7da2466b2e1dd139");
-ga_track_view = function(view) {
+progression = function(event, id, seconds) {
+GameAnalytics("addProgressionEvent", event, "level" + (id < 10 ? "0" + id : id), "", "", seconds);
+return ga_wrap(function() {
+return ga("send", "pageview", [ "game", id, event ].join("/"));
+});
+};
+track_view = function(view) {
 return ga_wrap(function() {
 return ga("send", "pageview", view);
 });
 };
-progression = function(event, id, seconds) {
-GameAnalytics("addProgressionEvent", event, "level" + (id < 10 ? "0" + id : id), "", "", seconds);
-return ga_track_view([ "game", id, event ].join("/"));
+track_design = function(view, action) {
+GameAnalytics("addDesignEvent", "" + view + ":" + action);
+return ga_wrap(function() {
+return ga("send", "pageview", [ view, action ].join("/"));
+});
 };
 App.events.bind("router:game", function(id) {
 return progression("Start", id);
@@ -46919,18 +46928,16 @@ App.events.bind("router:game-reset", function(id, data) {
 return progression("Fail", id, data.seconds_total);
 });
 App.events.bind("router:start", function() {
-return ga_track_view("start");
+return track_view("start");
 });
 App.events.bind("router:credits", function() {
-return ga_track_view("credits");
+return track_view("credits");
 });
 App.events.bind("router:sound", function(volume) {
-GameAnalytics("addDesignEvent", "sound:" + volume);
-return ga_track_view([ "sound", volume ].join("/"));
+return track_design("sound", volume);
 });
 return App.events.bind("router:share", function(from) {
-GameAnalytics("addDesignEvent", "share:" + from);
-return ga_track_view([ "share", from ].join("/"));
+return track_design("share", from);
 });
 });
 }).call(this);
