@@ -37,6 +37,10 @@ App.events.bind 'router:init', ->
   #   GameAnalytics("addBusinessEvent", "EUR", 99, "game", "full", "#{from}:#{type}")
   #   ga_wrap -> ga('send', 'pageview', ['buy', from, type].join('/'))
 
+  App.events.bind 'router:sound', (volume)->
+    GameAnalytics("addDesignEvent", "sound:#{volume}")
+    ga_wrap -> ga('send', 'pageview', ['sound', volume].join('/'))
+
   App.events.bind 'router:share', (from)->
     GameAnalytics("addDesignEvent", "share:#{from}")
     ga_wrap -> ga('send', 'pageview', ['share', from].join('/'))

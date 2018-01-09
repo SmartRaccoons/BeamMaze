@@ -18,6 +18,7 @@ production :
 	bower_components/zepto/zepto.js \
 	bower_components/universalapi/uniapi.js \
 	bower_components/js-cookie/src/js.cookie.js \
+	bower_components/howler.js/dist/howler.js \
 	public/d/js/init.js \
 	public/d/locale/en.js \
 	public/d/locale/lv.js \
@@ -36,6 +37,7 @@ production :
 	public/d/js/view/game.js \
 	public/d/js/view/popup.js \
 	public/d/js/analytics.js \
+	public/d/js/sound.js \
 > public/d/all-before.js
 
 	cat public/d/all-before.js \

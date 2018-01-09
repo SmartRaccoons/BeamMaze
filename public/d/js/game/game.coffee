@@ -20,12 +20,14 @@ window.o.Game = class Game extends MicroEvent
       @_map.render_after()
     @_map = new window.o.GameMap()
     moves = 0
+    @_map.bind 'move', =>
+      moves++
+      @trigger 'move', moves
     @_map.bind 'beam', (mirrors)=>
       if @_map.solved
         @_map.remove_controls()
         @trigger 'solved', mirrors
         return
-      @trigger 'move', moves++
 
 
     @_scene = new BABYLON.Scene(@_engine)

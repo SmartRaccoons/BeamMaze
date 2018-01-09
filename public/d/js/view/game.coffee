@@ -34,6 +34,7 @@ window.o.ViewGame = class Game extends window.o.View
       game.bind 'move', (move)=>
         if move is 1
           @$('.game-controls-reset').css('display', '')
+        @trigger 'move', move
       @_timer_start = new Date().getTime()
     , 800
 

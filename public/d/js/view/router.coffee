@@ -2,13 +2,19 @@ window.o.ViewRouter = class Router extends window.o.View
   el: "<div class='container'>"
   template: """
     <button class='back-link'>#{_l('Menu')}</button>
+    <button class='sound-switch' data-volume='<%= sound %>'></button>
   """
   events:
     'click .back-link': -> @start()
+    'click .sound-switch': ->
+      volume = if @$sound.attr('data-volume') is 'off' then 'on' else 'off'
+      @$sound.attr('data-volume', volume)
+      @trigger 'sound', volume
 
   constructor: ->
     super
     @$back = @$('.back-link')
+    @$sound = @$('.sound-switch')
     @_active = null
     @game_stages = window.o.GameMapData.length
     @game_last = if @options.game_last > @game_stages then @game_stages else @options.game_last
@@ -74,6 +80,7 @@ window.o.ViewRouter = class Router extends window.o.View
     @_active.bind 'reset', (data)=>
       App.events.trigger 'router:game-reset', id, data
       @_active.load()
+    @_active.bind 'move', (move)=> App.events.trigger 'router:game-move', move
 
   _load: (view, options)->
     if @_active

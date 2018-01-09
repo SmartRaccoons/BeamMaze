@@ -9,6 +9,7 @@ module.exports = (grunt) ->
     'public/d/js/*/*.coffee'
     'public/d/js/*.coffee'
     'public/d/locale/*.coffee'
+    'public/d/*.coffee'
   ]
   coffee_command = "coffee -m -c"
   exec_callback = (error, stdout, stderr)->
@@ -35,9 +36,11 @@ module.exports = (grunt) ->
       fs.mkdirSync("#{dir}/d")
       fs.mkdirSync("#{dir}/d/css")
       fs.mkdirSync("#{dir}/d/images")
+      fs.mkdirSync("#{dir}/d/sound")
     exec "cp -r public/d/font/ #{dir}/d/font/"
     exec "find public/d/images -maxdepth 1 -type f -exec cp {} #{dir}/d/images/ \\;"
     exec "cp -r public/stage/ #{dir}/stage/"
+    exec "cp -r public/d/sound/ #{dir}/d/sound/"
     ['index.html',
       'offline.html',
       'd/j.js',

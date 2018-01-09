@@ -100,6 +100,17 @@ canvas
     bottom: 0.2em
     font-size: 1em
     z-index: 5
+  .sound-switch
+    position: absolute
+    right: 0.2em
+    top: 0.2em
+    z-index: 5
+    width: 50px
+    height: 50px
+    background-color: transparent
+    +icon-sprite(sound-on)
+    &[data-volume='off']
+      +icon-sprite(sound-off)
 .start
   text-align: center
   h1

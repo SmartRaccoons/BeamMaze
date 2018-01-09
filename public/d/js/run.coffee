@@ -18,12 +18,17 @@ App.user.authorize (user)->
   game_completed = parseInt(App.user.get('game_completed') or 1)
   App.router = new window.o.ViewRouter(_.extend({
     game_last: parseInt(App.user.get('game_last') or 1)
+    sound: App.user.get('sound') or 'on'
     game_completed: game_completed
     game_save: (stage)->
       if stage > game_completed
         game_completed = stage
       App.user.save({game_last: stage, game_completed: game_completed})
   }, App.platform_router_param))
+
+  App.router.bind 'sound', (volume)->
+    App.user.save({sound: volume})
+    App.events.trigger 'router:sound', volume
 
   App.router.bind 'share', (from)->
     App.events.trigger 'router:share', from
