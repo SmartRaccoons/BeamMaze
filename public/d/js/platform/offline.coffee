@@ -1,6 +1,8 @@
 App.session.get = ->
 App.session.set = ->
 
+App.version_media = 'offline'
+
 window.UniversalApi = class UniversalApiOffline extends UniversalApi
   authorize: (callback)-> callback({session: 'dummy-data'})
 

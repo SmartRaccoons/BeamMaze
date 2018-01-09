@@ -41,12 +41,12 @@ window.o = {}
 window.App =
   version: $('body').attr('data-version')
   version_dev: $('body').attr('data-version') is 'dev'
+  version_media: 'web'
   events: new MicroEvent()
   session: {
     get: -> Cookies.get('session')
     set: -> Cookies.set('session', App.user.session())
   }
-  classes: {}
   platform_router_param: {}
   lang:
     strings:

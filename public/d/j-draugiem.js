@@ -45161,6 +45161,7 @@ window.o = {};
 window.App = {
 version: $("body").attr("data-version"),
 version_dev: $("body").attr("data-version") === "dev",
+version_media: "web",
 events: new MicroEvent(),
 session: {
 get: function() {
@@ -45170,7 +45171,6 @@ set: function() {
 return Cookies.set("session", App.user.session());
 }
 },
-classes: {},
 platform_router_param: {},
 lang: {
 strings: {
@@ -46876,7 +46876,7 @@ return Popup;
 
 (function() {
 App.events.bind("router:init", function() {
-var ga_wrap, progression;
+var ga_track_view, ga_wrap, progression;
 ga_wrap = function(f) {
 var e;
 try {
@@ -46887,20 +46887,27 @@ e = _error;
 };
 ga_wrap(function() {
 ga("create", "UA-24527026-16", "auto");
-return ga("set", "&uid", App.user.user.id);
+if (App.user.user && App.user.user.id) {
+ga("set", "&uid", App.user.user.id);
+}
+ga("set", "contentGroup1", App.version_media);
+return ga("set", "appVersion", App.version);
 });
 GameAnalytics("setEnabledInfoLog", App.version_dev);
 GameAnalytics("setEnabledVerboseLog", App.version_dev);
-GameAnalytics("configureBuild", "web " + App.version);
+GameAnalytics("configureBuild", "" + App.version_media + "." + App.version);
 if (App.user.user && App.user.user.id) {
 GameAnalytics("configureUserId", "" + App.user.user.id);
 }
 GameAnalytics("initialize", "6cbc7e51b3786c24cc780fcd1fe367a2", "697a173d885cd4063e50a81f7da2466b2e1dd139");
+ga_track_view = function(view) {
+return ga_wrap(function() {
+return ga("send", "pageview", view);
+});
+};
 progression = function(event, id, seconds) {
 GameAnalytics("addProgressionEvent", event, "level" + (id < 10 ? "0" + id : id), "", "", seconds);
-return ga_wrap(function() {
-return ga("send", "pageview", [ "game", id, event ].join("/"));
-});
+return ga_track_view([ "game", id, event ].join("/"));
 };
 App.events.bind("router:game", function(id) {
 return progression("Start", id);
@@ -46912,26 +46919,18 @@ App.events.bind("router:game-reset", function(id, data) {
 return progression("Fail", id, data.seconds_total);
 });
 App.events.bind("router:start", function() {
-return ga_wrap(function() {
-return ga("send", "pageview", "start");
-});
+return ga_track_view("start");
 });
 App.events.bind("router:credits", function() {
-return ga_wrap(function() {
-return ga("send", "pageview", "credits");
-});
+return ga_track_view("credits");
 });
 App.events.bind("router:sound", function(volume) {
 GameAnalytics("addDesignEvent", "sound:" + volume);
-return ga_wrap(function() {
-return ga("send", "pageview", [ "sound", volume ].join("/"));
-});
+return ga_track_view([ "sound", volume ].join("/"));
 });
 return App.events.bind("router:share", function(from) {
 GameAnalytics("addDesignEvent", "share:" + from);
-return ga_wrap(function() {
-return ga("send", "pageview", [ "share", from ].join("/"));
-});
+return ga_track_view([ "share", from ].join("/"));
 });
 });
 }).call(this);
