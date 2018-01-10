@@ -4,7 +4,6 @@ App.events.bind 'router:init', ->
   if App.user.user and App.user.user.id
     ga('set', '&uid', App.user.user.id)
   ga('set', 'contentGroup1', App.version_media)
-  ga('set', 'appVersion', App.version)
 
   GameAnalytics("setEnabledInfoLog", App.version_dev)
   GameAnalytics("setEnabledVerboseLog", App.version_dev)

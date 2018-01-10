@@ -46882,7 +46882,6 @@ if (App.user.user && App.user.user.id) {
 ga("set", "&uid", App.user.user.id);
 }
 ga("set", "contentGroup1", App.version_media);
-ga("set", "appVersion", App.version);
 GameAnalytics("setEnabledInfoLog", App.version_dev);
 GameAnalytics("setEnabledVerboseLog", App.version_dev);
 GameAnalytics("configureBuild", "" + App.version_media + "." + App.version);
