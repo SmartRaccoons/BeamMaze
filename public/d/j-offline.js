@@ -46875,25 +46875,14 @@ return Popup;
 }).call(this);
 
 (function() {
-var ga_wrap;
-ga_wrap = function(f) {
-var e;
-try {
-return f.apply(this, arguments);
-} catch (_error) {
-e = _error;
-}
-};
 App.events.bind("router:init", function() {
 var progression, track_design, track_view;
-ga_wrap(function() {
 ga("create", "UA-24527026-16", "auto");
 if (App.user.user && App.user.user.id) {
 ga("set", "&uid", App.user.user.id);
 }
 ga("set", "contentGroup1", App.version_media);
-return ga("set", "appVersion", App.version);
-});
+ga("set", "appVersion", App.version);
 GameAnalytics("setEnabledInfoLog", App.version_dev);
 GameAnalytics("setEnabledVerboseLog", App.version_dev);
 GameAnalytics("configureBuild", "" + App.version_media + "." + App.version);
@@ -46903,20 +46892,14 @@ GameAnalytics("configureUserId", "" + App.user.user.id);
 GameAnalytics("initialize", "6cbc7e51b3786c24cc780fcd1fe367a2", "697a173d885cd4063e50a81f7da2466b2e1dd139");
 progression = function(event, id, seconds) {
 GameAnalytics("addProgressionEvent", event, "level" + (id < 10 ? "0" + id : id), "", "", seconds);
-return ga_wrap(function() {
 return ga("send", "pageview", [ "game", id, event ].join("/"));
-});
 };
 track_view = function(view) {
-return ga_wrap(function() {
 return ga("send", "pageview", view);
-});
 };
 track_design = function(view, action) {
 GameAnalytics("addDesignEvent", "" + view + ":" + action);
-return ga_wrap(function() {
 return ga("send", "pageview", [ view, action ].join("/"));
-});
 };
 App.events.bind("router:game", function(id) {
 return progression("Start", id);

@@ -1,15 +1,10 @@
-ga_wrap = (f)->
-  try
-    f.apply(this, arguments)
-  catch e
 
 App.events.bind 'router:init', ->
-  ga_wrap ->
-    ga('create', 'UA-24527026-16', 'auto')
-    if App.user.user and App.user.user.id
-      ga('set', '&uid', App.user.user.id)
-    ga('set', 'contentGroup1', App.version_media)
-    ga('set', 'appVersion', App.version)
+  ga('create', 'UA-24527026-16', 'auto')
+  if App.user.user and App.user.user.id
+    ga('set', '&uid', App.user.user.id)
+  ga('set', 'contentGroup1', App.version_media)
+  ga('set', 'appVersion', App.version)
 
   GameAnalytics("setEnabledInfoLog", App.version_dev)
   GameAnalytics("setEnabledVerboseLog", App.version_dev)
@@ -21,12 +16,12 @@ App.events.bind 'router:init', ->
 
   progression = (event, id, seconds)->
     GameAnalytics("addProgressionEvent", event, "level" + (if id < 10 then "0#{id}" else id), "", "", seconds)
-    ga_wrap -> ga('send', 'pageview', ['game', id, event].join('/'))
+    ga('send', 'pageview', ['game', id, event].join('/'))
   track_view = (view)->
-    ga_wrap -> ga('send', 'pageview', view)
+    ga('send', 'pageview', view)
   track_design = (view, action)->
     GameAnalytics("addDesignEvent", "#{view}:#{action}")
-    ga_wrap -> ga('send', 'pageview', [view, action].join('/'))
+    ga('send', 'pageview', [view, action].join('/'))
 
   App.events.bind 'router:game', (id)-> progression('Start', id)
   App.events.bind 'router:game-solved', (id, data)-> progression('Complete', id, data.seconds_total)
