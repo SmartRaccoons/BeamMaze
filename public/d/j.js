@@ -46973,9 +46973,6 @@ return this._sounds[name].play();
 };
 Sound.prototype.background = function() {
 var background_music, effect;
-if (this._mute) {
-return;
-}
 background_music = function(_this) {
 return function() {
 return _this._play_back("background", background_music);
@@ -46991,24 +46988,16 @@ return _this._play_back(_this._music_effects[random(0, _this._music_effects.leng
 }(this);
 return effect();
 };
-Sound.prototype._play_stop = function() {
-var k, v, _ref, _results;
-clearTimeout(this._effect_timeout);
+Sound.prototype.volume = function(volume) {
+var name, sound, _ref, _results;
+this._mute = volume === "off";
 _ref = this._sounds;
 _results = [];
-for (k in _ref) {
-v = _ref[k];
-_results.push(v.stop());
+for (name in _ref) {
+sound = _ref[name];
+_results.push(sound.mute(this._mute));
 }
 return _results;
-};
-Sound.prototype.volume = function(volume) {
-this._mute = volume === "off";
-if (this._mute) {
-return this._play_stop();
-} else {
-return this.background();
-}
 };
 return Sound;
 }();
@@ -47016,7 +47005,8 @@ App.events.bind("router:init", function() {
 var sound;
 sound = new Sound();
 sound.load(function() {
-return sound.volume(App.router.options.sound);
+sound.volume(App.router.options.sound);
+return sound.background();
 });
 App.events.bind("router:sound", function(volume) {
 return sound.volume(volume);

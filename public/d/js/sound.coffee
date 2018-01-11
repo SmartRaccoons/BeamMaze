@@ -36,31 +36,23 @@ class Sound
     @_sounds[name].play()
 
   background: ->
-    if @_mute
-      return
     background_music = => @_play_back('background', background_music)
     background_music()
     effect = =>
       @_effect_timeout = setTimeout (=> @_play_back(@_music_effects[random(0, @_music_effects.length, true)], effect)), random(40, 200) * 1000
     effect()
 
-  _play_stop: ->
-    clearTimeout(@_effect_timeout)
-    for k, v of @_sounds
-      v.stop()
-
   volume: (volume)->
     @_mute = volume is 'off'
-    if @_mute
-      @_play_stop()
-    else
-      @background()
+    for name, sound of @_sounds
+      sound.mute(@_mute)
 
 
 App.events.bind 'router:init', ->
   sound = new Sound()
   sound.load ->
     sound.volume(App.router.options.sound)
+    sound.background()
   App.events.bind 'router:sound', (volume)-> sound.volume(volume)
   App.events.bind 'router:game-solved', -> sound.play('laser')
   App.events.bind 'router:game-move', -> sound.play('move')
