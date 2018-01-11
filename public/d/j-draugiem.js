@@ -45594,8 +45594,7 @@ return Beam;
 BeamSphere = function(_super) {
 __extends(BeamSphere, _super);
 BeamSphere.prototype._default = {
-diameter: 4,
-color: Beam.prototype._default.color
+diameter: 4
 };
 function BeamSphere() {
 BeamSphere.__super__.constructor.apply(this, arguments);
@@ -45618,10 +45617,9 @@ return BeamSphere;
 window.o.ObjectBeamSource = BeamSource = function(_super) {
 __extends(BeamSource, _super);
 BeamSource.prototype.name = "source";
-BeamSource.prototype._default = {
-diameter: 4,
+BeamSource.prototype._default = _.extend({}, BeamSphere.prototype._default, {
 color: Beam.prototype._default.color
-};
+});
 function BeamSource() {
 this._beam = [];
 this._mirror = [];
@@ -45693,10 +45691,9 @@ return BeamSource;
 window.o.ObjectBeamTarget = BeamTarget = function(_super) {
 __extends(BeamTarget, _super);
 BeamTarget.prototype.name = "target";
-BeamTarget.prototype._default = {
-diameter: 4,
+BeamTarget.prototype._default = _.extend({}, BeamSphere.prototype._default, {
 color: [ 195, 18, 24 ]
-};
+});
 function BeamTarget() {
 BeamTarget.__super__.constructor.apply(this, arguments);
 this.mesh._class = this;
@@ -45785,7 +45782,6 @@ return Connector;
 MirrorTube = function(_super) {
 __extends(MirrorTube, _super);
 MirrorTube.prototype._default = {
-color: [ 187, 230, 239 ],
 color_active: window.o.ObjectBeam.prototype._default.color
 };
 function MirrorTube() {

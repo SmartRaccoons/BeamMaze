@@ -25,7 +25,6 @@ class Connector extends window.o.Object
 
 class MirrorTube extends window.o.Object
   _default: {
-    color: [187, 230, 239]
     color_active: window.o.ObjectBeam::_default.color
   }
   constructor: ->

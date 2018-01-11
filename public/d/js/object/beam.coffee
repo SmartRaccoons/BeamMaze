@@ -25,7 +25,6 @@ window.o.ObjectBeam = class Beam extends Object
 class BeamSphere extends window.o.ObjectSphere
   _default: {
     diameter: 4
-    color: Beam::_default.color
   }
   constructor: ->
     super
@@ -40,10 +39,9 @@ class BeamSphere extends window.o.ObjectSphere
 
 window.o.ObjectBeamSource = class BeamSource extends BeamSphere
   name: 'source'
-  _default: {
-    diameter: 4
+  _default: _.extend({}, BeamSphere::_default, {
     color: Beam::_default.color
-  }
+  })
   constructor: ->
     @_beam = []
     @_mirror = []
@@ -91,10 +89,9 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
 
 window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
   name: 'target'
-  _default: {
-    diameter: 4
+  _default: _.extend({}, BeamSphere::_default, {
     color: [195, 18, 24]
-  }
+  })
   constructor: ->
     super
     @mesh._class = @

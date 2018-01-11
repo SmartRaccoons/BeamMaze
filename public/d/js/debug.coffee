@@ -67,6 +67,21 @@ if not ('anime' of GET)
   window.o.ObjectBlank::_animation = (fn)-> fn(1, 0)
   window.o.ObjectMirror::_animation = (fn)-> fn(1, 0)
 
+if 'color_mirror' of GET
+  window.o.ObjectMirror::_default.color_mirror = GET['color_mirror'].split(',')
+if 'color_tube' of GET
+  window.o.ObjectMirror::_default.color_tube = GET['color_tube'].split(',')
+if 'color_mirror_reverse' of GET
+  window.o.ObjectMirrorReverse::_default.color_mirror = GET['color_mirror_reverse'].split(',')
+if 'color_blank' of GET
+  window.o.ObjectBlank::_default.color = GET['color_blank'].split(',')
+if 'color_beam' of GET
+  window.o.ObjectBeamSource::_default.color = window.o.ObjectBeam::_default.color = GET['color_beam'].split(',')
+if 'color_beam_target' of GET
+  window.o.ObjectBeamTarget::_default.color = GET['color_beam_target'].split(',')
+if 'color_body' of GET
+  $('body').css('background', 'rgb(' + GET['color_body'] + ')')
+
 
 window.o.GameMap = class GameMap extends window.o.GameMap
   remove_controls: ->
