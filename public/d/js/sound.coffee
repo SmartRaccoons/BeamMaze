@@ -6,16 +6,14 @@ random = (min, max, round = false)->
 
 
 class Sound
-  _music_effects: ['e1', 'e2', 'e3']
-
   load: (callback)->
     @_sounds = {}
     _loaded = 0
     _total = 0
-    @_music_effects.concat(['move', 'laser', 'background']).forEach (name)=>
+    ['move', 'laser', 'background1', 'background2'].forEach (name)=>
       _total++
       @_sounds[name] = new Howl({
-        src: ["d/sound/#{name}.webm", "sound/#{name}.mp3"]
+        src: [ "d/sound/#{name}.mp3", "d/sound/#{name}.webm"]
         volume: 0.2
       })
       @_sounds[name].once 'load', ->
@@ -24,7 +22,7 @@ class Sound
           callback()
 
   _play_back: (name, callback)->
-    ratio = random(0.5, 1)
+    ratio = random(0.7, 1.3)
     sound = @_sounds[name]
     s = sound.play()
     sound.rate ratio, s
@@ -36,11 +34,8 @@ class Sound
     @_sounds[name].play()
 
   background: ->
-    background_music = => @_play_back('background', background_music)
+    background_music = => @_play_back('background' + random(1, 3, true), background_music)
     background_music()
-    effect = =>
-      @_effect_timeout = setTimeout (=> @_play_back(@_music_effects[random(0, @_music_effects.length, true)], effect)), random(40, 200) * 1000
-    effect()
 
   volume: (volume)->
     @_mute = volume is 'off'

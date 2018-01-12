@@ -46933,17 +46933,16 @@ return Math.floor(r);
 };
 Sound = function() {
 function Sound() {}
-Sound.prototype._music_effects = [ "e1", "e2", "e3" ];
 Sound.prototype.load = function(callback) {
 var _loaded, _total;
 this._sounds = {};
 _loaded = 0;
 _total = 0;
-return this._music_effects.concat([ "move", "laser", "background" ]).forEach(function(_this) {
+return [ "move", "laser", "background1", "background2" ].forEach(function(_this) {
 return function(name) {
 _total++;
 _this._sounds[name] = new Howl({
-src: [ "d/sound/" + name + ".webm", "sound/" + name + ".mp3" ],
+src: [ "d/sound/" + name + ".mp3", "d/sound/" + name + ".webm" ],
 volume: .2
 });
 return _this._sounds[name].once("load", function() {
@@ -46957,7 +46956,7 @@ return callback();
 };
 Sound.prototype._play_back = function(name, callback) {
 var ratio, s, sound;
-ratio = random(.5, 1);
+ratio = random(.7, 1.3);
 sound = this._sounds[name];
 s = sound.play();
 sound.rate(ratio, s);
@@ -46970,21 +46969,13 @@ return;
 return this._sounds[name].play();
 };
 Sound.prototype.background = function() {
-var background_music, effect;
+var background_music;
 background_music = function(_this) {
 return function() {
-return _this._play_back("background", background_music);
+return _this._play_back("background" + random(1, 3, true), background_music);
 };
 }(this);
-background_music();
-effect = function(_this) {
-return function() {
-return _this._effect_timeout = setTimeout(function() {
-return _this._play_back(_this._music_effects[random(0, _this._music_effects.length, true)], effect);
-}, random(40, 200) * 1e3);
-};
-}(this);
-return effect();
+return background_music();
 };
 Sound.prototype.volume = function(volume) {
 var name, sound, _ref, _results;
