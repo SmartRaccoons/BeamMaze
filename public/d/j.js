@@ -46942,7 +46942,7 @@ return [ "move", "laser", "background1", "background2" ].forEach(function(_this)
 return function(name) {
 _total++;
 _this._sounds[name] = new Howl({
-src: [ "d/sound/" + name + ".mp3", "d/sound/" + name + ".webm" ],
+src: [ "d/sound/" + name + ".webm", "d/sound/" + name + ".mp3" ],
 volume: .2
 });
 return _this._sounds[name].once("load", function() {
