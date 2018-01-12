@@ -45781,9 +45781,6 @@ return Connector;
 }(window.o.Object);
 MirrorTube = function(_super) {
 __extends(MirrorTube, _super);
-MirrorTube.prototype._default = {
-color_active: window.o.ObjectBeam.prototype._default.color
-};
 function MirrorTube() {
 MirrorTube.__super__.constructor.apply(this, arguments);
 this.mesh.position = new BABYLON.Vector3(0, 0, -.55);
@@ -45894,6 +45891,7 @@ tubes = (Array.isArray(connectors) ? connectors : [ connectors ]).map(function(c
 return new connector({
 parent: _this,
 color: _this.options.color_tube,
+color_active: window.o.ObjectBeam.prototype._default.color,
 rotation: i
 });
 });

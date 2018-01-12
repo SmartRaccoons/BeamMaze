@@ -24,9 +24,6 @@ class Connector extends window.o.Object
 
 
 class MirrorTube extends window.o.Object
-  _default: {
-    color_active: window.o.ObjectBeam::_default.color
-  }
   constructor: ->
     super
     @mesh.position = new BABYLON.Vector3(0, 0, -0.55)
@@ -98,7 +95,13 @@ class MirrorNormal extends window.o.Object
     @connectors.forEach (connectors, i)=>
       if !connectors
         return
-      tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=> new connector({parent: @, color: @options.color_tube, rotation: i})
+      tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=>
+        new connector({
+          parent: @
+          color: @options.color_tube
+          color_active: window.o.ObjectBeam::_default.color
+          rotation: i
+        })
       tubes.forEach (t1, i)->
         tubes.forEach (t2, j)->
           if i is j
