@@ -46938,12 +46938,12 @@ var _loaded, _total;
 this._sounds = {};
 _loaded = 0;
 _total = 0;
-return [ "move", "laser", "background1", "background2" ].forEach(function(_this) {
+return [ "move", "laser" ].forEach(function(_this) {
 return function(name) {
 _total++;
 _this._sounds[name] = new Howl({
 src: [ "d/sound/" + name + ".webm", "d/sound/" + name + ".mp3" ],
-volume: .2
+volume: .3
 });
 return _this._sounds[name].once("load", function() {
 _loaded++;
@@ -46954,28 +46954,11 @@ return callback();
 };
 }(this));
 };
-Sound.prototype._play_back = function(name, callback) {
-var ratio, s, sound;
-ratio = random(.7, 1.3);
-sound = this._sounds[name];
-s = sound.play();
-sound.rate(ratio, s);
-return sound.once("end", callback, s);
-};
 Sound.prototype.play = function(name) {
 if (this._mute) {
 return;
 }
 return this._sounds[name].play();
-};
-Sound.prototype.background = function() {
-var background_music;
-background_music = function(_this) {
-return function() {
-return _this._play_back("background" + random(1, 3, true), background_music);
-};
-}(this);
-return background_music();
 };
 Sound.prototype.volume = function(volume) {
 var name, sound, _ref, _results;
@@ -46994,8 +46977,7 @@ App.events.bind("router:init", function() {
 var sound;
 sound = new Sound();
 sound.load(function() {
-sound.volume(App.router.options.sound);
-return sound.background();
+return sound.volume(App.router.options.sound);
 });
 App.events.bind("router:sound", function(volume) {
 return sound.volume(volume);
