@@ -63,7 +63,6 @@ $colorhide: rgba(0, 0, 0, 0.9)
 html, body
   height: 100%
   +reset
-  background: #2b272b
 body
   overflow-y: scroll
   font: 10px/1.3 retro, arial
@@ -94,6 +93,7 @@ canvas
 .container
   height: 100%
   position: relative
+  background: #2b272b
   .back-link
     position: absolute
     right: 0.2em
@@ -148,7 +148,6 @@ canvas
   margin: 0 auto
 .game
   .game-container
-    left: -4000px
     position: absolute
     width: 100%
     height: 100%
@@ -172,24 +171,6 @@ canvas
       vertical-align: middle
       background: #fff
       color: #97999c
-  &::before
-    content: attr(data-level)
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    text-align: center
-    font-size: 10em
-    z-index: 10
-    background: #2b272b
-  &.game-level-hide
-    .game-container
-      left: 0
-    &::before
-      background: none
-      opacity: 0
-      z-index: auto
 .popup
   position: absolute
   top: 0

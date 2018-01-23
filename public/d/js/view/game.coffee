@@ -23,20 +23,15 @@ window.o.ViewGame = class Game extends window.o.View
   load: ->
     @_timeouts.forEach (t)-> clearTimeout(t)
     @_timeouts = []
-    @$el.removeClass("#{@className}-level-hide")
-    @$el.attr('data-level', @options.stage)
     @$('.game-controls-reset').attr('data-level', @options.stage).css('display', 'none')
-    @_timeouts.push setTimeout =>
-      @$el.addClass("#{@className}-level-hide")
-      game.clear()
-      game.bind 'solved', => @_solved()
-      game.render({stage: @options.stage, container: @$('.game-container')})
-      game.bind 'move', (move)=>
-        if move is 1 and @options.stage isnt 1
-          @$('.game-controls-reset').css('display', '')
-        @trigger 'move', move
-      @_timer_start = new Date().getTime()
-    , 800
+    game.clear()
+    game.bind 'solved', => @_solved()
+    game.render({stage: @options.stage, container: @$('.game-container')})
+    game.bind 'move', (move)=>
+      if move is 1 and @options.stage isnt 1
+        @$('.game-controls-reset').css('display', '')
+      @trigger 'move', move
+    @_timer_start = new Date().getTime()
 
   _solved: ->
     @trigger 'solved', {seconds_total: @_time()}

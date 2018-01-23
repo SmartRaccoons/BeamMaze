@@ -79,8 +79,6 @@ if 'color_beam' of GET
   window.o.ObjectBeamSource::_default.color = window.o.ObjectBeam::_default.color = GET['color_beam'].split(',')
 if 'color_beam_target' of GET
   window.o.ObjectBeamTarget::_default.color = GET['color_beam_target'].split(',')
-if 'color_body' of GET
-  $('body').css('background', 'rgb(' + GET['color_body'] + ')')
 
 
 window.o.GameMap = class GameMap extends window.o.GameMap
@@ -100,6 +98,10 @@ window.o.ViewRouter = class Router extends window.o.ViewRouter
       window.o.GameMapData = [GET['map']]
       GET['stage'] = 1
     super
+    if 'color_body' of GET
+      color = GET['color_body'].split(',').map( (v)-> '#' + v.split('-')[0] + ' ' + v.split('-')[1] + '%').join(',')
+      $('.container').css('background',  "radial-gradient(ellipse at center, #{color})")
+      $('.container').css('background',  "-webkit-radial-gradient(ellipse at center, #{color})")
 
   run: ->
     if 'stage' of GET

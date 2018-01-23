@@ -38,13 +38,15 @@ window.o.Game = class Game extends MicroEvent
     window.App.events.trigger('game:init', @_scene, @_engine, @_light, @_camera)
 
     map_size = @_map.load(window.o.GameMapData[options.stage - 1], _l('stage_desc')[options.stage])
-    max_size = Math.max(map_size[0], map_size[1])
+    @_camera_animation(Math.max(map_size[0], map_size[1]))
+    @_rendered = true
+
+  _camera_animation: (max_size)->
     window.App.events.trigger 'map:animation', 'camera_anime', (m, steps)=>
       if steps is 0
         return @_camera.setPosition(new BABYLON.Vector3(0, 0, -60 - 20 * max_size))
       @_camera.setPosition(new BABYLON.Vector3(0, 0, -200 * Math.sin((1-m) * Math.PI/2) - 60 - 20 * max_size))
     , 20
-    @_rendered = true
 
   clear: ->
     @unbind()
