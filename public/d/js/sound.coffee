@@ -14,7 +14,7 @@ class Sound
       _total++
       @_sounds[name] = new Howl({
         src: ["d/sound/#{name}.webm", "d/sound/#{name}.mp3"]
-        volume: 0.3
+        volume: 0.5
       })
       @_sounds[name].once 'load', ->
         _loaded++
