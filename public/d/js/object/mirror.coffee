@@ -134,8 +134,7 @@ _move_positions_coors = _move_positions.map _angle_to_xy
 
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _default: {
-    color: [0, 0, 0, 0]
-    color_mirror: [103, 181, 229, 0.4]
+    color: [103, 181, 229, 0.4]
     color_tube: [255, 255, 255, 0.6]
   }
   _move_reverse: false
@@ -149,15 +148,16 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'cross': MirrorCross
   constructor: ->
     super
-    @_move_position = 0
     @_static = 's' in @options.params
+    @_move_position = 0
     @mirror = new @classes[@options.type]({
       parent: @
-      color: if @_static then @options.color else @options.color_mirror
       color_tube: @options.color_tube
     })
+    if @_static
+      @color([0, 0, 0, 0])
     if !@_static
-      @_connector = new Connector({parent: @, color: @options.color_mirror.slice(0, 3)})
+      @_connector = new Connector({parent: @, color: @options.color.slice(0, 3)})
 
   _controls_add: ->
     if @_controls_added
@@ -198,7 +198,7 @@ _move_positions_coors_reverse = _move_positions_reverse.map _angle_to_xy
 window.o.ObjectMirrorReverse = class MirrorContainerReverse extends MirrorContainer
   _move_reverse: true
   _default: _.extend({}, MirrorContainer::_default, {
-    color_mirror: [188, 105, 43, 0.4]
+    color: [188, 105, 43, 0.4]
   })
   _move_positions: _move_positions_reverse
   _move_positions_coors: _move_positions_coors_reverse

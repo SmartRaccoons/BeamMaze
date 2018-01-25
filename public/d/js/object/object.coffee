@@ -28,7 +28,7 @@ window.App.events.bind 'game:init', (scene, engine, light, camera)->
 
 window.o.Object = class Object extends MicroEvent
   _default: {
-    color: [0, 0, 0]
+    color: [0, 0, 0, 0]
   }
   constructor: (options)->
     super
