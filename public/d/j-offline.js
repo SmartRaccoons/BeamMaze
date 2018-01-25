@@ -12488,12 +12488,12 @@ e.Tools.LoadFile(n + ".fragment.fx", r);
 }, t.prototype._dumpShadersSource = function(t, i, r) {
 var n = this._engine.webGLVersion > 1 ? "#version 300 es\n" : "", o = n + (r ? r + "\n" : "");
 t = o + t, i = o + i;
-var s = 2, a = "\n1	" + t.replace(/\n/gm, function() {
-return "\n" + s++ + "	";
+var s = 2, a = "\n1\t" + t.replace(/\n/gm, function() {
+return "\n" + s++ + "\t";
 });
 s = 2;
-var l = "\n1	" + i.replace(/\n/gm, function() {
-return "\n" + s++ + "	";
+var l = "\n1\t" + i.replace(/\n/gm, function() {
+return "\n" + s++ + "\t";
 });
 this.name.vertexElement ? (e.Tools.Error("Vertex shader: " + this.name.vertexElement + a), 
 e.Tools.Error("Fragment shader: " + this.name.fragmentElement + l)) : this.name.vertex ? (e.Tools.Error("Vertex shader: " + this.name.vertex + a), 
@@ -24138,18 +24138,18 @@ for (var M = 0, S = P.materials.length; M < S; M++) {
 var C = P.materials[M];
 y.push(C);
 var R = i(C, d, o, a);
-f += "\n	Material " + R.toString(p);
+f += "\n\tMaterial " + R.toString(p);
 }
 y.push(P.id);
 var O = e.Material.ParseMultiMaterial(P, o);
-T = !0, f += "\n	Multi-Material " + O.toString(p);
+T = !0, f += "\n\tMulti-Material " + O.toString(p);
 break;
 }
 }
 if (!1 === T) {
 y.push(b.materialId);
 var R = i(b.materialId, d, o, a);
-R ? f += "\n	Material " + R.toString(p) : e.Tools.Warn("Material not found for mesh " + b.id);
+R ? f += "\n\tMaterial " + R.toString(p) : e.Tools.Warn("Material not found for mesh " + b.id);
 }
 }
 if (b.skeletonId > -1 && void 0 !== d.skeletons && null !== d.skeletons) {
@@ -24157,12 +24157,12 @@ if (!1 === v.indexOf(b.skeletonId) > -1) for (var I = 0, D = d.skeletons.length;
 var B = d.skeletons[I];
 if (B.id === b.skeletonId) {
 var L = e.Skeleton.Parse(B, o);
-c.push(L), v.push(B.id), f += "\n	Skeleton " + L.toString(p);
+c.push(L), v.push(B.id), f += "\n\tSkeleton " + L.toString(p);
 }
 }
 }
 var w = e.Mesh.Parse(b, o, a);
-l.push(w), f += "\n	Mesh " + w.toString(p);
+l.push(w), f += "\n\tMesh " + w.toString(p);
 }
 }
 var F;
@@ -24196,7 +24196,7 @@ void 0 !== a.autoClear && null !== a.autoClear && (t.autoClear = a.autoClear), v
 void 0 !== a.ambientColor && null !== a.ambientColor && (t.ambientColor = e.Color3.FromArray(a.ambientColor)), 
 void 0 !== a.gravity && null !== a.gravity && (t.gravity = e.Vector3.FromArray(a.gravity)), 
 a.fogMode && 0 !== a.fogMode) switch (t.fogMode = a.fogMode, t.fogColor = e.Color3.FromArray(a.fogColor), 
-t.fogStart = a.fogStart, t.fogEnd = a.fogEnd, t.fogDensity = a.fogDensity, s += "	Fog mode for scene:  ", 
+t.fogStart = a.fogStart, t.fogEnd = a.fogEnd, t.fogDensity = a.fogDensity, s += "\tFog mode for scene:  ", 
 t.fogMode) {
 case 1:
 s += "exp\n";
@@ -24212,7 +24212,7 @@ s += "linear\n";
 if (a.physicsEnabled) {
 var h;
 "cannon" === a.physicsEngine ? h = new e.CannonJSPlugin() : "oimo" === a.physicsEngine && (h = new e.OimoJSPlugin()), 
-s = "	Physics engine " + (a.physicsEngine ? a.physicsEngine : "oimo") + " enabled\n";
+s = "\tPhysics engine " + (a.physicsEngine ? a.physicsEngine : "oimo") + " enabled\n";
 var c = a.physicsGravity ? e.Vector3.FromArray(a.physicsGravity) : null;
 t.enablePhysics(c, h);
 }
@@ -24221,20 +24221,20 @@ t.workerCollisions = !!a.workerCollisions;
 var u, f;
 if (void 0 !== a.lights && null !== a.lights) for (u = 0, f = a.lights.length; u < f; u++) {
 var d = a.lights[u], p = e.Light.Parse(d, t);
-p && (s += 0 === u ? "\n	Lights:" : "", s += "\n		" + p.toString(l));
+p && (s += 0 === u ? "\n\tLights:" : "", s += "\n\t\t" + p.toString(l));
 }
 if (void 0 !== a.animations && null !== a.animations) for (u = 0, f = a.animations.length; u < f; u++) {
 var _ = a.animations[u], m = e.Animation.Parse(_);
-t.animations.push(m), s += 0 === u ? "\n	Animations:" : "", s += "\n		" + m.toString(l);
+t.animations.push(m), s += 0 === u ? "\n\tAnimations:" : "", s += "\n\t\t" + m.toString(l);
 }
 if (a.autoAnimate && t.beginAnimation(t, a.autoAnimateFrom, a.autoAnimateTo, a.autoAnimateLoop, a.autoAnimateSpeed || 1), 
 void 0 !== a.materials && null !== a.materials) for (u = 0, f = a.materials.length; u < f; u++) {
 var g = a.materials[u], v = e.Material.Parse(g, t, r);
-s += 0 === u ? "\n	Materials:" : "", s += "\n		" + v.toString(l);
+s += 0 === u ? "\n\tMaterials:" : "", s += "\n\t\t" + v.toString(l);
 }
 if (void 0 !== a.multiMaterials && null !== a.multiMaterials) for (u = 0, f = a.multiMaterials.length; u < f; u++) {
 var y = a.multiMaterials[u], b = e.Material.ParseMultiMaterial(y, t);
-s += 0 === u ? "\n	MultiMaterials:" : "", s += "\n		" + b.toString(l);
+s += 0 === u ? "\n\tMultiMaterials:" : "", s += "\n\t\t" + b.toString(l);
 }
 if (void 0 !== a.morphTargetManagers && null !== a.morphTargetManagers) for (var x = 0, T = a.morphTargetManagers; x < T.length; x++) {
 var A = T[x];
@@ -24242,7 +24242,7 @@ e.MorphTargetManager.Parse(A, t);
 }
 if (void 0 !== a.skeletons && null !== a.skeletons) for (u = 0, f = a.skeletons.length; u < f; u++) {
 var E = a.skeletons[u], P = e.Skeleton.Parse(E, t);
-s += 0 === u ? "\n	Skeletons:" : "", s += "\n		" + P.toString(l);
+s += 0 === u ? "\n\tSkeletons:" : "", s += "\n\t\t" + P.toString(l);
 }
 var M = a.geometries;
 if (void 0 !== M && null !== M) {
@@ -24293,11 +24293,11 @@ e.TransformNode.Parse(W, t, r);
 }
 if (void 0 !== a.meshes && null !== a.meshes) for (u = 0, f = a.meshes.length; u < f; u++) {
 var Y = a.meshes[u], H = e.Mesh.Parse(Y, t, r);
-s += 0 === u ? "\n	Meshes:" : "", s += "\n		" + H.toString(l);
+s += 0 === u ? "\n\tMeshes:" : "", s += "\n\t\t" + H.toString(l);
 }
 if (void 0 !== a.cameras && null !== a.cameras) for (u = 0, f = a.cameras.length; u < f; u++) {
 var j = a.cameras[u], X = e.Camera.Parse(j, t);
-s += 0 === u ? "\n	Cameras:" : "", s += "\n		" + X.toString(l);
+s += 0 === u ? "\n\tCameras:" : "", s += "\n\t\t" + X.toString(l);
 }
 for (void 0 !== a.activeCameraID && null !== a.activeCameraID && t.setActiveCameraByID(a.activeCameraID), 
 u = 0, f = t.cameras.length; u < f; u++) {
@@ -31499,7 +31499,8 @@ break;
 
 case t.TEX_2D:
 case t.COMPRESSED_3D:
-case t.TEX_3D:}
+case t.TEX_3D:
+}
 }, t.prototype._upload2DCompressedLevels = function(e, i) {
 for (var r = t.HEADER_LEN + this.bytesOfKeyValueData, n = this.pixelWidth, o = this.pixelHeight, s = i ? this.numberOfMipmapLevels : 1, a = 0; a < s; a++) {
 for (var l = new Int32Array(this.arrayBuffer, r, 1)[0], h = 0; h < this.numberOfFaces; h++) {
@@ -41829,8 +41830,8 @@ th: tableRow,
 }, readyRE = /complete|loaded|interactive/, simpleSelectorRE = /^[\w-]*$/, class2type = {}, toString = class2type.toString, zepto = {}, camelize, uniq, tempParent = document.createElement("div"), propMap = {
 tabindex: "tabIndex",
 readonly: "readOnly",
-"for": "htmlFor",
-"class": "className",
+for: "htmlFor",
+class: "className",
 maxlength: "maxLength",
 cellspacing: "cellSpacing",
 cellpadding: "cellPadding",
@@ -45272,9 +45273,9 @@ indices: [ 0, 1, 2, 3, 4, 1, 5, 6, 4, 7, 2, 6, 4, 2, 1, 3, 7, 5, 0, 3, 1, 3, 5, 
 }).call(this);
 
 (function() {
-var Object, ObjectSphere, meshes, vertexes, _camera, _engine, _light, _object_id, _scene, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Object, ObjectSphere, _camera, _engine, _light, _object_id, _scene, meshes, vertexes, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -45283,7 +45284,7 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
+}, hasProp = {}.hasOwnProperty;
 _object_id = 0;
 meshes = {};
 vertexes = null;
@@ -45292,15 +45293,15 @@ _engine = null;
 _light = null;
 _camera = null;
 window.App.events.bind("game:init", function(scene, engine, light, camera) {
-var k, v, vertex, _convertToFlat, _ref;
+var _convertToFlat, k, ref, v, vertex;
 _scene = scene;
 _engine = engine;
 _light = light;
 _camera = camera;
 meshes = {};
-_ref = window.o.ObjectData;
-for (k in _ref) {
-v = _ref[k];
+ref = window.o.ObjectData;
+for (k in ref) {
+v = ref[k];
 vertex = new BABYLON.VertexData();
 vertex.positions = v.positions.slice();
 vertex.normals = v.normals.slice();
@@ -45312,10 +45313,10 @@ meshes[k].isVisible = false;
 }
 return _convertToFlat = true;
 });
-window.o.Object = Object = function(_super) {
-__extends(Object, _super);
+window.o.Object = Object = function(superClass) {
+extend(Object, superClass);
 Object.prototype._default = {
-color: [ 0, 0, 0 ]
+color: [ 0, 0, 0, 0 ]
 };
 function Object(options) {
 Object.__super__.constructor.apply(this, arguments);
@@ -45412,8 +45413,8 @@ return this.mesh.dispose();
 };
 return Object;
 }(MicroEvent);
-window.o.ObjectSphere = ObjectSphere = function(_super) {
-__extends(ObjectSphere, _super);
+window.o.ObjectSphere = ObjectSphere = function(superClass) {
+extend(ObjectSphere, superClass);
 function ObjectSphere() {
 return ObjectSphere.__super__.constructor.apply(this, arguments);
 }
@@ -45425,8 +45426,8 @@ return BABYLON.Mesh.CreateSphere(this._name(), this.options.segments, this.optio
 };
 return ObjectSphere;
 }(Object);
-window.o.ObjectBox = ObjectSphere = function(_super) {
-__extends(ObjectSphere, _super);
+window.o.ObjectBox = ObjectSphere = function(superClass) {
+extend(ObjectSphere, superClass);
 function ObjectSphere() {
 return ObjectSphere.__super__.constructor.apply(this, arguments);
 }
@@ -45442,9 +45443,9 @@ return ObjectSphere;
 }).call(this);
 
 (function() {
-var Text, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Text, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -45453,18 +45454,25 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
+}, hasProp = {}.hasOwnProperty;
+window.o.ObjectText = Text = function(superClass) {
+extend(Text, superClass);
+Text.prototype._default = {
+color: [ 255, 255, 255 ]
 };
-window.o.ObjectText = Text = function(_super) {
-__extends(Text, _super);
 function Text() {
 var context, size, size_font, text_parts, text_parts_total, texture;
 Text.__super__.constructor.apply(this, arguments);
 texture = new BABYLON.DynamicTexture("texture_" + this._name(), 512, this.scene(), true);
-texture.hasAlpha = true;
 size_font = 40;
 context = texture.getContext();
-context.fillStyle = "#ffffff";
-context.font = "" + size_font + "px retro";
+context.fillStyle = "#" + this.options.color.slice(0, 3).map(function(v) {
+return parseInt(v).toString(16);
+}).join("");
+if (this.options.color[3] != null) {
+context.globalAlpha = parseFloat(this.options.color[3]);
+}
+context.font = size_font + "px retro";
 context.textAlign = "center";
 context.textBaseline = "middle";
 size = texture.getSize();
@@ -45478,6 +45486,7 @@ this.mesh.material = new BABYLON.StandardMaterial("material_" + this._name(), th
 this.mesh.material.backFaceCulling = false;
 this.mesh.material.specularColor = new BABYLON.Color3(0, 0, 0);
 this.mesh.material.diffuseTexture = texture;
+this.mesh.material.opacityTexture = texture;
 }
 Text.prototype.mesh_build = function() {
 return new BABYLON.Mesh.CreatePlane(this._name(), 50, this.scene(), true);
@@ -45487,9 +45496,9 @@ return Text;
 }).call(this);
 
 (function() {
-var Blank, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Blank, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -45498,9 +45507,9 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
-window.o.ObjectBlank = Blank = function(_super) {
-__extends(Blank, _super);
+}, hasProp = {}.hasOwnProperty;
+window.o.ObjectBlank = Blank = function(superClass) {
+extend(Blank, superClass);
 Blank.prototype._default = {
 color: [ 151, 153, 156 ]
 };
@@ -45550,9 +45559,9 @@ return Blank;
 }).call(this);
 
 (function() {
-var Beam, BeamSource, BeamSphere, BeamTarget, Object, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Beam, BeamSource, BeamSphere, BeamTarget, Object, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -45561,10 +45570,10 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
+}, hasProp = {}.hasOwnProperty;
 Object = window.o.Object;
-window.o.ObjectBeam = Beam = function(_super) {
-__extends(Beam, _super);
+window.o.ObjectBeam = Beam = function(superClass) {
+extend(Beam, superClass);
 Beam.prototype._default = {
 color: [ 255, 243, 21 ]
 };
@@ -45591,8 +45600,8 @@ size: 1
 };
 return Beam;
 }(Object);
-BeamSphere = function(_super) {
-__extends(BeamSphere, _super);
+BeamSphere = function(superClass) {
+extend(BeamSphere, superClass);
 BeamSphere.prototype._default = {
 diameter: 4
 };
@@ -45614,8 +45623,8 @@ this;
 }
 return BeamSphere;
 }(window.o.ObjectSphere);
-window.o.ObjectBeamSource = BeamSource = function(_super) {
-__extends(BeamSource, _super);
+window.o.ObjectBeamSource = BeamSource = function(superClass) {
+extend(BeamSource, superClass);
 BeamSource.prototype.name = "source";
 BeamSource.prototype._default = _.extend({}, BeamSphere.prototype._default, {
 color: Beam.prototype._default.color
@@ -45626,7 +45635,7 @@ this._mirror = [];
 BeamSource.__super__.constructor.apply(this, arguments);
 }
 BeamSource.prototype.beam = function() {
-var direction, i, last_mirror, pick_info, points, tube_check, _i, _results;
+var direction, i, j, last_mirror, pick_info, points, results, tube_check;
 this.beam_remove();
 points = [ new BABYLON.Vector3(this.options.position[0], this.options.position[1], this.options.position[2]) ];
 last_mirror = null;
@@ -45634,8 +45643,8 @@ direction = new BABYLON.Vector3(0, 1e3, 0);
 tube_check = function(_type) {
 return _type && _type.indexOf("mirrorTube") > -1;
 };
-_results = [];
-for (i = _i = 0; _i < 100; i = ++_i) {
+results = [];
+for (i = j = 0; j < 100; i = ++j) {
 pick_info = this.scene().pickWithRay(new BABYLON.Ray(points[points.length - 1], direction, 100), function(i) {
 return function(m) {
 if (i === 0 && m._type === "source" || tube_check(m._type) && last_mirror === m._class.mirror_id()) {
@@ -45667,10 +45676,10 @@ this._mirror.push(pick_info.pickedMesh._class.parent);
 if ([ "mirrorTubeStraight", "mirrorTube" ].indexOf(pick_info.pickedMesh._type) === -1) {
 break;
 } else {
-_results.push(void 0);
+results.push(void 0);
 }
 }
-return _results;
+return results;
 };
 BeamSource.prototype.beam_remove = function() {
 this._mirror.forEach(function(m) {
@@ -45688,8 +45697,8 @@ return BeamSource.__super__.remove.apply(this, arguments);
 };
 return BeamSource;
 }(BeamSphere);
-window.o.ObjectBeamTarget = BeamTarget = function(_super) {
-__extends(BeamTarget, _super);
+window.o.ObjectBeamTarget = BeamTarget = function(superClass) {
+extend(BeamTarget, superClass);
 BeamTarget.prototype.name = "target";
 BeamTarget.prototype._default = _.extend({}, BeamSphere.prototype._default, {
 color: [ 195, 18, 24 ]
@@ -45727,9 +45736,9 @@ return BeamTarget;
 }).call(this);
 
 (function() {
-var Connector, MirrorContainer, MirrorContainerReverse, MirrorCross, MirrorEmpty, MirrorNormal, MirrorReverse, MirrorStraight, MirrorTube, MirrorTubeConnect, MirrorTubeConnectOut, MirrorTubeEmpty, MirrorTubeStraight, MirrorTubeStraightOut, _angle_to_xy, _move_positions, _move_positions_coors, _move_positions_coors_reverse, _move_positions_reverse, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Connector, MirrorContainer, MirrorContainerReverse, MirrorCross, MirrorEmpty, MirrorNormal, MirrorReverse, MirrorStraight, MirrorTube, MirrorTubeConnect, MirrorTubeConnectOut, MirrorTubeEmpty, MirrorTubeStraight, MirrorTubeStraightOut, _angle_to_xy, _move_positions, _move_positions_coors, _move_positions_coors_reverse, _move_positions_reverse, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -45738,14 +45747,14 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-}, __indexOf = [].indexOf || function(item) {
+}, hasProp = {}.hasOwnProperty, indexOf = [].indexOf || function(item) {
 for (var i = 0, l = this.length; i < l; i++) {
 if (i in this && this[i] === item) return i;
 }
 return -1;
 };
-Connector = function(_super) {
-__extends(Connector, _super);
+Connector = function(superClass) {
+extend(Connector, superClass);
 Connector.prototype.name = "connector";
 function Connector() {
 Connector.__super__.constructor.apply(this, arguments);
@@ -45779,8 +45788,8 @@ return _this.mesh.rotation.z = angle_start + angle_diff * m;
 };
 return Connector;
 }(window.o.Object);
-MirrorTube = function(_super) {
-__extends(MirrorTube, _super);
+MirrorTube = function(superClass) {
+extend(MirrorTube, superClass);
 function MirrorTube() {
 MirrorTube.__super__.constructor.apply(this, arguments);
 this.mesh.position = new BABYLON.Vector3(0, 0, -.55);
@@ -45809,8 +45818,8 @@ return this.active();
 };
 return MirrorTube;
 }(window.o.Object);
-MirrorTubeConnect = function(_super) {
-__extends(MirrorTubeConnect, _super);
+MirrorTubeConnect = function(superClass) {
+extend(MirrorTubeConnect, superClass);
 function MirrorTubeConnect() {
 return MirrorTubeConnect.__super__.constructor.apply(this, arguments);
 }
@@ -45821,8 +45830,8 @@ return new BABYLON.Vector3(v.y, -v.x, v.z);
 };
 return MirrorTubeConnect;
 }(MirrorTube);
-MirrorTubeConnectOut = function(_super) {
-__extends(MirrorTubeConnectOut, _super);
+MirrorTubeConnectOut = function(superClass) {
+extend(MirrorTubeConnectOut, superClass);
 function MirrorTubeConnectOut() {
 return MirrorTubeConnectOut.__super__.constructor.apply(this, arguments);
 }
@@ -45840,16 +45849,16 @@ return new BABYLON.Vector3(-v.y, v.x, v.z);
 };
 return MirrorTubeConnectOut;
 }(MirrorTube);
-MirrorTubeEmpty = function(_super) {
-__extends(MirrorTubeEmpty, _super);
+MirrorTubeEmpty = function(superClass) {
+extend(MirrorTubeEmpty, superClass);
 function MirrorTubeEmpty() {
 return MirrorTubeEmpty.__super__.constructor.apply(this, arguments);
 }
 MirrorTubeEmpty.prototype.name = "mirrorTubeEmpty";
 return MirrorTubeEmpty;
 }(MirrorTube);
-MirrorTubeStraight = function(_super) {
-__extends(MirrorTubeStraight, _super);
+MirrorTubeStraight = function(superClass) {
+extend(MirrorTubeStraight, superClass);
 function MirrorTubeStraight() {
 return MirrorTubeStraight.__super__.constructor.apply(this, arguments);
 }
@@ -45860,8 +45869,8 @@ return new BABYLON.Vector3(v.x, v.y, v.z);
 };
 return MirrorTubeStraight;
 }(MirrorTube);
-MirrorTubeStraightOut = function(_super) {
-__extends(MirrorTubeStraightOut, _super);
+MirrorTubeStraightOut = function(superClass) {
+extend(MirrorTubeStraightOut, superClass);
 function MirrorTubeStraightOut() {
 return MirrorTubeStraightOut.__super__.constructor.apply(this, arguments);
 }
@@ -45873,8 +45882,8 @@ return mesh;
 };
 return MirrorTubeStraightOut;
 }(MirrorTubeStraight);
-MirrorNormal = function(_super) {
-__extends(MirrorNormal, _super);
+MirrorNormal = function(superClass) {
+extend(MirrorNormal, superClass);
 MirrorNormal.prototype.name = "mirror";
 MirrorNormal.prototype.connectors = [ [ MirrorTubeConnect, MirrorTubeConnectOut ], null, [ MirrorTubeConnect, MirrorTubeConnectOut ] ];
 function MirrorNormal() {
@@ -45919,32 +45928,32 @@ return t.deactive();
 };
 return MirrorNormal;
 }(window.o.Object);
-MirrorReverse = function(_super) {
-__extends(MirrorReverse, _super);
+MirrorReverse = function(superClass) {
+extend(MirrorReverse, superClass);
 function MirrorReverse() {
 return MirrorReverse.__super__.constructor.apply(this, arguments);
 }
 MirrorReverse.prototype.connectors = [ null, [ MirrorTubeConnect, MirrorTubeConnectOut ], null, [ MirrorTubeConnect, MirrorTubeConnectOut ] ];
 return MirrorReverse;
 }(MirrorNormal);
-MirrorEmpty = function(_super) {
-__extends(MirrorEmpty, _super);
+MirrorEmpty = function(superClass) {
+extend(MirrorEmpty, superClass);
 function MirrorEmpty() {
 return MirrorEmpty.__super__.constructor.apply(this, arguments);
 }
 MirrorEmpty.prototype.connectors = [ MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty, MirrorTubeEmpty ];
 return MirrorEmpty;
 }(MirrorNormal);
-MirrorStraight = function(_super) {
-__extends(MirrorStraight, _super);
+MirrorStraight = function(superClass) {
+extend(MirrorStraight, superClass);
 function MirrorStraight() {
 return MirrorStraight.__super__.constructor.apply(this, arguments);
 }
 MirrorStraight.prototype.connectors = [ [ MirrorTubeStraight, MirrorTubeStraightOut ], MirrorTubeEmpty, null, MirrorTubeEmpty ];
 return MirrorStraight;
 }(MirrorNormal);
-MirrorCross = function(_super) {
-__extends(MirrorCross, _super);
+MirrorCross = function(superClass) {
+extend(MirrorCross, superClass);
 function MirrorCross() {
 return MirrorCross.__super__.constructor.apply(this, arguments);
 }
@@ -45959,11 +45968,10 @@ x: Math.round(Math.cos(angle))
 };
 _move_positions = [ Math.PI * 3 / 2, Math.PI, Math.PI / 2, 0 ];
 _move_positions_coors = _move_positions.map(_angle_to_xy);
-window.o.ObjectMirror = MirrorContainer = function(_super) {
-__extends(MirrorContainer, _super);
+window.o.ObjectMirror = MirrorContainer = function(superClass) {
+extend(MirrorContainer, superClass);
 MirrorContainer.prototype._default = {
-color: [ 0, 0, 0, 0 ],
-color_mirror: [ 103, 181, 229, .4 ],
+color: [ 103, 181, 229, .4 ],
 color_tube: [ 255, 255, 255, .6 ]
 };
 MirrorContainer.prototype._move_reverse = false;
@@ -45978,17 +45986,19 @@ cross: MirrorCross
 };
 function MirrorContainer() {
 MirrorContainer.__super__.constructor.apply(this, arguments);
+this._static = indexOf.call(this.options.params, "s") >= 0;
 this._move_position = 0;
-this._static = __indexOf.call(this.options.params, "s") >= 0;
 this.mirror = new this.classes[this.options.type]({
 parent: this,
-color: this._static ? this.options.color : this.options.color_mirror,
 color_tube: this.options.color_tube
 });
+if (this._static) {
+this.color([ 0, 0, 0, 0 ]);
+}
 if (!this._static) {
 this._connector = new Connector({
 parent: this,
-color: this.options.color_mirror.slice(0, 3)
+color: this.options.color.slice(0, 3)
 });
 }
 }
@@ -46050,14 +46060,14 @@ return MirrorContainer;
 }(window.o.ObjectBlank);
 _move_positions_reverse = [ _move_positions[0], _move_positions[3], _move_positions[2], _move_positions[1] ];
 _move_positions_coors_reverse = _move_positions_reverse.map(_angle_to_xy);
-window.o.ObjectMirrorReverse = MirrorContainerReverse = function(_super) {
-__extends(MirrorContainerReverse, _super);
+window.o.ObjectMirrorReverse = MirrorContainerReverse = function(superClass) {
+extend(MirrorContainerReverse, superClass);
 function MirrorContainerReverse() {
 return MirrorContainerReverse.__super__.constructor.apply(this, arguments);
 }
 MirrorContainerReverse.prototype._move_reverse = true;
 MirrorContainerReverse.prototype._default = _.extend({}, MirrorContainer.prototype._default, {
-color_mirror: [ 188, 105, 43, .4 ]
+color: [ 188, 105, 43, .4 ]
 });
 MirrorContainerReverse.prototype._move_positions = _move_positions_reverse;
 MirrorContainerReverse.prototype._move_positions_coors = _move_positions_coors_reverse;
@@ -46070,9 +46080,9 @@ window.o.GameMapData = [ "1|09|8-", "00009|0|1|---8", "0000|00-0|0-009|1-00|---8
 }).call(this);
 
 (function() {
-var Map, MapAnimation, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Map, MapAnimation, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46081,14 +46091,14 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-}, __indexOf = [].indexOf || function(item) {
+}, hasProp = {}.hasOwnProperty, indexOf = [].indexOf || function(item) {
 for (var i = 0, l = this.length; i < l; i++) {
 if (i in this && this[i] === item) return i;
 }
 return -1;
 };
-MapAnimation = function(_super) {
-__extends(MapAnimation, _super);
+MapAnimation = function(superClass) {
+extend(MapAnimation, superClass);
 function MapAnimation() {
 var fn, in_action_active, triggered_start;
 MapAnimation.__super__.constructor.apply(this, arguments);
@@ -46147,11 +46157,11 @@ return this._render_after_fn.push(callback);
 MapAnimation.prototype.render_before = function() {
 return function(_this) {
 return function() {
-var name, params, _ref, _results;
-_ref = _this._animations;
-_results = [];
-for (name in _ref) {
-params = _ref[name];
+var name, params, ref, results;
+ref = _this._animations;
+results = [];
+for (name in ref) {
+params = ref[name];
 if (params.length === 0) {
 delete _this._animations[name];
 continue;
@@ -46159,12 +46169,12 @@ continue;
 params[0].steps--;
 params[0].callback((params[0].steps_total - params[0].steps) / params[0].steps_total, params[0].steps);
 if (params[0].steps === 0) {
-_results.push(_this._animations[name].shift());
+results.push(_this._animations[name].shift());
 } else {
-_results.push(void 0);
+results.push(void 0);
 }
 }
-return _results;
+return results;
 };
 }(this)();
 };
@@ -46175,8 +46185,8 @@ return this._render_after_fn.pop()();
 };
 return MapAnimation;
 }(MicroEvent);
-window.o.GameMap = Map = function(_super) {
-__extends(Map, _super);
+window.o.GameMap = Map = function(superClass) {
+extend(Map, superClass);
 function Map() {
 return Map.__super__.constructor.apply(this, arguments);
 }
@@ -46225,7 +46235,7 @@ return s.trim().split("");
 params = [ "s", "r" ];
 map_size = [ Math.floor(map.reduce(function(max, v) {
 return Math.max(max, v.filter(function(v) {
-return !(__indexOf.call(v, params) >= 0);
+return !(indexOf.call(v, params) >= 0);
 }).length);
 }, 0) / 2), Math.floor(map.length / 2) ];
 this._map = {};
@@ -46238,7 +46248,7 @@ return row.forEach(function(cell, i) {
 var x, y;
 y = -j + map_size[1];
 x = i - map_size[0] - found;
-if (__indexOf.call(params, cell) >= 0) {
+if (indexOf.call(params, cell) >= 0) {
 params_found.push(cell);
 found += 1;
 return;
@@ -46268,10 +46278,10 @@ return map_size;
 Map.prototype.position_check = function() {
 return this._mirror.forEach(function(_this) {
 return function(m) {
-var i, nr, p, _i, _len, _ref;
-_ref = [ 0, 1, 2, 3 ];
-for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-i = _ref[_i];
+var i, k, len, nr, p, ref;
+ref = [ 0, 1, 2, 3 ];
+for (k = 0, len = ref.length; k < len; k++) {
+i = ref[k];
 nr = (m._move_position + i) % 4;
 p = m.get_move_position(nr, true);
 if (_this._map[p.y] && _this._map[p.y][p.x] && _this._map[p.y][p.x] === "0") {
@@ -46323,7 +46333,7 @@ position: coors
 Map.prototype.mirror = function(coors, type, params) {
 var m;
 this.blank(coors);
-m = new (window.o[__indexOf.call(params, "r") >= 0 ? "ObjectMirrorReverse" : "ObjectMirror"])({
+m = new (window.o[indexOf.call(params, "r") >= 0 ? "ObjectMirrorReverse" : "ObjectMirror"])({
 position: coors,
 type: type,
 params: params
@@ -46333,10 +46343,10 @@ return;
 }
 m.bind("move", function(_this) {
 return function(position) {
-var i, x, y, _i, _ref;
+var i, k, ref, x, y;
 _this.trigger("move");
 _this.beam_remove();
-for (i = _i = 1; _i <= 20; i = ++_i) {
+for (i = k = 1; k <= 20; i = ++k) {
 y = m.position.y + position.y * i;
 x = m.position.x + position.x * i;
 if (!(_this._map[y] && _this._map[y][x] && _this._map[y][x] === "0")) {
@@ -46346,8 +46356,8 @@ x = m.position.x + position.x * i;
 break;
 }
 }
-_ref = [ _this._map[y][x], _this._map[m.position.y][m.position.x] ], _this._map[m.position.y][m.position.x] = _ref[0], 
-_this._map[y][x] = _ref[1];
+ref = [ _this._map[y][x], _this._map[m.position.y][m.position.x] ], _this._map[m.position.y][m.position.x] = ref[0], 
+_this._map[y][x] = ref[1];
 return m.move({
 x: position.x * i,
 y: position.y * i
@@ -46385,12 +46395,12 @@ Map.prototype.remove = function() {
 Map.__super__.remove.apply(this, arguments);
 this._clear_ob.forEach(function(_this) {
 return function(n) {
-var a, _results;
-_results = [];
+var a, results;
+results = [];
 while (a = _this[n].shift()) {
-_results.push(a.remove());
+results.push(a.remove());
 }
-return _results;
+return results;
 };
 }(this));
 return this.clear();
@@ -46400,9 +46410,9 @@ return Map;
 }).call(this);
 
 (function() {
-var Game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Game, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46411,9 +46421,9 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
-window.o.Game = Game = function(_super) {
-__extends(Game, _super);
+}, hasProp = {}.hasOwnProperty;
+window.o.Game = Game = function(superClass) {
+extend(Game, superClass);
 function Game() {
 Game.__super__.constructor.apply(this, arguments);
 this._rendered = false;
@@ -46427,7 +46437,7 @@ return _this._engine.resize();
 this;
 }
 Game.prototype.render = function(options) {
-var camera, map_size, max_size, moves;
+var camera, map_size, moves;
 options.container.append(this.canvas);
 this._engine.resize();
 this._engine.runRenderLoop(function(_this) {
@@ -46460,8 +46470,11 @@ this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
 this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-30, 30, -50), this._scene);
 window.App.events.trigger("game:init", this._scene, this._engine, this._light, this._camera);
 map_size = this._map.load(window.o.GameMapData[options.stage - 1], _l("stage_desc")[options.stage]);
-max_size = Math.max(map_size[0], map_size[1]);
-window.App.events.trigger("map:animation", "camera_anime", function(_this) {
+this._camera_animation(Math.max(map_size[0], map_size[1]));
+return this._rendered = true;
+};
+Game.prototype._camera_animation = function(max_size) {
+return window.App.events.trigger("map:animation", "camera_anime", function(_this) {
 return function(m, steps) {
 if (steps === 0) {
 return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -60 - 20 * max_size));
@@ -46469,7 +46482,6 @@ return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -60 - 20 * max_size))
 return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -200 * Math.sin((1 - m) * Math.PI / 2) - 60 - 20 * max_size));
 };
 }(this), 20);
-return this._rendered = true;
 };
 Game.prototype.clear = function() {
 this.unbind();
@@ -46489,9 +46501,9 @@ return Game;
 }).call(this);
 
 (function() {
-var View, view_id, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var View, view_id, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46500,10 +46512,10 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
+}, hasProp = {}.hasOwnProperty;
 view_id = 0;
-window.o.View = View = function(_super) {
-__extends(View, _super);
+window.o.View = View = function(superClass) {
+extend(View, superClass);
 View.prototype.className = null;
 View.prototype.el = "<div>";
 View.prototype.template = "";
@@ -46517,7 +46529,7 @@ this.render(options);
 this;
 }
 View.prototype.render = function(data) {
-var k, m, v, _ref;
+var k, m, ref, v;
 if (data == null) {
 data = {};
 }
@@ -46530,9 +46542,9 @@ data.options = this.options;
 this.$el.html(_.template(this.template)(data));
 }
 if (this.events) {
-_ref = this.events;
-for (k in _ref) {
-v = _ref[k];
+ref = this.events;
+for (k in ref) {
+v = ref[k];
 m = k.match(/^(\S+)\s*(.*)$/);
 this.$el.on(m[1] + ".delegateEvents" + this._id, m[2], _.bind(v, this));
 }
@@ -46553,9 +46565,9 @@ return View;
 }).call(this);
 
 (function() {
-var Router, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Router, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46564,9 +46576,9 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
-window.o.ViewRouter = Router = function(_super) {
-__extends(Router, _super);
+}, hasProp = {}.hasOwnProperty;
+window.o.ViewRouter = Router = function(superClass) {
+extend(Router, superClass);
 Router.prototype.el = "<div class='container'>";
 Router.prototype.template = "<button class='back-link'>" + _l("Menu") + "</button>\n<button class='sound-switch' data-volume='<%= sound %>'></button>";
 Router.prototype.events = {
@@ -46705,9 +46717,9 @@ return Router;
 }).call(this);
 
 (function() {
-var start, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var start, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46716,9 +46728,9 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
-window.o.ViewStart = start = function(_super) {
-__extends(start, _super);
+}, hasProp = {}.hasOwnProperty;
+window.o.ViewStart = start = function(superClass) {
+extend(start, superClass);
 function start() {
 return start.__super__.constructor.apply(this, arguments);
 }
@@ -46742,9 +46754,9 @@ return start;
 }).call(this);
 
 (function() {
-var Game, game, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Game, game, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46753,10 +46765,10 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
+}, hasProp = {}.hasOwnProperty;
 game = null;
-window.o.ViewGame = Game = function(_super) {
-__extends(Game, _super);
+window.o.ViewGame = Game = function(superClass) {
+extend(Game, superClass);
 Game.prototype.className = "game";
 Game.prototype.template = "<div class='game-container'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>";
 Game.prototype.events = {
@@ -46779,29 +46791,26 @@ this._timeouts.forEach(function(t) {
 return clearTimeout(t);
 });
 this._timeouts = [];
-this.$el.removeClass("" + this.className + "-level-hide");
-this.$el.attr("data-level", this.options.stage);
 this.$(".game-controls-reset").attr("data-level", this.options.stage).css("display", "none");
-return this._timeouts.push(setTimeout(function(_this) {
-return function() {
-_this.$el.addClass("" + _this.className + "-level-hide");
 game.clear();
-game.bind("solved", function() {
+game.bind("solved", function(_this) {
+return function() {
 return _this._solved();
-});
+};
+}(this));
 game.render({
-stage: _this.options.stage,
-container: _this.$(".game-container")
+stage: this.options.stage,
+container: this.$(".game-container")
 });
-game.bind("move", function(move) {
+game.bind("move", function(_this) {
+return function(move) {
 if (move === 1 && _this.options.stage !== 1) {
 _this.$(".game-controls-reset").css("display", "");
 }
 return _this.trigger("move", move);
-});
-return _this._timer_start = new Date().getTime();
 };
-}(this), 800));
+}(this));
+return this._timer_start = new Date().getTime();
 };
 Game.prototype._solved = function() {
 this.trigger("solved", {
@@ -46825,9 +46834,9 @@ return Game;
 }).call(this);
 
 (function() {
-var Popup, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var Popup, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -46836,9 +46845,9 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
-window.o.ViewPopup = Popup = function(_super) {
-__extends(Popup, _super);
+}, hasProp = {}.hasOwnProperty;
+window.o.ViewPopup = Popup = function(superClass) {
+extend(Popup, superClass);
 Popup.prototype.className = "popup";
 Popup.prototype.template = "<div>\n  <% if(typeof title !== \"undefined\"){%>\n    <h1><%- title %></h1>\n  <% } %>\n  <div class='popup-content'>\n    <%= content %>\n  </div>\n  <% if(typeof actions !== \"undefined\"){%>\n    <nav>\n    <% actions.forEach(function (action, i) { %>\n      <button data-action='<%= i %>'><%- Array.isArray(action) ? action[0] : action %></button>\n    <% }); %>\n    </nav>\n  <% } %>\n  <% if (options.close){ %>\n    <button class='popup-close'></button>\n  <% } %>\n</div>";
 Popup.prototype.events = {
@@ -46878,7 +46887,7 @@ ga("set", "&uid", App.user.user.id);
 ga("set", "contentGroup1", App.version_media);
 GameAnalytics("setEnabledInfoLog", App.version_dev);
 GameAnalytics("setEnabledVerboseLog", App.version_dev);
-GameAnalytics("configureBuild", "" + App.version_media + "." + App.version);
+GameAnalytics("configureBuild", App.version_media + "." + App.version);
 if (App.user.user && App.user.user.id) {
 GameAnalytics("configureUserId", "" + App.user.user.id);
 }
@@ -46891,7 +46900,7 @@ track_view = function(view) {
 return ga("send", "pageview", view);
 };
 track_design = function(view, action) {
-GameAnalytics("addDesignEvent", "" + view + ":" + action);
+GameAnalytics("addDesignEvent", view + ":" + action);
 return ga("send", "pageview", [ view, action ].join("/"));
 };
 App.events.bind("router:game", function(id) {
@@ -46943,7 +46952,7 @@ return function(name) {
 _total++;
 _this._sounds[name] = new Howl({
 src: [ "d/sound/" + name + ".webm", "d/sound/" + name + ".mp3" ],
-volume: .3
+volume: .5
 });
 return _this._sounds[name].once("load", function() {
 _loaded++;
@@ -46961,15 +46970,15 @@ return;
 return this._sounds[name].play();
 };
 Sound.prototype.volume = function(volume) {
-var name, sound, _ref, _results;
+var name, ref, results, sound;
 this._mute = volume === "off";
-_ref = this._sounds;
-_results = [];
-for (name in _ref) {
-sound = _ref[name];
-_results.push(sound.mute(this._mute));
+ref = this._sounds;
+results = [];
+for (name in ref) {
+sound = ref[name];
+results.push(sound.mute(this._mute));
 }
-return _results;
+return results;
 };
 return Sound;
 }();
@@ -46992,9 +47001,9 @@ return sound.play("move");
 }).call(this);
 
 (function() {
-var UniversalApiOffline, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+var UniversalApiOffline, extend = function(child, parent) {
 for (var key in parent) {
-if (__hasProp.call(parent, key)) child[key] = parent[key];
+if (hasProp.call(parent, key)) child[key] = parent[key];
 }
 function ctor() {
 this.constructor = child;
@@ -47003,12 +47012,12 @@ ctor.prototype = parent.prototype;
 child.prototype = new ctor();
 child.__super__ = parent.prototype;
 return child;
-};
+}, hasProp = {}.hasOwnProperty;
 App.session.get = function() {};
 App.session.set = function() {};
 App.version_media = "offline";
-window.UniversalApi = UniversalApiOffline = function(_super) {
-__extends(UniversalApiOffline, _super);
+window.UniversalApi = UniversalApiOffline = function(superClass) {
+extend(UniversalApiOffline, superClass);
 function UniversalApiOffline() {
 return UniversalApiOffline.__super__.constructor.apply(this, arguments);
 }
@@ -47024,16 +47033,16 @@ UniversalApiOffline.prototype.get = function(v) {
 return Cookies.get("data." + v);
 };
 UniversalApiOffline.prototype.save = function(ob, callback) {
-var k, v, _results;
+var k, results, v;
 if (callback == null) {
 callback = function() {};
 }
-_results = [];
+results = [];
 for (k in ob) {
 v = ob[k];
-_results.push(Cookies.set("data." + k, v));
+results.push(Cookies.set("data." + k, v));
 }
-return _results;
+return results;
 };
 return UniversalApiOffline;
 }(UniversalApi);

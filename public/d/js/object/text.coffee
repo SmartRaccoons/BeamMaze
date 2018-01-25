@@ -5,7 +5,6 @@ window.o.ObjectText = class Text extends window.o.Object
   constructor: ->
     super
     texture = new (BABYLON.DynamicTexture)("texture_#{@_name()}", 512, @scene(), true)
-    texture.hasAlpha = true
     size_font = 40
     context = texture.getContext()
     context.fillStyle = '#' + @options.color.slice(0, 3).map( (v)-> parseInt(v).toString(16) ).join('')
@@ -24,6 +23,7 @@ window.o.ObjectText = class Text extends window.o.Object
     @mesh.material.backFaceCulling = false
     @mesh.material.specularColor = new (BABYLON.Color3)(0, 0, 0)
     @mesh.material.diffuseTexture = texture
+    @mesh.material.opacityTexture = texture
 
   mesh_build: ->
     new (BABYLON.Mesh.CreatePlane)(@_name(), 50, @scene(), true)
