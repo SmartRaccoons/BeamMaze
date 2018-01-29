@@ -67,21 +67,23 @@ if not ('anime' of GET)
   window.o.ObjectBlank::_animation = (fn)-> fn(1, 0)
   window.o.ObjectMirror::_animation = (fn)-> fn(1, 0)
 
+color_read = (v)-> GET[v].split(',').map (v)-> parseFloat(v)
+
 if 'color_mirror' of GET
-  window.o.ObjectMirror::_default.color = GET['color_mirror'].split(',')
+  window.o.ObjectMirror::_default.color = color_read('color_mirror')
 if 'color_tube' of GET
-  window.o.ObjectMirror::_default.color_tube = GET['color_tube'].split(',')
-  window.o.ObjectMirrorReverse::_default.color_tube = GET['color_tube'].split(',')
+  window.o.ObjectMirror::_default.color_tube = color_read('color_tube')
+  window.o.ObjectMirrorReverse::_default.color_tube = color_read('color_tube')
 if 'color_mirror_reverse' of GET
-  window.o.ObjectMirrorReverse::_default.color = GET['color_mirror_reverse'].split(',')
+  window.o.ObjectMirrorReverse::_default.color = color_read('color_mirror_reverse')
 if 'color_blank' of GET
-  window.o.ObjectBlank::_default.color = GET['color_blank'].split(',')
+  window.o.ObjectBlank::_default.color = color_read('color_blank')
 if 'color_beam' of GET
-  window.o.ObjectBeamSource::_default.color = window.o.ObjectBeam::_default.color = GET['color_beam'].split(',')
+  window.o.ObjectBeamSource::_default.color = window.o.ObjectBeam::_default.color = color_read('color_beam')
 if 'color_beam_target' of GET
-  window.o.ObjectBeamTarget::_default.color = GET['color_beam_target'].split(',')
+  window.o.ObjectBeamTarget::_default.color = color_read('color_beam_target')
 if 'color_text' of GET
-  window.o.ObjectText::_default.color = GET['color_text'].split(',')
+  window.o.ObjectText::_default.color = color_read('color_text')
 
 
 window.o.GameMap = class GameMap extends window.o.GameMap

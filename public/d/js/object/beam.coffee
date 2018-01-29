@@ -25,15 +25,17 @@ window.o.ObjectBeam = class Beam extends Object
 class BeamSphere extends window.o.ObjectSphere
   _default: {
     diameter: 4
+    sheath_1: 0.5
+    sheath_2: 0.2
   }
   constructor: ->
     super
     @color()
     @mesh.position = new BABYLON.Vector3(@options.position[0], @options.position[1], @options.position[2])
     @sheath = new window.o.ObjectSphere({diameter: @options.diameter + 1, parent: @})
-    @sheath.color(@options.color.concat(0.5))
+    @sheath.color(@options.color.concat(@options.sheath_1))
     @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 2, parent: @})
-    @sheath2.color(@options.color.concat(0.2))
+    @sheath2.color(@options.color.concat(@options.sheath_2))
     @
 
 
@@ -108,9 +110,9 @@ window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
     @solved = true
     c1 = @options.color
     c2 = Beam::_default.color
-    color_diff = [c2[0]-c1[0],c2[1]-c1[1],c2[2]-c1[2]]
+    color_diff = c1.slice(0, 3).map (v, i)-> c2[i] - v
     @_animation (m, steps)=>
-      color = [m * color_diff[0] + c1[0], m * color_diff[1] + c1[1], m * color_diff[2] + c1[2]]
+      color = color_diff.map (v, i)-> v * m + c1[i]
       @color(color)
-      @sheath.color(color.concat(0.5))
-      @sheath2.color(color.concat(0.3))
+      @sheath.color(color.concat(@options.sheath_1))
+      @sheath2.color(color.concat(@options.sheath_2))

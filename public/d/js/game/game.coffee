@@ -34,7 +34,7 @@ window.o.Game = class Game extends MicroEvent
     @_scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
     @_camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), @_scene)
     @_camera.setPosition(new BABYLON.Vector3(0, 0, -150))
-    @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-30, 30, -50), @_scene)
+    @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-50, 50, -80), @_scene)
     window.App.events.trigger('game:init', @_scene, @_engine, @_light, @_camera)
 
     map_size = @_map.load(window.o.GameMapData[options.stage - 1], _l('stage_desc')[options.stage])
