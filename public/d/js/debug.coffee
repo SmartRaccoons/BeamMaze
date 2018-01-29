@@ -71,6 +71,7 @@ if 'color_mirror' of GET
   window.o.ObjectMirror::_default.color = GET['color_mirror'].split(',')
 if 'color_tube' of GET
   window.o.ObjectMirror::_default.color_tube = GET['color_tube'].split(',')
+  window.o.ObjectMirrorReverse::_default.color_tube = GET['color_tube'].split(',')
 if 'color_mirror_reverse' of GET
   window.o.ObjectMirrorReverse::_default.color = GET['color_mirror_reverse'].split(',')
 if 'color_blank' of GET
