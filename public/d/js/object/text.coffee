@@ -4,8 +4,8 @@ window.o.ObjectText = class Text extends window.o.Object
   }
   constructor: ->
     super
-    texture = new (BABYLON.DynamicTexture)("texture_#{@_name()}", 512, @scene(), true)
-    size_font = 40
+    texture = new (BABYLON.DynamicTexture)("texture_#{@_name()}", 768, @scene(), true)
+    size_font = 60
     context = texture.getContext()
     context.fillStyle = '#' + @options.color.slice(0, 3).map( (v)-> parseInt(v).toString(16) ).join('')
     if @options.color[3]?
