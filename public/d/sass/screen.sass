@@ -155,24 +155,17 @@ canvas
     padding-bottom: 3em
   .game-next, .game-previous
     position: absolute
-    color: $color2
-    height: 200px
-    line-height: 200px
     top: 50%
-    margin-top: -100px
+    width: 30px
+    height: 50px
+    margin-top: -25px
     cursor: pointer
-    font-size: 3em
-    padding: 0 0.2em
-    &:hover
-      color: $color1
   .game-next
-    right: 0
-    &::before
-      content: '→'
+    right: 0.4em
+    +icon-sprite(right)
   .game-previous
-    left: 0
-    &::before
-      content: '←'
+    left: 0.4em
+    +icon-sprite(left)
   .game-controls
     position: absolute
     left: 10%
