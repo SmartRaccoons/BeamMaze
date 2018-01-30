@@ -6,7 +6,7 @@ App.lang.strings.en =
      direction"""
     4: """helpbox"""
   }
-  'New levels': 'New levels'
+  'Uncompleted levels': 'Uncompleted levels'
   'Credits': 'Production'
   'Continue': 'Continue'
   'Quit': 'Close'

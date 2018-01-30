@@ -6,7 +6,7 @@ App.lang.strings.lv =
      virzienā"""
     4: """palīgklucīši"""
   }
-  'New levels': 'Jauni līmeņi'
+  'Uncompleted levels levels': 'Nepabeigti līmeņi'
   'Credits': 'Sakapāja'
   'Continue': 'Turpināt'
   'Quit': 'Aizvērt'

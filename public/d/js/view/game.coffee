@@ -4,6 +4,8 @@ window.o.ViewGame = class Game extends window.o.View
   className: 'game'
   template: """
         <div class='game-container'></div>
+        <div class='game-previous'></div>
+        <div class='game-next'></div>
         <div class='game-controls'>
           <button class='game-controls-reset'>#{_l('Reset')}</button>
         </div>
@@ -12,6 +14,8 @@ window.o.ViewGame = class Game extends window.o.View
   events:
     'click .game-controls-reset': ->
       @trigger 'reset', {seconds_total: @_time()}
+    'click .game-next': -> @trigger 'jump', @options.stage + 1
+    'click .game-previous': -> @trigger 'jump', @options.stage - 1
 
   constructor: ->
     super
@@ -27,6 +31,8 @@ window.o.ViewGame = class Game extends window.o.View
   load: ->
     @_timeouts.forEach (t)-> clearTimeout(t)
     @_timeouts = []
+    @$('.game-previous').css('display', if @options.stage > 1 then '' else 'none')
+    @$('.game-next').css('display', if @options.completed > @options.stage then '' else 'none')
     @$('.game-controls-reset').attr('data-level', @options.stage).css('display', 'none')
     game.clear()
     game.bind 'solved', => @_solved()

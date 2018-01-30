@@ -50,7 +50,7 @@ window.o.ViewRouter = class Router extends window.o.View
 
   _game_completed: ->
     @game_last = 1
-    @options.game_save(@game_last)
+    @options.game_save()
     new window.o.ViewPopup({
       title: _l('Game over')
       content: _l('Game over description')
@@ -62,13 +62,17 @@ window.o.ViewRouter = class Router extends window.o.View
     }).bind 'remove', => @game()
 
   game: (id = @game_last)->
+    @game_last = id
     App.events.trigger 'router:game', id
-    @_load('game', {stage: id})
+    @_load('game', {stage: id, completed: @options.game_completed})
+    @_active.bind 'jump', (st)=> @game(st)
     @_active.bind 'solved', (data)=>
       App.events.trigger 'router:game-solved', id, data
       if id is @game_last and @game_last < @game_stages
         @game_last++
-        @options.game_save(@game_last)
+        if @game_last > @options.game_completed
+          @options.game_completed = @game_last
+        @options.game_save()
     @_active.bind 'next', =>
       if id < @game_last
         return @game(id + 1)
