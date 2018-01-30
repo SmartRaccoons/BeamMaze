@@ -13,8 +13,6 @@ window.o.ViewRouter = class Router extends window.o.View
 
   constructor: ->
     super
-    @$back = @$('.back-link')
-    @$sound = @$('.sound-switch')
     @_active = null
     @game_stages = window.o.GameMapData.length
     @game_last = if @options.game_last > @game_stages then @game_stages else @options.game_last
@@ -86,6 +84,14 @@ window.o.ViewRouter = class Router extends window.o.View
     if @_active
       @_active.remove()
     @$back.css('display', if view is 'start' then 'none' else '')
-    @_active = new window.o['View' + view.charAt(0).toUpperCase() + view.slice(1)](_.extend({parent: @$el}, options))
+    @_active = new window.o['View' + view.charAt(0).toUpperCase() + view.slice(1)](options)
+    @$el.prepend @_active.$el
+    @_active.render()
     @_active._name = view
     @_active
+
+  render: ->
+    super
+    @$back = @$('.back-link')
+    @$sound = @$('.sound-switch')
+    @

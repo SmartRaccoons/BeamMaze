@@ -24,7 +24,8 @@ App.user.authorize (user)->
       if stage > game_completed
         game_completed = stage
       App.user.save({game_last: stage, game_completed: game_completed})
-  }, App.platform_router_param))
+  }, App.platform_router_param)).render()
+  App.router.$el.appendTo('body')
 
   App.router.bind 'sound', (volume)->
     App.user.save({sound: volume})

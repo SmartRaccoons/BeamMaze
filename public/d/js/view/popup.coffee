@@ -31,7 +31,8 @@ window.o.ViewPopup = class Popup extends window.o.View
 
   constructor: ->
     @options =
-      parent: if $('.container').length then $('.container') else document.body
       close: true
       actions_leave: true
     super
+    @$el.appendTo(if $('.container').length then $('.container') else document.body)
+    @render()

@@ -47,7 +47,7 @@ $breakpoints: (small: 480px, normal: 640px, large: 800px, wide: 1080px)
   height: 100%
   background-color: $colorhide
 
-$color1: #f04923
+$color1: rgb(235, 75, 39)
 $color2: rgb(151, 153, 156)
 $color202: rgba(151, 153, 156, 0.5)
 $color3: rgb(95, 88, 93)
@@ -93,18 +93,18 @@ canvas
 .container
   height: 100%
   position: relative
-  background: #2b272b
+  background: #fefefe
+  // background: radial-gradient(#fefefe 38%, #ededed 100%)
+  background: radial-gradient(#fefefe 38%, #efe4d1 100%)
   .back-link
     position: absolute
     right: 0.2em
     bottom: 0.2em
-    font-size: 1em
-    z-index: 5
+    font-size: 1.3em
   .sound-switch
     position: absolute
     right: 0.2em
     top: 0.2em
-    z-index: 5
     width: 50px
     height: 50px
     background-color: transparent
@@ -137,6 +137,7 @@ canvas
       width: 65px
       height: 63px
       background-image: url('../images/raccoon.png')
+      opacity: 0.5
     &:hover
       cursor: pointer
       color: $color1

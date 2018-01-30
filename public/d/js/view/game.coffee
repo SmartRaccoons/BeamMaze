@@ -18,7 +18,11 @@ window.o.ViewGame = class Game extends window.o.View
     if !game
       game = new window.o.Game()
     @_timeouts = []
+
+  render: ->
+    super
     @load()
+    @
 
   load: ->
     @_timeouts.forEach (t)-> clearTimeout(t)

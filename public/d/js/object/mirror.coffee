@@ -134,8 +134,8 @@ _move_positions_coors = _move_positions.map _angle_to_xy
 
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _default: {
-    color: [103, 181, 229, 0.4]
-    color_tube: [255, 255, 255, 0.6]
+    color: [37, 169, 245, 0.6]
+    color_tube: [255, 255, 255, 0.9]
   }
   _move_reverse: false
   _move_positions: _move_positions
@@ -198,7 +198,7 @@ _move_positions_coors_reverse = _move_positions_reverse.map _angle_to_xy
 window.o.ObjectMirrorReverse = class MirrorContainerReverse extends MirrorContainer
   _move_reverse: true
   _default: _.extend({}, MirrorContainer::_default, {
-    color: [188, 105, 43, 0.4]
+    color: [239, 107, 0, 0.6]
   })
   _move_positions: _move_positions_reverse
   _move_positions_coors: _move_positions_coors_reverse

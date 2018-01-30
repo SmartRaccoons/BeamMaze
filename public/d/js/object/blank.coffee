@@ -1,6 +1,6 @@
 window.o.ObjectBlank = class Blank extends window.o.Object
   _default: {
-    color: [151, 153, 156]
+    color: [189, 186, 180]
   }
   name: 'blank'
   _step: 10

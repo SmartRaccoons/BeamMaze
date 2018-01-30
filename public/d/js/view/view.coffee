@@ -11,11 +11,10 @@ window.o.View = class View extends MicroEvent
     @options = _.extend(@options or {}, options)
     view_id++
     @_id = view_id
-    @render(options)
+    @$el = $(@el)
     @
 
-  render: (data = {})->
-    @$el = $(@el).appendTo(@options.parent or document.body)
+  render: (data = @options)->
     if @className
       @$el.addClass(@className)
     if @template

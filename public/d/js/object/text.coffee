@@ -1,6 +1,7 @@
 window.o.ObjectText = class Text extends window.o.Object
   _default: {
-    color: [255, 255, 255]
+    # color: [37, 169, 245]
+    color: [235, 75, 39]
   }
   constructor: ->
     super
