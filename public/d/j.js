@@ -45197,7 +45197,7 @@ stage_desc: {
 3: "clockwise\ndirection",
 4: "helpbox"
 },
-"New levels": "New levels",
+"Uncompleted levels": "Uncompleted levels",
 Credits: "Production",
 Continue: "Continue",
 Quit: "Close",
@@ -45221,7 +45221,7 @@ stage_desc: {
 3: "pulksteņrādītāja\nvirzienā",
 4: "palīgklucīši"
 },
-"New levels": "Jauni līmeņi",
+"Uncompleted levels levels": "Nepabeigti līmeņi",
 Credits: "Sakapāja",
 Continue: "Turpināt",
 Quit: "Aizvērt",
@@ -45458,13 +45458,13 @@ return child;
 window.o.ObjectText = Text = function(superClass) {
 extend(Text, superClass);
 Text.prototype._default = {
-color: [ 255, 255, 255 ]
+color: [ 37, 169, 245 ]
 };
 function Text() {
 var context, size, size_font, text_parts, text_parts_total, texture;
 Text.__super__.constructor.apply(this, arguments);
-texture = new BABYLON.DynamicTexture("texture_" + this._name(), 512, this.scene(), true);
-size_font = 40;
+texture = new BABYLON.DynamicTexture("texture_" + this._name(), 768, this.scene(), true);
+size_font = 60;
 context = texture.getContext();
 context.fillStyle = "#" + this.options.color.slice(0, 3).map(function(v) {
 return parseInt(v).toString(16);
@@ -45511,7 +45511,7 @@ return child;
 window.o.ObjectBlank = Blank = function(superClass) {
 extend(Blank, superClass);
 Blank.prototype._default = {
-color: [ 151, 153, 156 ]
+color: [ 189, 186, 180 ]
 };
 Blank.prototype.name = "blank";
 Blank.prototype._step = 10;
@@ -45603,7 +45603,9 @@ return Beam;
 BeamSphere = function(superClass) {
 extend(BeamSphere, superClass);
 BeamSphere.prototype._default = {
-diameter: 4
+diameter: 4,
+sheath_1: .5,
+sheath_2: .2
 };
 function BeamSphere() {
 BeamSphere.__super__.constructor.apply(this, arguments);
@@ -45613,12 +45615,12 @@ this.sheath = new window.o.ObjectSphere({
 diameter: this.options.diameter + 1,
 parent: this
 });
-this.sheath.color(this.options.color.concat(.5));
+this.sheath.color(this.options.color.concat(this.options.sheath_1));
 this.sheath2 = new window.o.ObjectSphere({
 diameter: this.options.diameter + 2,
 parent: this
 });
-this.sheath2.color(this.options.color.concat(.2));
+this.sheath2.color(this.options.color.concat(this.options.sheath_2));
 this;
 }
 return BeamSphere;
@@ -45720,14 +45722,18 @@ var c1, c2, color_diff;
 this.solved = true;
 c1 = this.options.color;
 c2 = Beam.prototype._default.color;
-color_diff = [ c2[0] - c1[0], c2[1] - c1[1], c2[2] - c1[2] ];
+color_diff = c1.slice(0, 3).map(function(v, i) {
+return c2[i] - v;
+});
 return this._animation(function(_this) {
 return function(m, steps) {
 var color;
-color = [ m * color_diff[0] + c1[0], m * color_diff[1] + c1[1], m * color_diff[2] + c1[2] ];
+color = color_diff.map(function(v, i) {
+return v * m + c1[i];
+});
 _this.color(color);
-_this.sheath.color(color.concat(.5));
-return _this.sheath2.color(color.concat(.3));
+_this.sheath.color(color.concat(_this.options.sheath_1));
+return _this.sheath2.color(color.concat(_this.options.sheath_2));
 };
 }(this));
 };
@@ -45971,8 +45977,8 @@ _move_positions_coors = _move_positions.map(_angle_to_xy);
 window.o.ObjectMirror = MirrorContainer = function(superClass) {
 extend(MirrorContainer, superClass);
 MirrorContainer.prototype._default = {
-color: [ 103, 181, 229, .4 ],
-color_tube: [ 255, 255, 255, .6 ]
+color: [ 37, 169, 245, .6 ],
+color_tube: [ 255, 255, 255, .9 ]
 };
 MirrorContainer.prototype._move_reverse = false;
 MirrorContainer.prototype._move_positions = _move_positions;
@@ -46067,7 +46073,7 @@ return MirrorContainerReverse.__super__.constructor.apply(this, arguments);
 }
 MirrorContainerReverse.prototype._move_reverse = true;
 MirrorContainerReverse.prototype._default = _.extend({}, MirrorContainer.prototype._default, {
-color: [ 188, 105, 43, .4 ]
+color: [ 239, 107, 0, .6 ]
 });
 MirrorContainerReverse.prototype._move_positions = _move_positions_reverse;
 MirrorContainerReverse.prototype._move_positions_coors = _move_positions_coors_reverse;
@@ -46076,7 +46082,7 @@ return MirrorContainerReverse;
 }).call(this);
 
 (function() {
-window.o.GameMapData = [ "1|09|8-", "00009|0|1|---8", "0000|00-0|0-009|1-00|---8", "-1-|-09|10-|-8", "11-|009|00-|-8", "900|-00|-2|-1|-8", "00-|029|01-|-8", "000|091|001|8", "9-100|1-000|8-200", "000|0-0|200|-01|8-9", "-0-1|444049|8-0-0", "-121|90s3022|-000-8", "9000|--0-|-000-|-3-002|-0000|-8", "2-0310|000000|0-0000|8--9-", "9-02|--00|-2020|-0000|--008", "-2-|100|020-9|000|-0|-003|---8", "4421|3440|8-03|--33|---9", "9|232|303|232|--8", "1-0110|0-0-009|0-00-0|0-0000|8", "00000|00000|00803|00921|00033|00032", "9-0112|-00-0-|-8--", "--11339|--3333|1-4550|8", "000|9-0|010|120|-8", "-9|900|-00|-2|-2|-88", "039--930|00112200|0--88--0", "30|0000|8--0|--000|9-000001|--030-12", "-102|00300|-000|--8|-s5s5s5|--9|-000|00300|-201", "-0419|33335|33-35|33333|8143" ];
+window.o.GameMapData = [ "1|09|8-", "00009|0|1|---8", "0000|00-0|0-009|1-00|---8", "-1-|-09|01-|-8", "10-|009|10-|-8", "01-|009|10-|-8", "900|-00|-2|-1|-8", "00-|029|01-|-8", "000|091|001|8", "9-100|1-000|8-200", "000|0-0|200|-01|8-9", "-0-1|444049|8-0-0", "-121|90s3022|-000-8", "9000|--0-|-000-|-3-002|-0000|-8", "2-0310|000000|0-0000|8--9-", "9-02|--00|-2020|-0000|--008", "-2-|100|020-9|000|-0|-003|---8", "4421|3440|8-03|--33|---9", "9|232|303|232|--8", "1-0110|0-0-009|0-00-0|0-0000|8", "00000|00000|00803|00921|00033|00032", "9-0112|-00-0-|-8--", "--11339|--3333|1-4550|8", "000|9-0|010|120|-8", "-9|900|-00|-2|-2|-88", "039--930|00112200|0--88--0", "30|0000|8--0|--000|9-000001|--030-12", "-102|00300|-000|--8|-s5s5s5|--9|-000|00300|-201", "-0419|33335|33-35|33333|8143" ];
 }).call(this);
 
 (function() {
@@ -46467,7 +46473,7 @@ this._scene = new BABYLON.Scene(this._engine);
 this._scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), this._scene);
 this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
-this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-30, 30, -50), this._scene);
+this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-50, 50, -80), this._scene);
 window.App.events.trigger("game:init", this._scene, this._engine, this._light, this._camera);
 map_size = this._map.load(window.o.GameMapData[options.stage - 1], _l("stage_desc")[options.stage]);
 this._camera_animation(Math.max(map_size[0], map_size[1]));
@@ -46525,15 +46531,14 @@ View.__super__.constructor.apply(this, arguments);
 this.options = _.extend(this.options || {}, options);
 view_id++;
 this._id = view_id;
-this.render(options);
+this.$el = $(this.el);
 this;
 }
 View.prototype.render = function(data) {
 var k, m, ref, v;
 if (data == null) {
-data = {};
+data = this.options;
 }
-this.$el = $(this.el).appendTo(this.options.parent || document.body);
 if (this.className) {
 this.$el.addClass(this.className);
 }
@@ -46594,8 +46599,6 @@ return this.trigger("sound", volume);
 };
 function Router() {
 Router.__super__.constructor.apply(this, arguments);
-this.$back = this.$(".back-link");
-this.$sound = this.$(".sound-switch");
 this._active = null;
 this.game_stages = window.o.GameMapData.length;
 this.game_last = this.options.game_last > this.game_stages ? this.game_stages : this.options.game_last;
@@ -46645,7 +46648,7 @@ close: false
 };
 Router.prototype._game_completed = function() {
 this.game_last = 1;
-this.options.game_save(this.game_last);
+this.options.game_save();
 return new window.o.ViewPopup({
 title: _l("Game over"),
 content: _l("Game over description"),
@@ -46665,16 +46668,26 @@ Router.prototype.game = function(id) {
 if (id == null) {
 id = this.game_last;
 }
+this.game_last = id;
 App.events.trigger("router:game", id);
 this._load("game", {
-stage: id
+stage: id,
+completed: this.options.game_completed
 });
+this._active.bind("jump", function(_this) {
+return function(st) {
+return _this.game(st);
+};
+}(this));
 this._active.bind("solved", function(_this) {
 return function(data) {
 App.events.trigger("router:game-solved", id, data);
 if (id === _this.game_last && _this.game_last < _this.game_stages) {
 _this.game_last++;
-return _this.options.game_save(_this.game_last);
+if (_this.game_last > _this.options.game_completed) {
+_this.options.game_completed = _this.game_last;
+}
+return _this.options.game_save();
 }
 };
 }(this));
@@ -46706,11 +46719,17 @@ if (this._active) {
 this._active.remove();
 }
 this.$back.css("display", view === "start" ? "none" : "");
-this._active = new (window.o["View" + view.charAt(0).toUpperCase() + view.slice(1)])(_.extend({
-parent: this.$el
-}, options));
+this._active = new (window.o["View" + view.charAt(0).toUpperCase() + view.slice(1)])(options);
+this.$el.prepend(this._active.$el);
+this._active.render();
 this._active._name = view;
 return this._active;
+};
+Router.prototype.render = function() {
+Router.__super__.render.apply(this, arguments);
+this.$back = this.$(".back-link");
+this.$sound = this.$(".sound-switch");
+return this;
 };
 return Router;
 }(window.o.View);
@@ -46735,7 +46754,7 @@ function start() {
 return start.__super__.constructor.apply(this, arguments);
 }
 start.prototype.className = "start";
-start.prototype.template = "<h1>Raccoobe</h1>\n    <nav>\n      <ul>\n       <li><button data-action='continue'>" + _l("Continue") + "</button></li>\n       <% if(new_levels) {%>\n        <li><button data-action='new_levels' data-count=\"<%= new_levels %>\">" + _l("New levels") + "</button></li>\n        <% } %>\n       <% if (close) { %>\n        <li><button data-action='close'>" + _l("Quit") + "</button></li>\n      <% } %>\n     </ul>\n    </nav>\n    <span class='start-author'>" + _l("Credits") + "<span>";
+start.prototype.template = "<h1>Raccoobe</h1>\n    <nav>\n      <ul>\n       <li><button data-action='continue'>" + _l("Continue") + "</button></li>\n       <% if(new_levels) {%>\n        <li><button data-action='new_levels' data-count=\"<%= new_levels %>\">" + _l("Uncompleted levels") + "</button></li>\n        <% } %>\n       <% if (close) { %>\n        <li><button data-action='close'>" + _l("Quit") + "</button></li>\n      <% } %>\n     </ul>\n    </nav>\n    <span class='start-author'>" + _l("Credits") + "<span>";
 start.prototype.events = {
 "click .start-author": function() {
 return this.trigger("credits");
@@ -46770,12 +46789,18 @@ game = null;
 window.o.ViewGame = Game = function(superClass) {
 extend(Game, superClass);
 Game.prototype.className = "game";
-Game.prototype.template = "<div class='game-container'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>";
+Game.prototype.template = "<div class='game-container'></div>\n<div class='game-previous'></div>\n<div class='game-next'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>";
 Game.prototype.events = {
 "click .game-controls-reset": function() {
 return this.trigger("reset", {
 seconds_total: this._time()
 });
+},
+"click .game-next": function() {
+return this.trigger("jump", this.options.stage + 1);
+},
+"click .game-previous": function() {
+return this.trigger("jump", this.options.stage - 1);
 }
 };
 function Game() {
@@ -46784,13 +46809,19 @@ if (!game) {
 game = new window.o.Game();
 }
 this._timeouts = [];
-this.load();
 }
+Game.prototype.render = function() {
+Game.__super__.render.apply(this, arguments);
+this.load();
+return this;
+};
 Game.prototype.load = function() {
 this._timeouts.forEach(function(t) {
 return clearTimeout(t);
 });
 this._timeouts = [];
+this.$(".game-previous").css("display", this.options.stage > 1 ? "" : "none");
+this.$(".game-next").css("display", this.options.completed > this.options.stage ? "" : "none");
 this.$(".game-controls-reset").attr("data-level", this.options.stage).css("display", "none");
 game.clear();
 game.bind("solved", function(_this) {
@@ -46867,11 +46898,12 @@ return this.remove(true);
 };
 function Popup() {
 this.options = {
-parent: $(".container").length ? $(".container") : document.body,
 close: true,
 actions_leave: true
 };
 Popup.__super__.constructor.apply(this, arguments);
+this.$el.appendTo($(".container").length ? $(".container") : document.body);
+this.render();
 }
 return Popup;
 }(window.o.View);
@@ -47008,7 +47040,6 @@ app_id: 1,
 url: "https://uniapi.raccoons.lv/user.json"
 });
 App.user.authorize(function(user) {
-var game_completed;
 window.loading.done(98);
 window.loading.remove();
 if (!user.session) {
@@ -47018,21 +47049,18 @@ close: false
 });
 }
 App.session.set(App.user.session());
-game_completed = parseInt(App.user.get("game_completed") || 1);
 App.router = new window.o.ViewRouter(_.extend({
 game_last: parseInt(App.user.get("game_last") || 1),
 sound: App.user.get("sound") || "on",
-game_completed: game_completed,
-game_save: function(stage) {
-if (stage > game_completed) {
-game_completed = stage;
-}
+game_completed: parseInt(App.user.get("game_completed") || 1),
+game_save: function() {
 return App.user.save({
-game_last: stage,
-game_completed: game_completed
+game_last: App.router.game_last,
+game_completed: App.router.options.game_completed
 });
 }
-}, App.platform_router_param));
+}, App.platform_router_param)).render();
+App.router.$el.appendTo("body");
 App.router.bind("sound", function(volume) {
 App.user.save({
 sound: volume
