@@ -2,6 +2,7 @@ fs = require('fs')
 pjson = require('./package.json')
 exec = require('child_process').exec
 _ = require('lodash')
+node_ssh = require('node-ssh')
 
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-watch')
@@ -15,6 +16,25 @@ module.exports = (grunt) ->
   exec_callback = (error, stdout, stderr)->
     if error
       console.log('exec error: ' + error)
+
+  grunt.registerTask 'termi', ->
+    done = @async()
+    ssh = new node_ssh()
+    ssh.connect({
+      host: 'termi.lv'
+      username: 'piisiitiis'
+      privateKey: '/Users/bambis/.ssh/id_rsa'
+    })
+    .then =>
+      ssh.execCommand('git pull', { cwd:'/www/raccoobe/master/' }).then (result)->
+        if result.stdout
+          console.log(result.stdout)
+        if result.stderr
+          console.log('STDERR: ' + result.stderr)
+        done()
+    .catch =>
+      console.info arguments
+      done()
 
   grunt.registerTask 'compile', ->
     rf = (name)-> fs.readFileSync("#{__dirname}/template/#{name}.html", 'utf8')
