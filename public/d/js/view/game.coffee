@@ -7,7 +7,7 @@ window.o.ViewGame = class Game extends window.o.View
         <div class='game-previous'></div>
         <div class='game-next'></div>
         <div class='game-controls'>
-          <button class='game-controls-reset'>#{_l('Reset')}</button>
+          <button class='game-controls-reset'><%= _l('Reset') %></button>
         </div>
   """
 

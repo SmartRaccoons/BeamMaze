@@ -1,7 +1,7 @@
 window.o.ViewRouter = class Router extends window.o.View
   el: "<div class='container'>"
   template: """
-    <button class='back-link'>#{_l('Menu')}</button>
+    <button class='back-link'><%= _l('Menu') %></button>
     <button class='sound-switch' data-volume='<%= sound %>'></button>
   """
   events:

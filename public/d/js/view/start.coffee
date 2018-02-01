@@ -4,16 +4,16 @@ window.o.ViewStart = class start extends window.o.View
     <h1>Raccoobe</h1>
         <nav>
           <ul>
-           <li><button data-action='continue'>#{_l('Continue')}</button></li>
+           <li><button data-action='continue'><%= _l('Continue') %></button></li>
            <% if(new_levels) {%>
-            <li><button data-action='new_levels' data-count="<%= new_levels %>">#{_l('Uncompleted levels')}</button></li>
+            <li><button data-action='new_levels' data-count="<%= new_levels %>"><%= _l('Uncompleted levels') %></button></li>
             <% } %>
            <% if (close) { %>
-            <li><button data-action='close'>#{_l('Quit')}</button></li>
+            <li><button data-action='close'><%= _l('Quit') %></button></li>
           <% } %>
          </ul>
         </nav>
-        <span class='start-author'>#{_l('Credits')}<span>
+        <span class='start-author'><%= _l('Credits') %><span>
   """
 
   events:

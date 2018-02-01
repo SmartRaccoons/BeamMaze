@@ -45221,7 +45221,7 @@ stage_desc: {
 3: "pulksteņrādītāja\nvirzienā",
 4: "palīgklucīši"
 },
-"Uncompleted levels levels": "Nepabeigti līmeņi",
+"Uncompleted levels": "Nepabeigti līmeņi",
 Credits: "Sakapāja",
 Continue: "Turpināt",
 Quit: "Aizvērt",
@@ -46585,7 +46585,7 @@ return child;
 window.o.ViewRouter = Router = function(superClass) {
 extend(Router, superClass);
 Router.prototype.el = "<div class='container'>";
-Router.prototype.template = "<button class='back-link'>" + _l("Menu") + "</button>\n<button class='sound-switch' data-volume='<%= sound %>'></button>";
+Router.prototype.template = "<button class='back-link'><%= _l('Menu') %></button>\n<button class='sound-switch' data-volume='<%= sound %>'></button>";
 Router.prototype.events = {
 "click .back-link": function() {
 return this.start();
@@ -46754,7 +46754,7 @@ function start() {
 return start.__super__.constructor.apply(this, arguments);
 }
 start.prototype.className = "start";
-start.prototype.template = "<h1>Raccoobe</h1>\n    <nav>\n      <ul>\n       <li><button data-action='continue'>" + _l("Continue") + "</button></li>\n       <% if(new_levels) {%>\n        <li><button data-action='new_levels' data-count=\"<%= new_levels %>\">" + _l("Uncompleted levels") + "</button></li>\n        <% } %>\n       <% if (close) { %>\n        <li><button data-action='close'>" + _l("Quit") + "</button></li>\n      <% } %>\n     </ul>\n    </nav>\n    <span class='start-author'>" + _l("Credits") + "<span>";
+start.prototype.template = "<h1>Raccoobe</h1>\n    <nav>\n      <ul>\n       <li><button data-action='continue'><%= _l('Continue') %></button></li>\n       <% if(new_levels) {%>\n        <li><button data-action='new_levels' data-count=\"<%= new_levels %>\"><%= _l('Uncompleted levels') %></button></li>\n        <% } %>\n       <% if (close) { %>\n        <li><button data-action='close'><%= _l('Quit') %></button></li>\n      <% } %>\n     </ul>\n    </nav>\n    <span class='start-author'><%= _l('Credits') %><span>";
 start.prototype.events = {
 "click .start-author": function() {
 return this.trigger("credits");
@@ -46789,7 +46789,7 @@ game = null;
 window.o.ViewGame = Game = function(superClass) {
 extend(Game, superClass);
 Game.prototype.className = "game";
-Game.prototype.template = "<div class='game-container'></div>\n<div class='game-previous'></div>\n<div class='game-next'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'>" + _l("Reset") + "</button>\n</div>";
+Game.prototype.template = "<div class='game-container'></div>\n<div class='game-previous'></div>\n<div class='game-next'></div>\n<div class='game-controls'>\n  <button class='game-controls-reset'><%= _l('Reset') %></button>\n</div>";
 Game.prototype.events = {
 "click .game-controls-reset": function() {
 return this.trigger("reset", {
