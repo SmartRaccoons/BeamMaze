@@ -4,7 +4,7 @@ class MapAnimation extends MicroEvent
     @clear()
     in_action_active = 0
     triggered_start = false
-    fn = (animation, callback, steps = 30, in_action=false)=>
+    fn = (animation, callback, steps = 30, in_action=false, easing='linear', properties=false)=>
       if !@_animations[animation]
         @_animations[animation] = []
       if in_action
@@ -12,6 +12,20 @@ class MapAnimation extends MicroEvent
         if not triggered_start
           @trigger 'animation_start'
           triggered_start = true
+      if properties
+        do ->
+          axises = [0, 1, 2]
+          position_start = properties.object.position.clone().asArray()
+          position_end = properties.position.asArray()
+          position_diff = axises.map (axis)-> position_end[axis] - position_start[axis]
+          callback = (m, steps)->
+            if steps is 0
+              properties.fn position_end
+              if properties.callback
+                properties.callback()
+              return
+            properties.fn axises.map (axis)-> position_diff[axis] * m + position_start[axis]
+
       @_animations[animation].push {
         callback: (m, steps)=>
           callback.apply(@, arguments)
@@ -24,6 +38,12 @@ class MapAnimation extends MicroEvent
               triggered_start = false
         steps: steps
         steps_total: steps
+        easing: {
+          'linear': (m)-> m
+          'linearOut': (m)-> 1 - m
+          'sin': (m)-> Math.sin(m * Math.PI/2)
+          'sinOut': (m)-> Math.sin((1 - m) * Math.PI/2)
+        }[easing]
       }
 
     window.App.events.bind 'map:animation', fn
@@ -42,7 +62,8 @@ class MapAnimation extends MicroEvent
           delete @_animations[name]
           continue
         params[0].steps--
-        params[0].callback((params[0].steps_total - params[0].steps)/params[0].steps_total, params[0].steps)
+        params[0].callback( params[0].easing((params[0].steps_total - params[0].steps)/params[0].steps_total)
+        , params[0].steps)
         if params[0].steps is 0
           @_animations[name].shift()
     )()

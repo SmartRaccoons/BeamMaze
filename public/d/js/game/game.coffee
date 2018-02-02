@@ -32,21 +32,30 @@ window.o.Game = class Game extends MicroEvent
 
     @_scene = new BABYLON.Scene(@_engine)
     @_scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
-    @_camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), @_scene)
-    @_camera.setPosition(new BABYLON.Vector3(0, 0, -150))
+    @_camera = new BABYLON.ArcRotateCamera('camera', 0, 0, 0, BABYLON.Vector3.Zero(), @_scene)
     @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-50, 50, -80), @_scene)
     window.App.events.trigger('game:init', @_scene, @_engine, @_light, @_camera)
-
     map_size = @_map.load(window.o.GameMapData[options.stage - 1], _l('stage_desc')[options.stage])
-    @_camera_animation(Math.max(map_size[0], map_size[1]))
+    @_camera_animation(-60 - 20 * Math.max(map_size[0], map_size[1]))
     @_rendered = true
 
-  _camera_animation: (max_size)->
-    window.App.events.trigger 'map:animation', 'camera_anime', (m, steps)=>
-      if steps is 0
-        return @_camera.setPosition(new BABYLON.Vector3(0, 0, -60 - 20 * max_size))
-      @_camera.setPosition(new BABYLON.Vector3(0, 0, -200 * Math.sin((1-m) * Math.PI/2) - 60 - 20 * max_size))
-    , 20
+  _camera_animation: (z)->
+    @_camera.setPosition(new BABYLON.Vector3(0, 0, -100 + z))
+    window.App.events.trigger 'map:animation', 'camera_anime', false, 30, false, 'sin', {
+      position: new BABYLON.Vector3(0, 0, z)
+      object: @_camera
+      fn: (position)=> @_camera.setPosition(BABYLON.Vector3.FromArray(position))
+      callback: => @_camera_little_moving(z)
+    }
+
+  _camera_little_moving: (z)->
+    r = -> (Math.random() - 0.5) * 10
+    window.App.events.trigger 'map:animation', 'camera_anime', false, 200, false, 'linear', {
+      position: new BABYLON.Vector3(r(), r(), z)
+      object: @_camera
+      fn: (position)=> @_camera.setPosition(BABYLON.Vector3.FromArray(position))
+      callback: => @_camera_little_moving(z)
+    }
 
   clear: ->
     @unbind()

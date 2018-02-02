@@ -46112,12 +46112,18 @@ this.clear();
 in_action_active = 0;
 triggered_start = false;
 fn = function(_this) {
-return function(animation, callback, steps, in_action) {
+return function(animation, callback, steps, in_action, easing, properties) {
 if (steps == null) {
 steps = 30;
 }
 if (in_action == null) {
 in_action = false;
+}
+if (easing == null) {
+easing = "linear";
+}
+if (properties == null) {
+properties = false;
 }
 if (!_this._animations[animation]) {
 _this._animations[animation] = [];
@@ -46128,6 +46134,29 @@ if (!triggered_start) {
 _this.trigger("animation_start");
 triggered_start = true;
 }
+}
+if (properties) {
+(function() {
+var axises, position_diff, position_end, position_start;
+axises = [ 0, 1, 2 ];
+position_start = properties.object.position.clone().asArray();
+position_end = properties.position.asArray();
+position_diff = axises.map(function(axis) {
+return position_end[axis] - position_start[axis];
+});
+return callback = function(m, steps) {
+if (steps === 0) {
+properties.fn(position_end);
+if (properties.callback) {
+properties.callback();
+}
+return;
+}
+return properties.fn(axises.map(function(axis) {
+return position_diff[axis] * m + position_start[axis];
+}));
+};
+})();
 }
 return _this._animations[animation].push({
 callback: function(m, steps) {
@@ -46144,7 +46173,21 @@ return triggered_start = false;
 }
 },
 steps: steps,
-steps_total: steps
+steps_total: steps,
+easing: {
+linear: function(m) {
+return m;
+},
+linearOut: function(m) {
+return 1 - m;
+},
+sin: function(m) {
+return Math.sin(m * Math.PI / 2);
+},
+sinOut: function(m) {
+return Math.sin((1 - m) * Math.PI / 2);
+}
+}[easing]
 });
 };
 }(this);
@@ -46173,7 +46216,7 @@ delete _this._animations[name];
 continue;
 }
 params[0].steps--;
-params[0].callback((params[0].steps_total - params[0].steps) / params[0].steps_total, params[0].steps);
+params[0].callback(params[0].easing((params[0].steps_total - params[0].steps) / params[0].steps_total), params[0].steps);
 if (params[0].steps === 0) {
 results.push(_this._animations[name].shift());
 } else {
@@ -46443,7 +46486,7 @@ return _this._engine.resize();
 this;
 }
 Game.prototype.render = function(options) {
-var camera, map_size, moves;
+var map_size, moves;
 options.container.append(this.canvas);
 this._engine.resize();
 this._engine.runRenderLoop(function(_this) {
@@ -46471,23 +46514,49 @@ _this.trigger("solved", mirrors);
 }(this));
 this._scene = new BABYLON.Scene(this._engine);
 this._scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-this._camera = camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 100, BABYLON.Vector3.Zero(), this._scene);
-this._camera.setPosition(new BABYLON.Vector3(0, 0, -150));
+this._camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 0, BABYLON.Vector3.Zero(), this._scene);
 this._light = new BABYLON.HemisphericLight("Light", new BABYLON.Vector3(-50, 50, -80), this._scene);
 window.App.events.trigger("game:init", this._scene, this._engine, this._light, this._camera);
 map_size = this._map.load(window.o.GameMapData[options.stage - 1], _l("stage_desc")[options.stage]);
-this._camera_animation(Math.max(map_size[0], map_size[1]));
+this._camera_animation(-60 - 20 * Math.max(map_size[0], map_size[1]));
 return this._rendered = true;
 };
-Game.prototype._camera_animation = function(max_size) {
-return window.App.events.trigger("map:animation", "camera_anime", function(_this) {
-return function(m, steps) {
-if (steps === 0) {
-return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -60 - 20 * max_size));
-}
-return _this._camera.setPosition(new BABYLON.Vector3(0, 0, -200 * Math.sin((1 - m) * Math.PI / 2) - 60 - 20 * max_size));
+Game.prototype._camera_animation = function(z) {
+this._camera.setPosition(new BABYLON.Vector3(0, 0, -100 + z));
+return window.App.events.trigger("map:animation", "camera_anime", false, 30, false, "sin", {
+position: new BABYLON.Vector3(0, 0, z),
+object: this._camera,
+fn: function(_this) {
+return function(position) {
+return _this._camera.setPosition(BABYLON.Vector3.FromArray(position));
 };
-}(this), 20);
+}(this),
+callback: function(_this) {
+return function() {
+return _this._camera_little_moving(z);
+};
+}(this)
+});
+};
+Game.prototype._camera_little_moving = function(z) {
+var r;
+r = function() {
+return (Math.random() - .5) * 10;
+};
+return window.App.events.trigger("map:animation", "camera_anime", false, 200, false, "linear", {
+position: new BABYLON.Vector3(r(), r(), z),
+object: this._camera,
+fn: function(_this) {
+return function(position) {
+return _this._camera.setPosition(BABYLON.Vector3.FromArray(position));
+};
+}(this),
+callback: function(_this) {
+return function() {
+return _this._camera_little_moving(z);
+};
+}(this)
+});
 };
 Game.prototype.clear = function() {
 this.unbind();
