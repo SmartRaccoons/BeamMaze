@@ -10,6 +10,34 @@ compile :
 run :
 	python -m SimpleHTTPServer 8111
 
+production-mobile :
+	grunt compile
+	cat bower_components/babylonjs/dist/preview\ release/babylon.js \
+	bower_components/lodash/lodash.js \
+	bower_components/universalapi/uniapi.js \
+	public/d/js/init.js \
+	public/d/locale/en.js \
+	public/d/locale/lv.js \
+	public/d/js/object/data.js \
+	public/d/js/object/object.js \
+	public/d/js/object/text.js \
+	public/d/js/object/blank.js \
+	public/d/js/object/beam.js \
+	public/d/js/object/mirror.js \
+	public/d/js/game/map.data.js \
+	public/d/js/game/map.js \
+	public/d/js/game/game.js \
+	public/d/js/platform/cocoon.js \
+> public/d/all.js
+	uglifyjs --beautify "indent-level=0" public/d/all.js -o public/d/j-cocoon.js
+	rm public/d/all.js
+	mkdir ../Raccoobe-cocoon
+	mkdir ../Raccoobe-cocoon/d
+	cp public/d/j-cocoon.js ../Raccoobe-cocoon/d/j-cocoon.js
+	cp public/cocoon.html ../Raccoobe-cocoon/index.html
+	cd ../Raccoobe-cocoon && zip -r ../Archive.zip *
+	rm -R ../Raccoobe-cocoon
+
 production :
 	grunt compile
 	cat node_modules/gameanalytics/dist/GameAnalytics.js \

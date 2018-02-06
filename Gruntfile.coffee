@@ -44,7 +44,7 @@ module.exports = (grunt) ->
       version: pjson.version
       name: pjson.name
     }}
-    ['dev', 'index', 'draugiem', 'offline'].forEach (f)-> wf(f, template({platform: f}))
+    ['dev', 'index', 'draugiem', 'offline', 'cocoon'].forEach (f)-> wf(f, template({platform: f}))
 
     for file in coffee
       exec("#{coffee_command} #{file}", exec_callback)

@@ -39,8 +39,8 @@ window._l = (key, subparams) ->
 window.o = {}
 
 window.App =
-  version: $('body').attr('data-version')
-  version_dev: $('body').attr('data-version') is 'dev'
+  version: document.body.getAttribute('data-version')
+  version_dev: document.body.getAttribute('data-version') is 'dev'
   version_media: 'web'
   events: new MicroEvent()
   session: {

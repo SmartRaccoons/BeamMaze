@@ -12,7 +12,7 @@ window.o.Game = class Game extends MicroEvent
     @
 
   render: (options)->
-    options.container.append(@canvas)
+    options.container.appendChild(@canvas)
     @_engine.resize()
     @_engine.runRenderLoop =>
       @_map.render_before()
