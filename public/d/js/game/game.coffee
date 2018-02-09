@@ -1,70 +1,44 @@
-
-
-
 window.o.Game = class Game extends MicroEvent
-
   constructor: ->
-    super
-    @_rendered = false
-    @canvas = document.createElement('canvas')
-    @_engine = new BABYLON.Engine(@canvas, true)
-    window.addEventListener 'resize', => @_engine.resize()
-    @
+    @scene = new (THREE.Scene)
+    @camera = new (THREE.PerspectiveCamera)(75, 1, 0.1, 1000)
+    @camera.position.z = 100
+    @renderer = new THREE.WebGLRenderer({alpha: !true})
+    # @renderer.setClearColor(0xffffff, 0)
+    document.body.appendChild @renderer.domElement
+    window.addEventListener 'resize', => @_resized()
+    @_resized()
 
-  render: (options)->
-    options.container.appendChild(@canvas)
-    @_engine.resize()
-    @_engine.runRenderLoop =>
-      @_map.render_before()
-      @_scene.render()
-      @_map.render_after()
-    @_map = new window.o.GameMap()
-    moves = 0
-    @_map.bind 'move', =>
-      moves++
-      @trigger 'move', moves
-    @_map.bind 'beam', (mirrors)=>
-      if @_map.solved
-        @_map.remove_controls()
-        @trigger 'solved', mirrors
-        return
+    # hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 )
+    # hemiLight.color.setHSL( 0.6, 1, 0.6 )
+    # hemiLight.groundColor.setHSL( 0.095, 1, 0.75 )
+    # hemiLight.position.set( 0, 0, 10 )
+    # scene.add( hemiLight )
 
+    l = new THREE.DirectionalLight()
+    @scene.add(l)
 
-    @_scene = new BABYLON.Scene(@_engine)
-    @_scene.clearColor = new BABYLON.Color4(0, 0, 0, 0)
-    @_camera = new BABYLON.ArcRotateCamera('camera', 0, 0, 0, BABYLON.Vector3.Zero(), @_scene)
-    @_light = new BABYLON.HemisphericLight('Light', new BABYLON.Vector3(-50, 50, -80), @_scene)
-    window.App.events.trigger('game:init', @_scene, @_engine, @_light, @_camera)
-    map_size = @_map.load(window.o.GameMapData[options.stage - 1], _l('stage_desc')[options.stage])
-    @_camera_animation(-60 - 20 * Math.max(map_size[0], map_size[1]))
-    @_rendered = true
+    # l = new THREE.HemisphereLight()
+    # scene.add(l)
+    l.position.x = -50
+    l.position.y = 50
+    l.position.z = 80
 
-  _camera_animation: (z)->
-    @_camera.setPosition(new BABYLON.Vector3(0, 0, -100 + z))
-    window.App.events.trigger 'map:animation', 'camera_anime', false, 30, false, 'sin', {
-      position: new BABYLON.Vector3(0, 0, z)
-      object: @_camera
-      fn: (position)=> @_camera.setPosition(BABYLON.Vector3.FromArray(position))
-      callback: => @_camera_little_moving(z)
-    }
+    animate = =>
+      @renderer.render @scene, @camera
+      requestAnimationFrame animate
+    animate()
+    window.App.events.trigger('game:init', @scene)
 
-  _camera_little_moving: (z)->
-    r = -> (Math.random() - 0.5) * 10
-    window.App.events.trigger 'map:animation', 'camera_anime', false, 200, false, 'linear', {
-      position: new BABYLON.Vector3(r(), r(), z)
-      object: @_camera
-      fn: (position)=> @_camera.setPosition(BABYLON.Vector3.FromArray(position))
-      callback: => @_camera_little_moving(z)
-    }
+  _resized: ->
+    @camera.aspect = window.innerWidth / window.innerHeight;
+    @camera.updateProjectionMatrix()
+    @renderer.setSize window.innerWidth, window.innerHeight
 
-  clear: ->
-    @unbind()
-    if not @_rendered
-      return
-    @_rendered = false
-    @_map.remove()
-    @_camera.dispose()
-    @_light.dispose()
-    @_scene.dispose()
-    @_engine.stopRenderLoop()
-    @canvas.parentElement.removeChild(@canvas)
+  load: (id)->
+    if @map
+      @map.remove()
+    @map = new window.o.GameMap()
+    map_size = @map.load(window.o.GameMapData[id - 1], _l('stage_desc')[id])
+    # @camera.position.z = 60 + 20 * Math.max(map_size[0], map_size[1])
+    @camera.position.z = 20 + 20 * Math.max(map_size[0], map_size[1])

@@ -8,13 +8,29 @@
     <% } %>
 </head>
 <body data-version='<%= ("dev" === platform ? "dev" : version) %>'>
-
+<!--
 <% if (platform !== 'cocoon') { %>
   <%= loading %>
-<% } %>
+<% } %> -->
 
 <% if ('dev' === platform) { %>
-  <script src="../node_modules/gameanalytics/dist/GameAnalytics.js"></script>
+    <script src="../bower_components/three.js/build/three.js"></script>
+    <script src="../bower_components/three.js/examples/js/controls/OrbitControls.js"></script>
+    <script src="../bower_components/lodash/lodash.js"></script>
+    <script src="d/js/init.js"></script>
+    <script src="d/locale/en.js"></script>
+    <script src="d/locale/lv.js"></script>
+    <script src="d/js/object/object.js"></script>
+    <script src="d/js/object/data.js"></script>
+    <script src="d/js/object/blank.js"></script>
+    <script src="d/js/object/beam.js"></script>
+    <script src="d/js/object/mirror.js"></script>
+    <script src="d/js/game/map.js"></script>
+    <script src="d/js/game/map.data.js"></script>
+    <script src="d/js/game/game.js"></script>
+    <script src="d/js/debug.js"></script>
+    <script src="d/js/platform/cocoon.js"></script>
+  <!-- <script src="../node_modules/gameanalytics/dist/GameAnalytics.js"></script>
   <script src="../bower_components/babylonjs/dist/preview release/babylon.js"></script>
   <script src="../bower_components/lodash/lodash.js"></script>
   <script src="../bower_components/zepto/zepto.js"></script>
@@ -38,10 +54,10 @@
   <script src="d/js/view/start.js"></script>
   <script src="d/js/view/game.js"></script>
   <script src="d/js/view/popup.js"></script>
-  <script src="d/js/debug.js"></script>
+  <script src="d/js/debug.js"></script> -->
   <!-- <script src="d/js/analytics.js"></script> -->
-  <script src="d/js/sound.js"></script>
-  <script src="d/js/run.js"></script>
+  <!-- <script src="d/js/sound.js"></script>
+  <script src="d/js/run.js"></script> -->
 
 <% } else { %>
 

@@ -1,80 +1,10 @@
-class MapAnimation extends MicroEvent
+window.o.GameMap = class Map extends MicroEvent
+  _clear_ob: ['_mirror', '_blank', '_target', '_source', '_text']
+
   constructor: ->
     super
-    @clear()
-    in_action_active = 0
-    triggered_start = false
-    fn = (animation, callback, steps = 30, in_action=false, easing='linear', properties=false)=>
-      if !@_animations[animation]
-        @_animations[animation] = []
-      if in_action
-        in_action_active++
-        if not triggered_start
-          @trigger 'animation_start'
-          triggered_start = true
-      if properties
-        do ->
-          axises = [0, 1, 2]
-          position_start = properties.object.position.clone().asArray()
-          position_end = properties.position.asArray()
-          position_diff = axises.map (axis)-> position_end[axis] - position_start[axis]
-          callback = (m, steps)->
-            if steps is 0
-              properties.fn position_end
-              if properties.callback
-                properties.callback()
-              return
-            properties.fn axises.map (axis)-> position_diff[axis] * m + position_start[axis]
-
-      @_animations[animation].push {
-        callback: (m, steps)=>
-          callback.apply(@, arguments)
-          if steps isnt 0
-            return
-          if in_action
-            in_action_active--
-            if in_action_active is 0
-              @trigger 'animation_end'
-              triggered_start = false
-        steps: steps
-        steps_total: steps
-        easing: {
-          'linear': (m)-> m
-          'linearOut': (m)-> 1 - m
-          'sin': (m)-> Math.sin(m * Math.PI/2)
-          'sinOut': (m)-> Math.sin((1 - m) * Math.PI/2)
-        }[easing]
-      }
-
-    window.App.events.bind 'map:animation', fn
-    @bind 'remove', -> window.App.events.unbind 'map:animation', fn
-
-  clear: ->
-    @_render_after_fn = []
-    @_animations = {}
-
-  _render_after_cl: (callback)-> @_render_after_fn.push callback
-
-  render_before: ->
-    (=>
-      for name, params of @_animations
-        if params.length is 0
-          delete @_animations[name]
-          continue
-        params[0].steps--
-        params[0].callback( params[0].easing((params[0].steps_total - params[0].steps)/params[0].steps_total)
-        , params[0].steps)
-        if params[0].steps is 0
-          @_animations[name].shift()
-    )()
-
-  render_after: ->
-    if @_render_after_fn.length > 0
-      @_render_after_fn.pop()()
-
-
-window.o.GameMap = class Map extends MapAnimation
-  _clear_ob: ['_mirror', '_blank', '_target', '_source', '_text']
+    @_clear_ob.forEach (n)=> @[n] = []
+    @solved = false
 
   clear: ->
     super
@@ -116,11 +46,11 @@ window.o.GameMap = class Map extends MapAnimation
         call(cell, x, y, params_found)
         params_found = []
         @_map[y][x] = cell
-    setTimeout =>
-      @beam_show()
-    , 100
-    if text
-      @_text.push new window.o.ObjectText({text: text, position: [0, map_size[1] * 10 + 10, -2.5]})
+    # setTimeout =>
+    #   @beam_show()
+    # , 100
+    # if text
+    #   @_text.push new window.o.ObjectText({text: text, position: [0, map_size[1] * 10 + 10, -2.5]})
     return map_size
 
   position_check: ->
@@ -145,10 +75,10 @@ window.o.GameMap = class Map extends MapAnimation
     @_source.forEach (s)-> s.beam_remove()
 
   beam_source: (coors)->
-    @_source.push new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    # @_source.push new window.o.ObjectBeamSource({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
 
   target: (coors)->
-    @_target.push new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
+    # @_target.push new window.o.ObjectBeamTarget({position: [coors[0] * 10, coors[1] * 10, -0.55 * 4]})
 
   blank: (coors)->
     @_blank.push new window.o.ObjectBlank({position: coors})

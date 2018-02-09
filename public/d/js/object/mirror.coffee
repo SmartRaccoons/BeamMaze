@@ -2,13 +2,13 @@ class Connector extends window.o.Object
   name: 'connector'
   constructor: ->
     super
-    @mesh.rotation.z = Math.PI
-    @color()
+    @mesh.rotation.z = -Math.PI / 2
     @hide()
 
   angle: (angle, reverse)->
     @show()
     angle = -Math.PI/2 + angle
+    return @mesh.rotation.z = angle
     if angle is @mesh.rotation.z
       return
     angle_diff = angle - @mesh.rotation.z
@@ -26,13 +26,13 @@ class Connector extends window.o.Object
 class MirrorTube extends window.o.Object
   constructor: ->
     super
-    @mesh.position = new BABYLON.Vector3(0, 0, -0.55)
-    @mesh._class = @
-    @deactive()
-    @mesh.rotate(new BABYLON.Vector3(0, 0, 1), @options.rotation * Math.PI / 2, BABYLON.Space.WORLD)
+    # @mesh._class = @
+    @mesh.position.z = 0.55
+    # @deactive()
+    @mesh.rotateZ(@options.rotation * Math.PI / 2)
     @
 
-  mirror_id: -> @parent.options.parent._name()
+  mirror_id: -> @parent.options.parent._id
 
   active: (silent=false)->
     @color(@options.color_active)
@@ -46,7 +46,7 @@ class MirrorTube extends window.o.Object
 
 
 class MirrorTubeConnect extends MirrorTube
-  name: 'mirrorTube'
+  name: 'mirror-tube'
 
   reflect: (v)->
     super
@@ -54,11 +54,11 @@ class MirrorTubeConnect extends MirrorTube
 
 
 class MirrorTubeConnectOut extends MirrorTube
-  name: 'mirrorTube'
+  name: 'mirror-tube'
   mesh_build: ->
     mesh = super
-    mesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI, BABYLON.Space.WORLD)
-    mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI/2, BABYLON.Space.WORLD)
+    mesh.rotateY(Math.PI)
+    mesh.rotateZ(-Math.PI/2)
     return mesh
 
   reflect: (v)->
@@ -67,11 +67,11 @@ class MirrorTubeConnectOut extends MirrorTube
 
 
 class MirrorTubeEmpty extends MirrorTube
-  name: 'mirrorTubeEmpty'
+  name: 'mirror-tube-empty'
 
 
 class MirrorTubeStraight extends MirrorTube
-  name: 'mirrorTubeStraight'
+  name: 'mirror-tube-straight'
 
   reflect: (v)->
     super
@@ -81,11 +81,14 @@ class MirrorTubeStraight extends MirrorTube
 class MirrorTubeStraightOut extends MirrorTubeStraight
   mesh_build: ->
     mesh = super
-    mesh.rotate(new BABYLON.Vector3(0, 0, 1), Math.PI, BABYLON.Space.WORLD)
+    mesh.rotateZ(Math.PI)
     mesh
 
 
 class MirrorNormal extends window.o.Object
+  _default: {
+    color: [0, 0, 0, 0]
+  }
   name: 'mirror'
   connectors: [[MirrorTubeConnect, MirrorTubeConnectOut], null, [MirrorTubeConnect, MirrorTubeConnectOut]]
   constructor: ->
@@ -97,7 +100,7 @@ class MirrorNormal extends window.o.Object
         return
       tubes = (if Array.isArray(connectors) then connectors else [connectors]).map (connector)=>
         new connector({
-          parent: @
+          parent: @parent
           color: @options.color_tube
           color_active: window.o.ObjectBeam::_default.color
           rotation: i
@@ -135,7 +138,7 @@ _move_positions_coors = _move_positions.map _angle_to_xy
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
   _default: {
     color: [37, 169, 245, 0.6]
-    color_tube: [255, 255, 255, 0.9]
+    color_tube: [255, 255, 255]
   }
   _move_reverse: false
   _move_positions: _move_positions
@@ -187,9 +190,10 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @_connector.angle(@_move_positions[nr], @_move_reverse)
 
   move: (position)->
-    @position.x = @position.x + position.x
-    @position.y = @position.y + position.y
-    @_update_position()
+    @position_set(position)
+    # @position.x = @position.x + position.x
+    # @position.y = @position.y + position.y
+    # @_update_position()
 
 
 _move_positions_reverse = [_move_positions[0], _move_positions[3], _move_positions[2], _move_positions[1]]
