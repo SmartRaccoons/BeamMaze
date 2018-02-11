@@ -1,9 +1,12 @@
 
 game = new window.o.Game()
-m = new window.o.ObjectMirror({position: [0, 0], type: 'straight', params: []})
-setTimeout =>
-  m.move([1, 1])
-, 5000
+m = new window.o.ObjectMirror({position: [2, 2], type: 'straight', params: []})
+# setTimeout =>
+#   m.move()
+# , 2000
+# setTimeout =>
+#   m.remove()
+# , 2500
 # m._connector.angle(m._move_positions[3])
 
 # m = new window.o.ObjectMirrorTube({color: [255, 255, 255]})

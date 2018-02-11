@@ -1,5 +1,6 @@
 window.o.Game = class Game extends MicroEvent
   constructor: ->
+    super
     @scene = new (THREE.Scene)
     @camera = new (THREE.PerspectiveCamera)(75, 1, 0.1, 1000)
     @camera.position.z = 100
@@ -24,11 +25,12 @@ window.o.Game = class Game extends MicroEvent
     l.position.y = 50
     l.position.z = 80
 
-    animate = =>
-      @renderer.render @scene, @camera
-      requestAnimationFrame animate
-    animate()
+    @render()
     window.App.events.trigger('game:init', @scene)
+
+  render: ->
+    @renderer.render @scene, @camera
+    requestAnimationFrame => @render()
 
   _resized: ->
     @camera.aspect = window.innerWidth / window.innerHeight;

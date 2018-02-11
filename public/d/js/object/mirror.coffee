@@ -131,11 +131,13 @@ class MirrorStraight extends MirrorNormal
 class MirrorCross extends MirrorNormal
   connectors: [MirrorTubeEmpty, [MirrorTubeStraight, MirrorTubeStraightOut], MirrorTubeEmpty]
 
-_angle_to_xy = (angle)-> {y: Math.round(Math.sin(angle)), x: Math.round(Math.cos(angle))}
+_angle_to_xy = (angle)-> [Math.round(Math.cos(angle)), Math.round(Math.sin(angle))]
 _move_positions = [Math.PI*3/2, Math.PI, Math.PI/2, 0]
 _move_positions_coors = _move_positions.map _angle_to_xy
 
+
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
+  _.extend @::, window.o.ObjectAnimation::
   _default: {
     color: [37, 169, 245, 0.6]
     color_tube: [255, 255, 255]
@@ -151,6 +153,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'cross': MirrorCross
   constructor: ->
     super
+    @_animation_reset()
     @_static = 's' in @options.params
     @_move_position = 0
     @mirror = new @classes[@options.type]({
@@ -179,7 +182,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     p = @_move_positions_coors[n]
     if !full
       return p
-    {x: p.x + @position.x, y: p.y + @position.y}
+    p.map (v, i)=> v + @position[i]
 
   set_move_position: (nr)->
     if nr is null
@@ -189,11 +192,13 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @_move_position = nr
     @_connector.angle(@_move_positions[nr], @_move_reverse)
 
-  move: (position)->
-    @position_set(position)
-    # @position.x = @position.x + position.x
-    # @position.y = @position.y + position.y
-    # @_update_position()
+  move: ->
+    position = @get_move_position(@_move_position, true)
+    @position_animate(position)
+
+  remove: ->
+    @_animation_reset()
+    super
 
 
 _move_positions_reverse = [_move_positions[0], _move_positions[3], _move_positions[2], _move_positions[1]]

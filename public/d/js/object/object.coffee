@@ -40,8 +40,10 @@ window.o.Object = class Object extends MicroEvent
     @color()
     @
 
-  position_set: (position)-> position.forEach (v, i)=>
-    (@group or @mesh).position[_axis[i]] = v * @_position_scale
+  position_set: (position)->
+    @position = position
+    position.forEach (v, i)=>
+      (@group or @mesh).position[_axis[i]] = v * @_position_scale
 
   color: (color = @options.color, opacity = 1)->
     @mesh.material.color.fromArray(_color(color.slice(0, 3)))
