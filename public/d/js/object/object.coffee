@@ -13,17 +13,21 @@ _color = (c)-> c.map (v)-> v/255
 _object_id = 0
 window.o.Object = class Object extends MicroEvent
   _position_scale: 1
+  mesh: THREE.Mesh
 
   constructor: (options)->
+    super
+    if @_animation
+      _.extend @, window.o.ObjectAnimation::
+      @_animation_reset()
     _object_id++
     @_id = _object_id
-    super
     @options = _.extend({
       color: [255, 255, 255, 0.2]
     }, @_default, options)
-    @group = new THREE.Group()
     @mesh = @mesh_build()
-    @mesh.name = @name
+    if @name
+      @mesh.name = @name
     if @options.parent
       @parent = @options.parent
     if @parent
@@ -34,19 +38,20 @@ window.o.Object = class Object extends MicroEvent
       _scene.add(@group)
     if @options.position
       @position_set(@options.position)
-    # console.info @options.color, new THREE.Color().fromArray(@options.color)
-    # @mesh.material = new THREE.MeshLambertMaterial({ color: new THREE.Color().fromArray(_color(@options.color)) } )
-    @mesh.material = new THREE.MeshLambertMaterial()
     @color()
     @
 
+  position_get: ->
+    @position.map (v)=> v * @_position_scale
+
   position_set: (position)->
     @position = position
-    position.forEach (v, i)=>
-      (@group or @mesh).position[_axis[i]] = v * @_position_scale
+    @position_get().forEach (v, i)=>
+      (@group or @mesh).position[_axis[i]] = v
 
-  color: (color = @options.color, opacity = 1)->
-    @mesh.material.color.fromArray(_color(color.slice(0, 3)))
+  color: (color = @options.color, opacity = 1, material = @mesh.material)->
+    if color
+      @mesh.material.color.fromArray(_color(color.slice(0, 3)))
     if color[3]?
       opacity = color[3]
     if opacity isnt 1
@@ -57,13 +62,22 @@ window.o.Object = class Object extends MicroEvent
 
   show: -> @mesh.visible = true
 
-  mesh_build: -> new THREE.Mesh(_geometries[@name])
+  material: -> new THREE.MeshLambertMaterial()
+
+  mesh_build: -> new @mesh(@geometry(), @material())
+
+  geometry: -> _geometries[@name].clone()
+
+  scene: -> _scene
 
   remove: ->
+    if @_animation
+      @_animation_reset()
     super
-    # _scene.remove(@mesh)
-    # @mesh.geometry.dispose()
-    # @mesh.material.dispose()
+    _scene.remove(@mesh)
+    @mesh.geometry.dispose()
+    @mesh.material.dispose()
 
 
 window.o.ObjectSphere = class ObjectSphere extends Object
+  geometry: -> new THREE.SphereBufferGeometry( @options.diameter, 16, 16 )

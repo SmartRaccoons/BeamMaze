@@ -26,13 +26,13 @@ class Connector extends window.o.Object
 class MirrorTube extends window.o.Object
   constructor: ->
     super
-    # @mesh._class = @
+    @mesh._class = @
     @mesh.position.z = 0.55
-    # @deactive()
     @mesh.rotateZ(@options.rotation * Math.PI / 2)
     @
 
-  mirror_id: -> @parent.options.parent._id
+  mirror_id: ->
+    @parent._id
 
   active: (silent=false)->
     @color(@options.color_active)
@@ -50,20 +50,22 @@ class MirrorTubeConnect extends MirrorTube
 
   reflect: (v)->
     super
-    new BABYLON.Vector3(v.y, -v.x , v.z)
+    new THREE.Vector3(-v.y, v.x , v.z)
 
 
 class MirrorTubeConnectOut extends MirrorTube
   name: 'mirror-tube'
-  mesh_build: ->
-    mesh = super
-    mesh.rotateY(Math.PI)
-    mesh.rotateZ(-Math.PI/2)
-    return mesh
+
+  geometry: ->
+    g = super
+    g.rotateY(Math.PI)
+    g.rotateZ(Math.PI/2)
+    g
+
 
   reflect: (v)->
     super
-    new BABYLON.Vector3(-v.y, v.x , v.z)
+    new THREE.Vector3(v.y, -v.x , v.z)
 
 
 class MirrorTubeEmpty extends MirrorTube
@@ -75,7 +77,7 @@ class MirrorTubeStraight extends MirrorTube
 
   reflect: (v)->
     super
-    new BABYLON.Vector3(v.x, v.y , v.z)
+    new THREE.Vector3(v.x, v.y , v.z)
 
 
 class MirrorTubeStraightOut extends MirrorTubeStraight
@@ -137,7 +139,7 @@ _move_positions_coors = _move_positions.map _angle_to_xy
 
 
 window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
-  _.extend @::, window.o.ObjectAnimation::
+  _animation: true
   _default: {
     color: [37, 169, 245, 0.6]
     color_tube: [255, 255, 255]
@@ -153,7 +155,6 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     'cross': MirrorCross
   constructor: ->
     super
-    @_animation_reset()
     @_static = 's' in @options.params
     @_move_position = 0
     @mirror = new @classes[@options.type]({
@@ -196,9 +197,7 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     position = @get_move_position(@_move_position, true)
     @position_animate(position)
 
-  remove: ->
-    @_animation_reset()
-    super
+  deactive: -> @mirror.deactive()
 
 
 _move_positions_reverse = [_move_positions[0], _move_positions[3], _move_positions[2], _move_positions[1]]

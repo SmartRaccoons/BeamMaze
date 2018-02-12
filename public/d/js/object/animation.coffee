@@ -23,17 +23,21 @@ window.o.ObjectAnimation = class ObjectAnimation
     property = params.property or 'position'
     steps = params.steps or 30
     easing = params.easing or 'linear'
-    name = params.name or "#{property}"
+    name = params.name or "animation"
+    callback = params.callback
+    if !callback
+      do =>
+        value = params.value
+        value_start = @[property]
+        diff = value.map (v, i)-> v - value_start[i]
+        callback = (m, steps)=>
+          if steps is 0
+            @["#{property}_set"](value)
+            return @trigger "animation:#{property}:end"
+          @["#{property}_set"]( diff.map( (v, i)-> value_start[i] + v * m  ) )
+
     if !@_animations[name]
       @_animations[name] = []
-    value = params.value
-    value_start = @[property]
-    diff = value.map (v, i)-> v - value_start[i]
-    callback = (m, steps)=>
-      if steps is 0
-        @["#{property}_set"](value)
-        return @trigger "animation:#{property}:end"
-      @["#{property}_set"]( diff.map( (v, i)-> value_start[i] + v * m  ) )
 
     @_animations[name].push {
       callback: callback
