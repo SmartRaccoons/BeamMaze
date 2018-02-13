@@ -12,21 +12,21 @@ window.o.ObjectBeam = class Beam extends window.o.Object
     end = @options.end.clone()
     geometry.vertices.push(start, end)
     axis = if start.x is end.x then 'y' else 'x'
-    (if start[axis] > end[axis] then [-4, 4] else [4, -4]).forEach (v, i)->
+    (if start[axis] > end[axis] then [-2, 2] else [2, -2]).forEach (v, i)->
       geometry.vertices[i][axis] = geometry.vertices[i][axis] + v
     geometry
 
 
 class BeamSphere extends window.o.ObjectSphere
   _default: {
-    diameter: 4
+    diameter: 2
     sheath_1: 0.5
     sheath_2: 0.2
   }
   constructor: ->
     super
-    @sheath1 = new window.o.ObjectSphere({diameter: @options.diameter + 1, color: @options.color.concat(@options.sheath_1), parent: @})
-    @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 2, color: @options.color.concat(@options.sheath_2), parent: @})
+    @sheath1 = new window.o.ObjectSphere({diameter: @options.diameter + 0.5, color: @options.color.concat(@options.sheath_1), parent: @})
+    @sheath2 = new window.o.ObjectSphere({diameter: @options.diameter + 1, color: @options.color.concat(@options.sheath_2), parent: @})
     @
 
 
@@ -43,7 +43,7 @@ window.o.ObjectBeamSource = class BeamSource extends BeamSphere
     @beam_remove()
     points = [new THREE.Vector3().fromArray(@options.position)]
     last_mirror = null
-    direction = new THREE.Vector3(0, 1000, @options.position[2])
+    direction = new THREE.Vector3(0, 1000, 0)
     _tube_name = 'mirror-tube'
     tube_check = (name)-> name and name.indexOf('mirror-tube') is 0
     for i in [0...100]

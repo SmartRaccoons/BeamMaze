@@ -30,7 +30,6 @@ window.o.Object = class Object extends MicroEvent
       @mesh.name = @name
     if @options.parent
       @parent = @options.parent
-    if @parent
       @parent.group.add(@mesh)
     else
       @group = new THREE.Group()
@@ -79,5 +78,9 @@ window.o.Object = class Object extends MicroEvent
     @mesh.material.dispose()
 
 
+window.o.ObjectBox = class ObjectSphere extends Object
+  geometry: -> new THREE.BoxGeometry(@options.diameter, @options.diameter, @options.diameter)
+
+
 window.o.ObjectSphere = class ObjectSphere extends Object
-  geometry: -> new THREE.SphereBufferGeometry( @options.diameter, 16, 16 )
+  geometry: -> new THREE.SphereGeometry( @options.diameter, 16, 16 )

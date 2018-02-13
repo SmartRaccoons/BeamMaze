@@ -5,7 +5,7 @@ mirror = new window.o.ObjectMirror({position: [1, 1], type: 'normal', params: []
 mirror = new window.o.ObjectMirror({position: [1, 2], type: 'reverse', params: []})
 mirror = new window.o.ObjectMirror({position: [0, 2], type: 'reverse', params: []})
 mirror = new window.o.ObjectMirror({position: [0, 3], type: 'straight', params: []})
-mirror = new window.o.ObjectBeamTarget({position: [0, 40]})
+target = new window.o.ObjectBeamTarget({position: [0, 40, 2.2]})
 # new window.o.ObjectBeam({
 #   start: new THREE.Vector3(0, 10, 0)
 #   end: new THREE.Vector3(0, -20, 0)
