@@ -1,4 +1,5 @@
 class Connector extends window.o.Object
+  _animation: true
   name: 'connector'
   constructor: ->
     super
@@ -8,7 +9,6 @@ class Connector extends window.o.Object
   angle: (angle, reverse)->
     @show()
     angle = -Math.PI/2 + angle
-    return @mesh.rotation.z = angle
     if angle is @mesh.rotation.z
       return
     angle_diff = angle - @mesh.rotation.z
@@ -17,10 +17,13 @@ class Connector extends window.o.Object
     if angle_diff < 0 and reverse
       angle_diff = angle_diff + 2 * Math.PI
     angle_start = @mesh.rotation.z
-    @_animation (m, steps)=>
-      if steps is 0
-        return @mesh.rotation.z = angle
-      @mesh.rotation.z = angle_start + angle_diff * m
+    @_animation_add
+      property: 'angle'
+      easing: 'sin'
+      callback: (m, steps)=>
+        if steps is 0
+          return @mesh.rotation.z = angle
+        @mesh.rotation.z = angle_start + angle_diff * m
 
 
 class MirrorTube extends window.o.Object
@@ -187,9 +190,8 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
     @_move_position = nr
     @_connector.angle(@_move_positions[nr], @_move_reverse)
 
-  move: ->
-    position = @get_move_position(@_move_position, true)
-    @position_animate(position)
+  move: (position)->
+    @position_animate(position, {steps: 30, easing: 'sin'})
 
   deactive: -> @mirror.deactive()
 

@@ -3,8 +3,8 @@ window.o.ObjectAnimation = class ObjectAnimation
   _animation_reset: ->
     @_animations = {}
 
-  position_animate: (position)->
-    @_animation_add({value: position, steps: 100})
+  position_animate: (position, params = {})->
+    @_animation_add _.extend({value: position}, params)
 
   _animate: ->
     for name, params of @_animations

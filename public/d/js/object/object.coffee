@@ -75,6 +75,8 @@ window.o.Object = class Object extends MicroEvent
       @_animation_reset()
     super
     _scene.remove(@mesh)
+    if @group
+      _scene.remove(@group)
     @mesh.geometry.dispose()
     @mesh.material.dispose()
 

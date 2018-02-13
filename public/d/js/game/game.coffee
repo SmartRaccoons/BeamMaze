@@ -31,7 +31,7 @@ window.o.Game = class Game extends MicroEvent
     document.addEventListener 'click', (event)=>
       object = @_event_get_class(event)
       if object
-        object.click.call(object)
+        object.events.click.call(object)
     document.addEventListener 'mousemove', (event)=>
       object = @_event_get_class(event)
       document.body.style.cursor = if object then 'pointer' else ''
