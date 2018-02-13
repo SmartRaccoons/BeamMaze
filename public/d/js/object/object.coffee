@@ -26,6 +26,7 @@ window.o.Object = class Object extends MicroEvent
       color: [255, 255, 255, 0.2]
     }, @_default, options)
     @mesh = @mesh_build()
+    @mesh._class = @
     if @name
       @mesh.name = @name
     if @options.parent

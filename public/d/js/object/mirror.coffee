@@ -26,7 +26,6 @@ class Connector extends window.o.Object
 class MirrorTube extends window.o.Object
   constructor: ->
     super
-    @mesh._class = @
     @mesh.position.z = 0.55
     @mesh.rotateZ(@options.rotation * Math.PI / 2)
     @
@@ -167,17 +166,12 @@ window.o.ObjectMirror = class MirrorContainer extends window.o.ObjectBlank
       @_connector = new Connector({parent: @, color: @options.color.slice(0, 3)})
 
   _controls_add: ->
-    if @_controls_added
-      return
-    @_controls_added = true
-    @mirror._action
-      mouseover: =>
-      mouseout: =>
+    @events = {
       click: => @trigger 'move', @get_move_position()
+    }
 
   _controls_remove: ->
-    @_controls_added = false
-    @mirror._action_remove()
+    @events = {}
 
   get_move_position: (n = @_move_position, full = false)->
     p = @_move_positions_coors[n]

@@ -91,7 +91,6 @@ window.o.ObjectBeamTarget = class BeamTarget extends BeamSphere
     color: [195, 18, 24]
   constructor: ->
     super
-    @mesh._class = @
     @reset()
     @
 

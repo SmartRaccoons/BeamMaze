@@ -27,6 +27,24 @@ window.o.Game = class Game extends MicroEvent
 
     @render()
     window.App.events.trigger('game:init', @scene)
+    @_event_raycaster = new THREE.Raycaster()
+    document.addEventListener 'click', (event)=>
+      object = @_event_get_class(event)
+      if object
+        object.click.call(object)
+    document.addEventListener 'mousemove', (event)=>
+      object = @_event_get_class(event)
+      document.body.style.cursor = if object then 'pointer' else ''
+
+  _event_get_class: (event)->
+    @_event_raycaster.setFromCamera({
+      x: (event.clientX / window.innerWidth) * 2 - 1
+		  y: -(event.clientY / window.innerHeight) * 2 + 1
+    }, @camera)
+    for intersect in @_event_raycaster.intersectObjects(@scene.children, true)
+      if intersect.object._class and intersect.object._class.events and intersect.object._class.events.click
+        return intersect.object._class
+    return false
 
   render: ->
     @renderer.render @scene, @camera
