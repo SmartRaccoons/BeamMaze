@@ -3,6 +3,8 @@ pjson = require('./package.json')
 exec = require('child_process').exec
 _ = require('lodash')
 node_ssh = require('node-ssh')
+template = require('./template/generate')
+
 
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-watch')
@@ -37,17 +39,31 @@ module.exports = (grunt) ->
       done()
 
   grunt.registerTask 'compile', ->
-    rf = (name)-> fs.readFileSync("#{__dirname}/template/#{name}.html", 'utf8')
-    wf = (name, html)-> fs.writeFileSync("#{__dirname}/public/#{name}.html", html)
-    template = _.template rf('index'), {imports: {
-      loading: rf('loading')
-      version: pjson.version
-      name: pjson.name
-    }}
-    ['dev', 'index', 'draugiem', 'offline', 'cocoon'].forEach (f)-> wf(f, template({platform: f}))
+    done = this.async()
+    platforms = ['index', 'cocoon']
+    platforms_exec = (i)=>
+      pl = platforms[i]
+      template.generate({platform: pl}, pl)
+      exec "cat #{template.js_get(pl).join(' ')} > all-temp.js"
+      exec "uglifyjs --beautify \"indent-level=0\" all-temp.js -o public/d/j-#{pl}.js", =>
+        exec "rm all-temp.js"
+        i++
+        if i >= platforms.length
+          done()
+        else
+          platforms_exec(i)
+    platforms_exec(0)
 
-    for file in coffee
-      exec("#{coffee_command} #{file}", exec_callback)
+  grunt.registerTask 'compile-cocoon', ->
+    done = this.async()
+    path = '../Raccoobe-cocoon'
+    exec "mkdir #{path}"
+    exec "mkdir #{path}/d"
+    exec "cp public/d/j-cocoon.js #{path}/d/j-cocoon.js", =>
+      exec "cp public/cocoon.html  #{path}/index.html", =>
+        exec "cd #{path} && zip -r ../Archive.zip *", =>
+          exec "rm -R #{path}"
+          done()
 
   grunt.registerTask 'version', ->
     dir = __dirname + '/public/v/' + pjson.version
