@@ -8,8 +8,9 @@ compile :
 	grunt compile
 
 run :
-	python -m SimpleHTTPServer 8111
+	coffee app_dev.coffee
 
 production-mobile :
 	grunt compile
 	grunt compile-cocoon
+	grunt cocoon-upload

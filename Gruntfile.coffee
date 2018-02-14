@@ -6,6 +6,18 @@ node_ssh = require('node-ssh')
 template = require('./template/generate')
 
 
+ssh_create = (callback, callback_error=->)->
+  ssh = new node_ssh()
+  ssh.connect({
+    host: 'termi.lv'
+    username: 'piisiitiis'
+    privateKey: '/Users/bambis/.ssh/id_rsa'
+  })
+  .then => callback(ssh)
+  .catch =>
+    console.info arguments
+    callback_error()
+
 module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-watch')
   coffee = [
@@ -21,22 +33,13 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'termi', ->
     done = @async()
-    ssh = new node_ssh()
-    ssh.connect({
-      host: 'termi.lv'
-      username: 'piisiitiis'
-      privateKey: '/Users/bambis/.ssh/id_rsa'
-    })
-    .then =>
+    ssh_create (ssh)=>
       ssh.execCommand('git pull', { cwd:'/www/raccoobe/master/' }).then (result)->
         if result.stdout
           console.log(result.stdout)
         if result.stderr
           console.log('STDERR: ' + result.stderr)
         done()
-    .catch =>
-      console.info arguments
-      done()
 
   grunt.registerTask 'compile', ->
     done = this.async()
@@ -61,9 +64,18 @@ module.exports = (grunt) ->
     exec "mkdir #{path}/d"
     exec "cp public/d/j-cocoon.js #{path}/d/j-cocoon.js", =>
       exec "cp public/cocoon.html  #{path}/index.html", =>
-        exec "cd #{path} && zip -r ../Archive.zip *", =>
+        exec "cd #{path} && zip -r ../Archive-ios.zip *", =>
           exec "rm -R #{path}"
           done()
+
+  grunt.registerTask 'cocoon-upload', ->
+    done = this.async()
+    ssh_create (ssh)=>
+      ssh.putFile("#{__dirname}/../Archive-ios.zip", "/www/raccoobe/master/public/Archive-ios.zip").then ->
+        done()
+      , (error)->
+        console.info error
+        done()
 
   grunt.registerTask 'version', ->
     dir = __dirname + '/public/v/' + pjson.version

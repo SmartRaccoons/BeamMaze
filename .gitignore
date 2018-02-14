@@ -3,8 +3,6 @@ bower_components/
 node_modules/
 *.js
 *.js.map
-!public/d/j-draugiem.js
-!public/d/j-offline.js
 !public/d/j-cocoon.js
 !public/d/j-index.js
 !public/v/**/*.js
