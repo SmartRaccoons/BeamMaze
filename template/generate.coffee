@@ -6,8 +6,11 @@ _ = require('lodash')
 javascripts = {
   all: [
     "bower_components/three.js/build/three.js"
+    # "bower_components/THREE.GUI/button.js"
+    # "bower_components/THREE.GUI/droid_sans_regular.typeface.js"
     "bower_components/lodash/lodash.js"
     "public/d/js/init.js"
+    # "public/d/js/font.js"
     "public/d/locale/en.js"
     "public/d/locale/lv.js"
     "public/d/js/object/animation.js"
@@ -19,6 +22,8 @@ javascripts = {
     "public/d/js/game/map.js"
     "public/d/js/game/map.data.js"
     "public/d/js/game/game.js"
+    "public/d/js/game/camera.js"
+    "public/d/js/router.js"
   ],
   dev: [
     "bower_components/three.js/examples/js/controls/OrbitControls.js"

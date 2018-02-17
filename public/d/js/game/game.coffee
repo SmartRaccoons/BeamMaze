@@ -2,28 +2,27 @@ window.o.Game = class Game extends MicroEvent
   constructor: ->
     super
     @scene = new (THREE.Scene)
-    @camera = new (THREE.PerspectiveCamera)(75, 1, 0.1, 1000)
-    @camera.position.z = 50
-    @renderer = new THREE.WebGLRenderer({alpha: !true})
-    # @renderer.setClearColor(0xffffff, 0)
+    @camera = new window.o.GameCamera()
+    @renderer = new THREE.WebGLRenderer({alpha: true})
+    @renderer.setClearColor(0xefe4d1, 0)
     document.body.appendChild @renderer.domElement
     window.addEventListener 'resize', => @_resized()
     @_resized()
 
-    # hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 )
-    # hemiLight.color.setHSL( 0.6, 1, 0.6 )
-    # hemiLight.groundColor.setHSL( 0.095, 1, 0.75 )
-    # hemiLight.position.set( 0, 0, 10 )
-    # scene.add( hemiLight )
+    do =>
+      l = new THREE.DirectionalLight()
+      l.position.set(-10, 50, 80 )
+      @scene.add(l)
 
-    l = new THREE.DirectionalLight()
-    @scene.add(l)
+      hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.3)
+      hemiLight.groundColor.setHSL( 1, 1, 1 )
+      hemiLight.position.set(0, 0, 10)
+      @scene.add( hemiLight )
 
-    # l = new THREE.HemisphereLight()
-    # scene.add(l)
-    l.position.x = -50
-    l.position.y = 50
-    l.position.z = 80
+    do =>
+      ground = new THREE.Mesh(new THREE.PlaneBufferGeometry( 1000, 1000 ), new THREE.MeshPhongMaterial( { color: 0xefe4d1, specular: 0xfefefe } ))
+      ground.position.set(0, 0, -100)
+      @scene.add ground
 
     @render()
     window.App.events.trigger('game:init', @scene)
@@ -40,25 +39,28 @@ window.o.Game = class Game extends MicroEvent
     @_event_raycaster.setFromCamera({
       x: (event.clientX / window.innerWidth) * 2 - 1
 		  y: -(event.clientY / window.innerHeight) * 2 + 1
-    }, @camera)
+    }, @camera.get())
     for intersect in @_event_raycaster.intersectObjects(@scene.children, true)
       if intersect.object._class and intersect.object._class.events and intersect.object._class.events.click
         return intersect.object._class
     return false
 
   render: ->
-    @renderer.render @scene, @camera
+    @renderer.render @scene, @camera.get()
     requestAnimationFrame => @render()
 
   _resized: ->
-    @camera.aspect = window.innerWidth / window.innerHeight;
-    @camera.updateProjectionMatrix()
+    @camera.resize(window.innerWidth, window.innerHeight)
     @renderer.setSize window.innerWidth, window.innerHeight
 
   load: (id)->
     if @map
       @map.remove()
+    @camera.position_set([0, 0, 150])
     @map = new window.o.GameMap()
-    map_size = @map.load(window.o.GameMapData[id - 1], _l('stage_desc')[id])
-    # @camera.position.z = 60 + 20 * Math.max(map_size[0], map_size[1])
-    @camera.position.z = 20 + 20 * Math.max(map_size[0], map_size[1])
+    params = @map.load(window.o.GameMapData[id - 1], _l('stage_desc')[id])
+    @camera.position_calculate(params)
+    @map.bind 'beam', =>
+      if @map.solved
+        @map.remove_controls()
+        @trigger 'solved'

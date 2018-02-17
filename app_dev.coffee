@@ -1,11 +1,11 @@
 express = require('express')
 pjson = require('./package.json')
-template = require('./template/generate')
 
 port = 8111
 app = express()
 app.listen(port)
 app.get '/', (req, res)->
+  template = require('./template/generate')
   res.send template.generate({dev: true, js: req.query.js})
 
 app.use('/public', express.static(__dirname + '/public'))

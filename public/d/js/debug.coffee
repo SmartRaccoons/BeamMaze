@@ -1,7 +1,7 @@
 window.o.Game = class Game extends window.o.Game
   constructor: ->
     super
-    @controls = new THREE.OrbitControls( @camera )
+    @controls = new THREE.OrbitControls( @camera.get() )
 
     @scene.add(new THREE.AxesHelper(10))
 

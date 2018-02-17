@@ -29623,7 +29623,10 @@ return v - value_start[i];
 return callback = function(m, steps) {
 if (steps === 0) {
 _this[property + "_set"](value);
-return _this.trigger("animation:" + property + ":end");
+if (_this.trigger) {
+_this.trigger("animation:" + property + ":end");
+}
+return;
 }
 return _this[property + "_set"](diff.map(function(v, i) {
 return value_start[i] + v * m;
@@ -30437,7 +30440,6 @@ return _this[n] = [];
 this.solved = false;
 }
 Map.prototype.clear = function() {
-Map.__super__.clear.apply(this, arguments);
 this._clear_ob.forEach(function(_this) {
 return function(n) {
 return _this[n] = [];
@@ -30446,7 +30448,7 @@ return _this[n] = [];
 return this.solved = false;
 };
 Map.prototype.load = function(map_string, text) {
-var call, map, map_size, methods, params;
+var call, map, map_coors, map_size, methods, params;
 methods = {
 "-": null,
 "0": "blank",
@@ -30484,6 +30486,7 @@ return !(indexOf.call(v, params) >= 0);
 }).length);
 }, 0) / 2), Math.floor(map.length / 2) ];
 this._map = {};
+map_coors = [ [], [] ];
 map.forEach(function(_this) {
 return function(row, j) {
 var found, params_found;
@@ -30501,6 +30504,8 @@ return;
 if (!_this._map[y]) {
 _this._map[y] = {};
 }
+map_coors[0].push(x);
+map_coors[1].push(y);
 call(cell, x, y, params_found);
 params_found = [];
 return _this._map[y][x] = cell;
@@ -30512,7 +30517,12 @@ return function() {
 return _this.beam_show();
 };
 }(this), 100);
-return map_size;
+return {
+center: map_coors.map(function(v) {
+return (Math.min.apply(null, v) + Math.max.apply(null, v)) * 5;
+}),
+size: Math.max.apply(null, map_size) * 10 * 2 + 15
+};
 };
 Map.prototype._map_get = function(p) {
 if (this._map[p[1]] && this._map[p[1]][p[0]] && this._map[p[1]][p[0]]) {
@@ -30585,7 +30595,6 @@ return;
 m.bind("move", function(_this) {
 return function(position) {
 var i, k, ref, x, y;
-_this.trigger("move");
 _this.beam_remove();
 for (i = k = 1; k <= 20; i = ++k) {
 y = m.position[1] + position[1] * i;
@@ -30667,14 +30676,13 @@ return child;
 window.o.Game = Game = function(superClass) {
 extend(Game, superClass);
 function Game() {
-var l;
 Game.__super__.constructor.apply(this, arguments);
 this.scene = new THREE.Scene();
-this.camera = new THREE.PerspectiveCamera(75, 1, .1, 1e3);
-this.camera.position.z = 50;
+this.camera = new window.o.GameCamera();
 this.renderer = new THREE.WebGLRenderer({
-alpha: !true
+alpha: true
 });
+this.renderer.setClearColor(15721681, 0);
 document.body.appendChild(this.renderer.domElement);
 window.addEventListener("resize", function(_this) {
 return function() {
@@ -30682,11 +30690,29 @@ return _this._resized();
 };
 }(this));
 this._resized();
+(function(_this) {
+return function() {
+var hemiLight, l;
 l = new THREE.DirectionalLight();
-this.scene.add(l);
-l.position.x = -50;
-l.position.y = 50;
-l.position.z = 80;
+l.position.set(-10, 50, 80);
+_this.scene.add(l);
+hemiLight = new THREE.HemisphereLight(16777215, 16777215, .3);
+hemiLight.groundColor.setHSL(1, 1, 1);
+hemiLight.position.set(0, 0, 10);
+return _this.scene.add(hemiLight);
+};
+})(this)();
+(function(_this) {
+return function() {
+var ground;
+ground = new THREE.Mesh(new THREE.PlaneBufferGeometry(1e3, 1e3), new THREE.MeshPhongMaterial({
+color: 15721681,
+specular: 16711422
+}));
+ground.position.set(0, 0, -100);
+return _this.scene.add(ground);
+};
+})(this)();
 this.render();
 window.App.events.trigger("game:init", this.scene);
 this._event_raycaster = new THREE.Raycaster();
@@ -30712,7 +30738,7 @@ var i, intersect, len, ref;
 this._event_raycaster.setFromCamera({
 x: event.clientX / window.innerWidth * 2 - 1,
 y: -(event.clientY / window.innerHeight) * 2 + 1
-}, this.camera);
+}, this.camera.get());
 ref = this._event_raycaster.intersectObjects(this.scene.children, true);
 for (i = 0, len = ref.length; i < len; i++) {
 intersect = ref[i];
@@ -30723,7 +30749,7 @@ return intersect.object._class;
 return false;
 };
 Game.prototype.render = function() {
-this.renderer.render(this.scene, this.camera);
+this.renderer.render(this.scene, this.camera.get());
 return requestAnimationFrame(function(_this) {
 return function() {
 return _this.render();
@@ -30731,19 +30757,102 @@ return _this.render();
 }(this));
 };
 Game.prototype._resized = function() {
-this.camera.aspect = window.innerWidth / window.innerHeight;
-this.camera.updateProjectionMatrix();
+this.camera.resize(window.innerWidth, window.innerHeight);
 return this.renderer.setSize(window.innerWidth, window.innerHeight);
 };
 Game.prototype.load = function(id) {
-var map_size;
+var params;
 if (this.map) {
 this.map.remove();
 }
 this.map = new window.o.GameMap();
-map_size = this.map.load(window.o.GameMapData[id - 1], _l("stage_desc")[id]);
-return this.camera.position.z = 20 + 20 * Math.max(map_size[0], map_size[1]);
+params = this.map.load(window.o.GameMapData[id - 1], _l("stage_desc")[id]);
+this.camera.position_calculate(params);
+return this.map.bind("beam", function(_this) {
+return function() {
+if (_this.map.solved) {
+return _this.trigger("solved");
+}
+};
+}(this));
 };
 return Game;
+}(MicroEvent);
+}).call(this);
+
+(function() {
+var Camera, extend = function(child, parent) {
+for (var key in parent) {
+if (hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+}, hasProp = {}.hasOwnProperty;
+window.o.GameCamera = Camera = function(superClass) {
+extend(Camera, superClass);
+function Camera() {
+this._animation_reset();
+this.camera = new THREE.PerspectiveCamera(60, 1, .1, 1e3);
+this.position = [ 0, 0, 0 ];
+this.position_set(this.position);
+}
+Camera.prototype.get = function() {
+return this.camera;
+};
+Camera.prototype.resize = function(w, h) {
+this.camera.aspect = w / h;
+return this.camera.updateProjectionMatrix();
+};
+Camera.prototype.position_set = function(position) {
+this.position = position;
+return this.camera.position.set(position[0], position[1], position[2]);
+};
+Camera.prototype.position_calculate = function(params) {
+console.info(params);
+return this.position_animate(params.center.concat(params.size), {
+easing: "sin"
+});
+};
+return Camera;
+}(window.o.ObjectAnimation);
+}).call(this);
+
+(function() {
+var Router, extend = function(child, parent) {
+for (var key in parent) {
+if (hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+}, hasProp = {}.hasOwnProperty;
+window.o.Router = Router = function(superClass) {
+extend(Router, superClass);
+function Router(options) {
+this.level = options.level || 1;
+this.game = new window.o.Game();
+this.game.bind("solved", function(_this) {
+return function() {
+_this.level++;
+return setTimeout(function() {
+return _this.game_level(_this.level);
+}, 2 * 1e3);
+};
+}(this));
+this.game_level();
+}
+Router.prototype.game_level = function() {
+return this.game.load(this.level);
+};
+return Router;
 }(MicroEvent);
 }).call(this);

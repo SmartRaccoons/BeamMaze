@@ -7,7 +7,6 @@ window.o.GameMap = class Map extends MicroEvent
     @solved = false
 
   clear: ->
-    super
     @_clear_ob.forEach (n)=> @[n] = []
     @solved = false
 
@@ -31,6 +30,7 @@ window.o.GameMap = class Map extends MicroEvent
     params = ['s', 'r']
     map_size = [Math.floor(map.reduce( ((max, v)-> Math.max(max, v.filter( (v)-> !(params in v)).length)), 0)/2), Math.floor(map.length/2)]
     @_map = {}
+    map_coors = [[], []]
     map.forEach (row, j)=>
       found = 0
       params_found = []
@@ -43,6 +43,8 @@ window.o.GameMap = class Map extends MicroEvent
           return
         if not @_map[y]
           @_map[y] = {}
+        map_coors[0].push(x)
+        map_coors[1].push(y)
         call(cell, x, y, params_found)
         params_found = []
         @_map[y][x] = cell
@@ -51,7 +53,7 @@ window.o.GameMap = class Map extends MicroEvent
     , 100
     # if text
     #   @_text.push new window.o.ObjectText({text: text, position: [0, map_size[1] * 10 + 10, -2.5]})
-    return map_size
+    return {center: map_coors.map( (v)-> (Math.min.apply(null, v) + Math.max.apply(null, v)) * 5 ), size: Math.max.apply(null, map_size) * 10 * 2 + 15}
 
   _map_get: (p)->
     if @_map[p[1]] and @_map[p[1]][p[0]] and @_map[p[1]][p[0]]
@@ -93,7 +95,6 @@ window.o.GameMap = class Map extends MicroEvent
     if m._static
       return
     m.bind 'move', (position)=>
-      @trigger 'move'
       @beam_remove()
       for i in [1..20]
         y = m.position[1] + position[1] * i

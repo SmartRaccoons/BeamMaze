@@ -33,7 +33,9 @@ window.o.ObjectAnimation = class ObjectAnimation
         callback = (m, steps)=>
           if steps is 0
             @["#{property}_set"](value)
-            return @trigger "animation:#{property}:end"
+            if @trigger
+              @trigger "animation:#{property}:end"
+            return
           @["#{property}_set"]( diff.map( (v, i)-> value_start[i] + v * m  ) )
 
     if !@_animations[name]
